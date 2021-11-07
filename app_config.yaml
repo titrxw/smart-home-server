@@ -1,7 +1,9 @@
-app_name: smart_home
-app_model: debug
-app_host: localhost
-app_port: '8080'
+app:
+  name: smart_home
+  env: debug
+server:
+  host: localhost
+  port: '8080'
 database:
   driver: mysql
   user: root
@@ -11,7 +13,7 @@ database:
   db_name: iot_smart_home
   charset: utf8
   show_sql: false
-redis_config:
+redis:
   addr: 127.0.0.1
   port: '6379'
   password: password
