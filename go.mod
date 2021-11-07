@@ -9,4 +9,5 @@ require (
 	github.com/imdario/mergo v0.3.12 // indirect
 	github.com/mitchellh/mapstructure v1.4.2 // indirect
 	golang.org/x/sys v0.0.0-20211106132015-ebca88c72f68 // indirect
+	gorm.io/gorm v1.22.2 // indirect
 )
