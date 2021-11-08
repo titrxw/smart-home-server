@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/titrxw/smart-home-server"
-	"github.com/titrxw/smart-home-server/router"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
+	app "github.com/titrxw/smart-home-server"
+	"github.com/titrxw/smart-home-server/router"
 )
 
 func main() {
@@ -13,6 +14,6 @@ func main() {
 
 	gin.SetMode(app.Config.App.Env)
 	server := gin.Default()
-	router.Register(server)
+	router.GRouter.Register(server)
 	server.Run(app.Config.Server.Host + ":" + strconv.Itoa(app.Config.Server.Port))
 }
