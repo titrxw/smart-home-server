@@ -22,3 +22,10 @@ emqx:
   host: 127.0.0.1:1883
   app_id: ''
   app_secret: ''
+jwt:
+  iss: 'admin'
+  subject: 'auth'
+  nbf_second: 120
+  ttl: 7200
+  public_key: ''
+  private_key: ''

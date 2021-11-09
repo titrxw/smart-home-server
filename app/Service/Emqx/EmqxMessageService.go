@@ -7,10 +7,15 @@ import (
 
 type EmqxMessageService struct {
 	EmqxServiceAbstract
+	openapiFactory *openapi.OpenApiFactory
 }
 
-func (this *EmqxServiceAbstract) getOpenApiFactory() *openapi.OpenApiFactory {
-	return openapi.NewOpenApiFactory(this.getEmqxClient())
+func (this *EmqxMessageService) getOpenApiFactory() *openapi.OpenApiFactory {
+	if this.openapiFactory == nil {
+		this.openapiFactory = openapi.NewOpenApiFactory(this.getEmqxClient())
+	}
+
+	return this.openapiFactory
 }
 
 func (this *EmqxMessageService) Publish(ctx context.Context, topic string, clientId string, payload string) (bool, error) {

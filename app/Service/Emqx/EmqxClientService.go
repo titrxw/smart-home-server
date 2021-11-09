@@ -9,20 +9,31 @@ import (
 	encrypt "github.com/titrxw/emqx-sdk/src/Auth/Encrypt"
 	auth_entity "github.com/titrxw/emqx-sdk/src/Auth/Entity"
 	auth_handler "github.com/titrxw/emqx-sdk/src/Auth/Handler"
+	app "github.com/titrxw/smart-home-server"
 )
 
 type EmqxClientService struct {
 	EmqxServiceAbstract
+	auth *auth.Auth
+	acl  *acl.Acl
 }
 
-func (this *EmqxClientService) getAuthHandler() *auth.Auth {
-	authHandler := auth_handler.NewMnesiaAuthHandler(this.getEmqxClient())
-	return auth.NewAuth(authHandler, new(encrypt.Sha256SaltEncrypt))
+func (this *EmqxClientService) getAuth() *auth.Auth {
+	if this.auth == nil {
+		authHandler := auth_handler.NewMnesiaAuthHandler(this.getEmqxClient())
+		this.auth = auth.NewAuth(authHandler, new(encrypt.Sha256SaltEncrypt))
+	}
+
+	return this.auth
 }
 
-func (this *EmqxClientService) getAclHandler() *acl.Acl {
-	aclHandler := acl_handler.NewMnesiaAclHandler(this.getEmqxClient())
-	return acl.NewAcl(aclHandler)
+func (this *EmqxClientService) getAcl() *acl.Acl {
+	if this.acl == nil {
+		aclHandler := acl_handler.NewMnesiaAclHandler(this.getEmqxClient())
+		this.acl = acl.NewAcl(aclHandler)
+	}
+
+	return this.acl
 }
 
 func (this *EmqxClientService) AddClient(ctx context.Context, clientId string, password string, salt string) (bool, error) {
@@ -31,7 +42,7 @@ func (this *EmqxClientService) AddClient(ctx context.Context, clientId string, p
 	authEntity.SetPassword(password)
 	authEntity.SetSalt(salt)
 
-	return this.getAuthHandler().Set(ctx, authEntity, true)
+	return this.getAuth().Set(ctx, authEntity, true)
 }
 
 func (this *EmqxClientService) AddClientPubAcl(ctx context.Context, clientId string, topic string) (bool, error) {
@@ -41,7 +52,7 @@ func (this *EmqxClientService) AddClientPubAcl(ctx context.Context, clientId str
 	aclEntity.SetActionPub()
 	aclEntity.SetAccessAllow()
 
-	return this.getAclHandler().Set(ctx, aclEntity, true)
+	return this.getAcl().Set(ctx, aclEntity, true)
 }
 
 func (this *EmqxClientService) AddClientSubAcl(ctx context.Context, clientId string, topic string) (bool, error) {
@@ -51,7 +62,7 @@ func (this *EmqxClientService) AddClientSubAcl(ctx context.Context, clientId str
 	aclEntity.SetActionSub()
 	aclEntity.SetAccessAllow()
 
-	return this.getAclHandler().Set(ctx, aclEntity, true)
+	return this.getAcl().Set(ctx, aclEntity, true)
 }
 
 func (this *EmqxClientService) AddClientPubSubAcl(ctx context.Context, clientId string, topic string) (bool, error) {
@@ -61,7 +72,11 @@ func (this *EmqxClientService) AddClientPubSubAcl(ctx context.Context, clientId 
 	aclEntity.SetActionPubSub()
 	aclEntity.SetAccessAllow()
 
-	return this.getAclHandler().Set(ctx, aclEntity, true)
+	return this.getAcl().Set(ctx, aclEntity, true)
 }
 
-var GEmqxClientService = new(EmqxClientService)
+var GEmqxClientService = &EmqxClientService{
+	EmqxServiceAbstract: EmqxServiceAbstract{
+		EmqxConfig: app.GApp.Config.Emqx,
+	},
+}
