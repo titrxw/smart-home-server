@@ -2,24 +2,59 @@ package base
 
 import (
 	"github.com/gin-gonic/gin"
-	"net/http"
+	"github.com/go-playground/validator/v10"
+	controller "github.com/titrxw/go-framework/src/Core/Controller"
+	global "github.com/titrxw/go-framework/src/Global"
 )
 
+type RequestAbstract struct {
+	TimeStamp uint   `json:"time_stamp" form:"time_stamp"`
+	Nonce     string `json:"nonce"`
+}
+
 type ControllerAbstract struct {
+	controller.ControllerAbstract
 }
 
-func (this *ControllerAbstract) JsonSuccessResponse(ctx *gin.Context) {
-	this.JsonResponseWithoutError(ctx, "success")
+func (this ControllerAbstract) translateValidationError(err error) string {
+	if validationErrors, ok := err.(validator.ValidationErrors); !ok {
+		return err.Error()
+	} else {
+		errStr := ""
+		for _, e := range validationErrors {
+			errStr += e.Translate(global.FApp.Translator) + ";"
+		}
+
+		return errStr
+	}
 }
 
-func (this *ControllerAbstract) JsonResponseWithoutError(ctx *gin.Context, data interface{}) {
-	this.JsonResponse(ctx, data, "", http.StatusOK)
+func (this ControllerAbstract) ValidateFormPost(ctx *gin.Context, request interface{}) bool {
+	err := ctx.ShouldBind(request)
+	if err != nil {
+		this.JsonResponseWithServerError(ctx, this.translateValidationError(err))
+		return false
+	}
+
+	return true
 }
 
-func (this *ControllerAbstract) JsonResponse(ctx *gin.Context, data interface{}, error string, statusCode int) {
-	ctx.JSON(statusCode, gin.H{
-		"data":  data,
-		"code":  http.StatusOK,
-		"error": error,
-	})
+func (this ControllerAbstract) ValidateQuery(ctx *gin.Context, request interface{}) bool {
+	err := ctx.BindQuery(request)
+	if err != nil {
+		this.JsonResponseWithServerError(ctx, this.translateValidationError(err))
+		return false
+	}
+
+	return true
+}
+
+func (this ControllerAbstract) ValidateFromUri(ctx *gin.Context, request interface{}) bool {
+	err := ctx.BindUri(request)
+	if err != nil {
+		this.JsonResponseWithServerError(ctx, this.translateValidationError(err))
+		return false
+	}
+
+	return true
 }

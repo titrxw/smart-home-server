@@ -4,28 +4,42 @@ app:
 server:
   host: localhost
   port: '8080'
+common:
+  secure_key: "sdf56gh78jmnbvf43edsw3401lbfdert"
+log:
+  default:
+    path: 'smart.log'
+    level: 'debug'
 database:
-  driver: mysql
-  user: root
-  password: 123456
-  host: 127.0.0.1
-  port: '3306'
-  db_name: iot_smart_home
-  charset: utf8
-  show_sql: false
+  default:
+    driver: mysql
+    user: root
+    password: 123456
+    host: 127.0.0.1
+    port: '3306'
+    db_name: iot_smart_home
+    charset: utf8mb4
+    show_sql: false
+    prefix: 'iot_'
 redis:
-  addr: 127.0.0.1
-  port: '6379'
-  password: password
-  db: 0
+  default:
+    host: 127.0.0.1
+    port: '6379'
+    password: ''
+    db: 0
 emqx:
-  host: 127.0.0.1:1883
-  app_id: ''
-  app_secret: ''
+  host: "http://127.0.0.1:18083/"
+  app_id: 'admin'
+  app_secret: 'public'
 jwt:
   iss: 'admin'
   subject: 'auth'
   nbf_second: 120
   ttl: 7200
-  public_key: ''
-  private_key: ''
+  public_key: "Tg6FijzU6km1yST1eyyPdCFsrkaktMBw5f402nciks26bvXgLrCGUea+JqStxVrkd+QR4xlQGKVRpiN96DSflLvu9XELdaVw5Jtsre+MqcHNA3Bf9g4RcjfCtkQ3terJFMCMk/fPZtijXB8rYtoxLUviDDYra/V5ZKT5ihiNDt2y1LEFCXxOQ7MJY3dO/fZh+WIqkHdI1IyR2z2S+v6G40jwgd5+B+qB/NG7aLafHFZAH2d0vHCq2ofsm5PLpIOCo/+w5BP2BKRPw4JAXW7kAw=="
+  private_key: "oALD2bWC6HO+br/aJskY037Dc6j0biv/S7KMtPsVj4NDk9n2YtCKEFLLxM420ac5V0FScyb6qwomZwvGgQk3hYVI9m9ub5bVJgdnmT4KWoG7AIsHi0dn3LnwpkGivV9CgQUT8UAzcz5ET7j5vIBLSA1DXzAu0OW8Q4mLBbe5V9fjzeKWCbkkurxIQwzv8mVmj3bbasTcajfbBBxYFszRGFASvwtGQmbzmyIs6qdEZKTZvnJyu+19AVU4F37ZbaUgo4QzIbDB+GICvPm/Rj+nNuA4Ea0t1nT0jubmb2XkhCKWacjzXsGXHzZCVXbhb5urIqhrwA9guDDTguXcoHI3zg=="
+mqtt:
+  host: '127.0.0.1'
+  port: 1883
+  user_name: 'iot_device_replay'
+  password: '66b2d1a5b79b4fa9b34629009a952827'

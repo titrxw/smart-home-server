@@ -10,5 +10,5 @@ type IndexController struct {
 }
 
 func (this *IndexController) Index(ctx *gin.Context) {
-	this.JsonSuccessResponse(ctx)
+	this.JsonResponseWithoutError(ctx, "")
 }

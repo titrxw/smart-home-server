@@ -8,6 +8,6 @@ import (
 type System struct {
 }
 
-func (this *System) registerRoute(router *gin.Engine) {
+func (this *System) registerRoute(router *gin.RouterGroup) {
 	router.GET("/", new(system.IndexController).Index)
 }
