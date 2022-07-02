@@ -10,6 +10,6 @@ type EmqxServiceAbstract struct {
 	EmqxClient *kernel.EmqxClient
 }
 
-func (this *EmqxServiceAbstract) getEmqxClient() *kernel.EmqxClient {
-	return this.EmqxClient
+func (emqxService *EmqxServiceAbstract) getEmqxClient() *kernel.EmqxClient {
+	return emqxService.EmqxClient
 }

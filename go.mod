@@ -6,6 +6,7 @@ require (
 	github.com/alexedwards/scs/mysqlstore v0.0.0-20211203064041-370cc303b69f
 	github.com/alexedwards/scs/v2 v2.5.0
 	github.com/cloudevents/sdk-go/v2 v2.6.0
+	github.com/eclipse/paho.mqtt.golang v1.4.1
 	github.com/gin-gonic/gin v1.7.4
 	github.com/go-playground/universal-translator v0.18.0
 	github.com/go-playground/validator/v10 v10.10.1
@@ -16,7 +17,7 @@ require (
 	github.com/mojocn/base64Captcha v1.3.5
 	github.com/satori/go.uuid v1.2.0
 	github.com/titrxw/emqx-sdk v0.0.0-20211130142505-b7b21dcc04c4
-	github.com/titrxw/go-framework v0.0.0-20220619134139-7c39ecc94047
+	github.com/titrxw/go-framework v0.0.0-20220701093631-b5004d9d10f7
 	gorm.io/gorm v1.22.2
 )
 
@@ -24,7 +25,6 @@ require (
 	github.com/asaskevich/EventBus v0.0.0-20200907212545-49d423059eef // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
-	github.com/eclipse/paho.mqtt.golang v1.4.1 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect

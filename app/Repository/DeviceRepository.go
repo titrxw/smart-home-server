@@ -1,16 +1,17 @@
 package repository
 
 import (
+	"time"
+
 	model "github.com/titrxw/smart-home-server/app/Model"
 	"gorm.io/gorm"
-	"time"
 )
 
 type DeviceRepository struct {
 	RepositoryAbstract
 }
 
-func (this DeviceRepository) AddUserDeviceByApp(db *gorm.DB, userId model.UID, app *model.App, device *model.Device) *model.Device {
+func (deviceRepository DeviceRepository) AddUserDeviceByApp(db *gorm.DB, userId model.UID, app *model.App, device *model.Device) *model.Device {
 	device.UserId = userId
 	device.AppId = app.ID
 	device.CreatedAt = model.LocalTime(time.Now())
@@ -24,7 +25,7 @@ func (this DeviceRepository) AddUserDeviceByApp(db *gorm.DB, userId model.UID, a
 	return device
 }
 
-func (this DeviceRepository) GetUserDevices(db *gorm.DB, userId model.UID, page uint, pageSize uint) *PageModel {
+func (deviceRepository DeviceRepository) GetUserDevices(db *gorm.DB, userId model.UID, page uint, pageSize uint) *PageModel {
 	devices := make([]model.Device, 0)
 	pageData := &PageModel{
 		CurPage:  page,
@@ -44,7 +45,7 @@ func (this DeviceRepository) GetUserDevices(db *gorm.DB, userId model.UID, page 
 	return pageData
 }
 
-func (this DeviceRepository) GetUserDeviceById(db *gorm.DB, userId model.UID, id uint) *model.Device {
+func (deviceRepository DeviceRepository) GetUserDeviceById(db *gorm.DB, userId model.UID, id uint) *model.Device {
 	device := new(model.Device)
 	result := db.Where("id = ?", id).Where("user_id = ?", userId).Where("device_status != ?", model.DEVICE_DELETE).First(device)
 	if result.RowsAffected == 1 {
@@ -58,7 +59,18 @@ func (this DeviceRepository) GetUserDeviceById(db *gorm.DB, userId model.UID, id
 	return nil
 }
 
-func (this DeviceRepository) GetDeviceById(db *gorm.DB, id uint) *model.Device {
+func (deviceRepository DeviceRepository) GetDeviceByApp(db *gorm.DB, app *model.App) *model.Device {
+	device := new(model.Device)
+	result := db.Where("app_id = ?", app.ID).Where("device_status != ?", model.DEVICE_DELETE).First(device)
+	if result.RowsAffected == 1 {
+		device.App = app
+		return device
+	}
+
+	return nil
+}
+
+func (deviceRepository DeviceRepository) GetDeviceById(db *gorm.DB, id uint) *model.Device {
 	device := new(model.Device)
 	result := db.Where("id = ?", id).Where("device_status != ?", model.DEVICE_DELETE).First(device)
 	if result.RowsAffected == 1 {
@@ -72,7 +84,7 @@ func (this DeviceRepository) GetDeviceById(db *gorm.DB, id uint) *model.Device {
 	return nil
 }
 
-func (this DeviceRepository) UpdateDevice(db *gorm.DB, device *model.Device) bool {
+func (deviceRepository DeviceRepository) UpdateDevice(db *gorm.DB, device *model.Device) bool {
 	result := db.Save(device)
 	return result.Error == nil
 }

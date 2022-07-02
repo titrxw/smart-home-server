@@ -9,7 +9,7 @@ import (
 type Device struct {
 }
 
-func (this *Device) registerRoute(router *gin.RouterGroup) {
+func (devicer *Device) registerRoute(router *gin.RouterGroup) {
 	v2 := router.Group("/device")
 	{
 		v2.GET("/setting", new(device.DeviceController).DeviceSetting)

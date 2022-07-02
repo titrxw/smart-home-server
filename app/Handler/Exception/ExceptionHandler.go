@@ -8,6 +8,6 @@ type ExceptionHandler struct {
 	exception.ExceptionHandler
 }
 
-func (this *ExceptionHandler) Handle(err error, trace string) {
-	this.ExceptionHandler.Handle(err, trace)
+func (handler *ExceptionHandler) Handle(err error, trace string) {
+	handler.ExceptionHandler.Handle(err, trace)
 }

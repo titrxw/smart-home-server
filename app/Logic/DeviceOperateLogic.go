@@ -3,20 +3,21 @@ package logic
 import (
 	"context"
 	"errors"
+	"reflect"
+	"time"
+
 	global "github.com/titrxw/go-framework/src/Global"
 	event "github.com/titrxw/smart-home-server/app/Event"
 	helper "github.com/titrxw/smart-home-server/app/Helper"
 	model "github.com/titrxw/smart-home-server/app/Model"
 	repository "github.com/titrxw/smart-home-server/app/Repository"
-	"reflect"
-	"time"
 )
 
 type DeviceOperateLogic struct {
 	LogicAbstract
 }
 
-func (this DeviceOperateLogic) IsSupportOperate(device *model.Device, operate model.DeviceOperateType) bool {
+func (deviceOperateLogic DeviceOperateLogic) IsSupportOperate(device *model.Device, operate model.DeviceOperateType) bool {
 	_, exists := Logic.DeviceLogic.GetDeviceSupportMap()[device.Type]
 	if !exists {
 		return false
@@ -30,15 +31,18 @@ func (this DeviceOperateLogic) IsSupportOperate(device *model.Device, operate mo
 	return false
 }
 
-func (this DeviceOperateLogic) TriggerOperate(ctx context.Context, device *model.Device, operate model.DeviceOperateType, payload model.OperatePayload, operateLevel uint8) (*model.DeviceOperateLog, error) {
+func (deviceOperateLogic DeviceOperateLogic) TriggerOperate(ctx context.Context, device *model.Device, operate model.DeviceOperateType, payload model.OperatePayload, operateLevel uint8) (*model.DeviceOperateLog, error) {
 	if device.IsDelete() {
 		return nil, errors.New("该设备已删除")
 	}
 	if device.IsDisable() {
 		return nil, errors.New("该设备状态异常")
 	}
-	if !this.IsSupportOperate(device, operate) {
+	if !deviceOperateLogic.IsSupportOperate(device, operate) {
 		return nil, errors.New("该设备不支持当前操作")
+	}
+	if !device.IsOnline() {
+		return nil, errors.New("该设备当前不在线")
 	}
 
 	deviceOperateLog := &model.DeviceOperateLog{
@@ -58,14 +62,14 @@ func (this DeviceOperateLogic) TriggerOperate(ctx context.Context, device *model
 		return nil, err
 	}
 
-	if !repository.Repository.DeviceOperateLogRepository.AddDeviceOperateLog(this.GetDefaultDb(), deviceOperateLog) {
+	if !repository.Repository.DeviceOperateLogRepository.AddDeviceOperateLog(deviceOperateLogic.GetDefaultDb(), deviceOperateLog) {
 		return nil, errors.New("添加操作记录失败")
 	}
 
 	err = Logic.EmqxLogic.PubClientOperate(ctx, device, deviceOperateLog)
 	if err != nil {
 		deviceOperateLog.ResponsePayload = model.OperatePayload{"error": err.Error()}
-		if !repository.Repository.DeviceOperateLogRepository.UpdateDeviceOperateLog(this.GetDefaultDb(), deviceOperateLog) {
+		if !repository.Repository.DeviceOperateLogRepository.UpdateDeviceOperateLog(deviceOperateLogic.GetDefaultDb(), deviceOperateLog) {
 			return nil, errors.New("更新操作记录失败")
 		}
 	}
@@ -81,19 +85,16 @@ func (this DeviceOperateLogic) TriggerOperate(ctx context.Context, device *model
 	return deviceOperateLog, nil
 }
 
-func (this DeviceOperateLogic) UpdateOperateLog(operateLog *model.DeviceOperateLog) error {
-	if !repository.Repository.DeviceOperateLogRepository.UpdateDeviceOperateLog(this.GetDefaultDb(), operateLog) {
+func (deviceOperateLogic DeviceOperateLogic) UpdateOperateLog(operateLog *model.DeviceOperateLog) error {
+	if !repository.Repository.DeviceOperateLogRepository.UpdateDeviceOperateLog(deviceOperateLogic.GetDefaultDb(), operateLog) {
 		return errors.New("更新操作记录失败")
 	}
 
 	return nil
 }
 
-func (this DeviceOperateLogic) GetDeviceOperateLogResultByNumber(device *model.Device, operateNumber string) (*model.DeviceOperateLog, error) {
-	operateLog := repository.Repository.DeviceOperateLogRepository.GetDeviceOperateLogByOperateNumber(this.GetDefaultDb(), operateNumber)
-	if operateLog == nil {
-		return nil, errors.New("设备操作记录不存在")
-	}
+func (deviceOperateLogic DeviceOperateLogic) GetDeviceOperateLogResultByNumber(device *model.Device, operateNumber string) (*model.DeviceOperateLog, error) {
+	operateLog, _ := deviceOperateLogic.GetOperateLogResultByNumber(operateNumber)
 	if operateLog.DeviceId != device.ID {
 		return nil, errors.New("非法操作")
 	}
@@ -101,8 +102,8 @@ func (this DeviceOperateLogic) GetDeviceOperateLogResultByNumber(device *model.D
 	return operateLog, nil
 }
 
-func (this DeviceOperateLogic) GetOperateLogResultByNumber(operateNumber string) (*model.DeviceOperateLog, error) {
-	operateLog := repository.Repository.DeviceOperateLogRepository.GetDeviceOperateLogByOperateNumber(this.GetDefaultDb(), operateNumber)
+func (deviceOperateLogic DeviceOperateLogic) GetOperateLogResultByNumber(operateNumber string) (*model.DeviceOperateLog, error) {
+	operateLog := repository.Repository.DeviceOperateLogRepository.GetDeviceOperateLogByOperateNumber(deviceOperateLogic.GetDefaultDb(), operateNumber)
 	if operateLog == nil {
 		return nil, errors.New("设备操作记录不存在")
 	}
@@ -110,6 +111,6 @@ func (this DeviceOperateLogic) GetOperateLogResultByNumber(operateNumber string)
 	return operateLog, nil
 }
 
-func (this DeviceOperateLogic) GetDeviceOperates(device *model.Device, page uint, pageSize uint) *repository.PageModel {
-	return repository.DeviceOperateLogRepository{}.GetDeviceOperates(this.GetDefaultDb(), device.ID, page, pageSize)
+func (deviceOperateLogic DeviceOperateLogic) GetDeviceOperates(device *model.Device, page uint, pageSize uint) *repository.PageModel {
+	return repository.DeviceOperateLogRepository{}.GetDeviceOperates(deviceOperateLogic.GetDefaultDb(), device.ID, page, pageSize)
 }

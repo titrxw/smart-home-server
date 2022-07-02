@@ -1,12 +1,13 @@
 package provider
 
 import (
+	"regexp"
+	"unicode/utf8"
+
 	ut "github.com/go-playground/universal-translator"
 	provider "github.com/titrxw/go-framework/src/Core/Provider"
 	global "github.com/titrxw/go-framework/src/Global"
 	logic "github.com/titrxw/smart-home-server/app/Logic"
-	"regexp"
-	"unicode/utf8"
 
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
@@ -16,7 +17,7 @@ type ValidatorProvider struct {
 	provider.ProviderAbstract
 }
 
-func (this *ValidatorProvider) Register(options interface{}) {
+func (validatorProvider *ValidatorProvider) Register(options interface{}) {
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		v.RegisterValidation("id", func(fl validator.FieldLevel) bool {
 			if id, ok := fl.Field().Interface().(uint); ok {

@@ -2,6 +2,7 @@ package emqx
 
 import (
 	"context"
+
 	"github.com/golobby/container/v3/pkg/container"
 	acl "github.com/titrxw/emqx-sdk/src/Acl"
 	acl_entity "github.com/titrxw/emqx-sdk/src/Acl/Entity"
@@ -28,76 +29,76 @@ func NewEmqxClientService(EmqxClient *kernel.EmqxClient) *EmqxClientService {
 	}
 }
 
-func (this *EmqxClientService) getAuth() *auth.Auth {
-	if this.auth == nil {
-		authHandler := auth_handler.NewMnesiaAuthHandler(this.getEmqxClient())
-		this.auth = auth.NewAuth(authHandler, nil)
+func (emqxClientService *EmqxClientService) getAuth() *auth.Auth {
+	if emqxClientService.auth == nil {
+		authHandler := auth_handler.NewMnesiaAuthHandler(emqxClientService.getEmqxClient())
+		emqxClientService.auth = auth.NewAuth(authHandler, nil)
 	}
 
-	return this.auth
+	return emqxClientService.auth
 }
 
-func (this *EmqxClientService) getAcl() *acl.Acl {
-	if this.acl == nil {
-		aclHandler := acl_handler.NewMnesiaAclHandler(this.getEmqxClient())
-		this.acl = acl.NewAcl(aclHandler)
+func (emqxClientService *EmqxClientService) getAcl() *acl.Acl {
+	if emqxClientService.acl == nil {
+		aclHandler := acl_handler.NewMnesiaAclHandler(emqxClientService.getEmqxClient())
+		emqxClientService.acl = acl.NewAcl(aclHandler)
 	}
 
-	return this.acl
+	return emqxClientService.acl
 }
 
-func (this *EmqxClientService) AddClient(ctx context.Context, clientId string, password string, salt string) error {
+func (emqxClientService *EmqxClientService) AddClient(ctx context.Context, clientId string, password string, salt string) error {
 	authEntity := new(auth_entity.AuthEntity)
 	authEntity.SetClientName(clientId)
 	authEntity.SetPassword(password)
 	authEntity.SetSalt(salt)
 
-	return this.getAuth().Set(ctx, authEntity, false)
+	return emqxClientService.getAuth().Set(ctx, authEntity, false)
 }
 
-func (this *EmqxClientService) DeleteClient(ctx context.Context, clientId string) error {
+func (emqxClientService *EmqxClientService) DeleteClient(ctx context.Context, clientId string) error {
 	authEntity := new(auth_entity.AuthEntity)
 	authEntity.SetClientName(clientId)
 
-	return this.getAuth().Delete(ctx, authEntity, false)
+	return emqxClientService.getAuth().Delete(ctx, authEntity, false)
 }
 
-func (this *EmqxClientService) AddClientPubAcl(ctx context.Context, clientId string, topic string) error {
+func (emqxClientService *EmqxClientService) AddClientPubAcl(ctx context.Context, clientId string, topic string) error {
 	aclEntity := new(acl_entity.AclEntity)
 	aclEntity.SetClientName(clientId)
 	aclEntity.SetTopic(topic)
 	aclEntity.SetActionPub()
 	aclEntity.SetAccessAllow()
 
-	return this.getAcl().Set(ctx, aclEntity, false)
+	return emqxClientService.getAcl().Set(ctx, aclEntity, false)
 }
 
-func (this *EmqxClientService) AddClientSubAcl(ctx context.Context, clientId string, topic string) error {
+func (emqxClientService *EmqxClientService) AddClientSubAcl(ctx context.Context, clientId string, topic string) error {
 	aclEntity := new(acl_entity.AclEntity)
 	aclEntity.SetClientName(clientId)
 	aclEntity.SetTopic(topic)
 	aclEntity.SetActionSub()
 	aclEntity.SetAccessAllow()
 
-	return this.getAcl().Set(ctx, aclEntity, false)
+	return emqxClientService.getAcl().Set(ctx, aclEntity, false)
 }
 
-func (this *EmqxClientService) AddClientPubSubAcl(ctx context.Context, clientId string, topic string) error {
+func (emqxClientService *EmqxClientService) AddClientPubSubAcl(ctx context.Context, clientId string, topic string) error {
 	aclEntity := new(acl_entity.AclEntity)
 	aclEntity.SetClientName(clientId)
 	aclEntity.SetTopic(topic)
 	aclEntity.SetActionPubSub()
 	aclEntity.SetAccessAllow()
 
-	return this.getAcl().Set(ctx, aclEntity, false)
+	return emqxClientService.getAcl().Set(ctx, aclEntity, false)
 }
 
-func (this *EmqxClientService) DeleteClientAcl(ctx context.Context, clientId string, topic string) error {
+func (emqxClientService *EmqxClientService) DeleteClientAcl(ctx context.Context, clientId string, topic string) error {
 	aclEntity := new(acl_entity.AclEntity)
 	aclEntity.SetClientName(clientId)
 	aclEntity.SetTopic(topic)
 
-	return this.getAcl().Delete(ctx, aclEntity, false)
+	return emqxClientService.getAcl().Delete(ctx, aclEntity, false)
 }
 
 func GetEmqxClientService(container container.Container) *EmqxClientService {

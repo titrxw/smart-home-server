@@ -11,13 +11,13 @@ type Router struct {
 	frontend.FrontendRouteGroup
 }
 
-func (this *Router) Register(router *gin.Engine) {
+func (r *Router) Register(router *gin.Engine) {
 	router.Static("/static", "./public/static")
 
 	v1 := router.Group("/api")
 	{
-		this.SysRouteGroup.RegisterBaseRouteGroup(v1)
-		this.FrontendRouteGroup.RegisterBaseRouteGroup(v1)
+		r.SysRouteGroup.RegisterBaseRouteGroup(v1)
+		r.FrontendRouteGroup.RegisterBaseRouteGroup(v1)
 	}
 }
 

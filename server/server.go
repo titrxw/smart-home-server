@@ -11,9 +11,7 @@ import (
 	server "github.com/titrxw/go-framework/src/Http/Server"
 	session2 "github.com/titrxw/go-framework/src/Http/Session"
 	"github.com/titrxw/smart-home-server/app"
-	mqtt "github.com/titrxw/smart-home-server/app/Mqtt"
 	"github.com/titrxw/smart-home-server/router"
-	"strconv"
 )
 
 func RegisterHttpServer(app *app.App) {
@@ -46,6 +44,4 @@ func RegisterHttpServer(app *app.App) {
 	app.Console.RegisterCommand(&route.ListCommand{
 		GinEngine: global.FHttpServer.GinEngine,
 	})
-
-	go mqtt.StartDeviceReplaySubscribe(app.Config.Mqtt.Host, strconv.Itoa(app.Config.Mqtt.Port), app.Config.Mqtt.UserName, app.Config.Mqtt.Password)
 }

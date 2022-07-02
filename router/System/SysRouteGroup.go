@@ -7,7 +7,7 @@ type SysRouteGroup struct {
 	Util
 }
 
-func (this *SysRouteGroup) RegisterBaseRouteGroup(router *gin.RouterGroup) {
-	this.System.registerRoute(router)
-	this.Util.registerRoute(router)
+func (sysRouteGroup *SysRouteGroup) RegisterBaseRouteGroup(router *gin.RouterGroup) {
+	sysRouteGroup.System.registerRoute(router)
+	sysRouteGroup.Util.registerRoute(router)
 }

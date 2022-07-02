@@ -23,18 +23,18 @@ type RedisStore struct {
 	Context    context.Context
 }
 
-func (this *RedisStore) Set(id string, value string) error {
-	return this.Redis.Set(this.Context, this.PreKey+id, value, this.Expiration).Err()
+func (redisStore *RedisStore) Set(id string, value string) error {
+	return redisStore.Redis.Set(redisStore.Context, redisStore.PreKey+id, value, redisStore.Expiration).Err()
 }
 
-func (this *RedisStore) Get(key string, clear bool) string {
-	val, err := this.Redis.Get(this.Context, key).Result()
+func (redisStore *RedisStore) Get(key string, clear bool) string {
+	val, err := redisStore.Redis.Get(redisStore.Context, key).Result()
 	if err != nil {
 		return ""
 	}
 
 	if clear {
-		err := this.Redis.Del(this.Context, key).Err()
+		err := redisStore.Redis.Del(redisStore.Context, key).Err()
 		if err != nil {
 			return ""
 		}
@@ -42,8 +42,8 @@ func (this *RedisStore) Get(key string, clear bool) string {
 	return val
 }
 
-func (this *RedisStore) Verify(id, answer string, clear bool) bool {
-	key := this.PreKey + id
-	v := this.Get(key, clear)
+func (redisStore *RedisStore) Verify(id, answer string, clear bool) bool {
+	key := redisStore.PreKey + id
+	v := redisStore.Get(key, clear)
 	return v == answer
 }

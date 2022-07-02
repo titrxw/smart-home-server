@@ -10,7 +10,7 @@ type ControllerAbstract struct {
 	base.ControllerAbstract
 }
 
-func (this ControllerAbstract) GetUserId(ctx *gin.Context) model.UID {
+func (controller ControllerAbstract) GetUserId(ctx *gin.Context) model.UID {
 	userId, _ := ctx.MustGet("user_id").(model.UID)
 	return userId
 }

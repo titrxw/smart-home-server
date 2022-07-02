@@ -7,4 +7,5 @@ type DeviceAdapterInterface interface {
 	BeforeTriggerOperate(device *model.Device, deviceOperateLog *model.DeviceOperateLog) error
 	AfterTriggerOperate(device *model.Device, deviceOperateLog *model.DeviceOperateLog) error
 	OnOperateResponse(deviceOperateLog *model.DeviceOperateLog) error
+	OnReport(device *model.Device, payload string) error
 }

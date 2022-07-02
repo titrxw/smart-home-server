@@ -9,10 +9,10 @@ import (
 type LogicAbstract struct {
 }
 
-func (this LogicAbstract) GetDefaultDb() *gorm.DB {
+func (logic LogicAbstract) GetDefaultDb() *gorm.DB {
 	return global.FApp.DbFactory.Channel("default")
 }
 
-func (this LogicAbstract) GetDefaultRedis() *redis.Client {
+func (logic LogicAbstract) GetDefaultRedis() *redis.Client {
 	return global.FApp.RedisFactory.Channel("default")
 }

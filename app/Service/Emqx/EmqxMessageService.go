@@ -2,6 +2,7 @@ package emqx
 
 import (
 	"context"
+
 	"github.com/golobby/container/v3/pkg/container"
 	kernel "github.com/titrxw/emqx-sdk/src/Kernel"
 	openapi "github.com/titrxw/emqx-sdk/src/OpenApi"
@@ -22,16 +23,16 @@ func NewEmqxMessageService(EmqxClient *kernel.EmqxClient) *EmqxMessageService {
 	}
 }
 
-func (this *EmqxMessageService) getOpenApiFactory() *openapi.OpenApiFactory {
-	if this.openapiFactory == nil {
-		this.openapiFactory = openapi.NewOpenApiFactory(this.getEmqxClient())
+func (emqxMessageService *EmqxMessageService) getOpenApiFactory() *openapi.OpenApiFactory {
+	if emqxMessageService.openapiFactory == nil {
+		emqxMessageService.openapiFactory = openapi.NewOpenApiFactory(emqxMessageService.getEmqxClient())
 	}
 
-	return this.openapiFactory
+	return emqxMessageService.openapiFactory
 }
 
-func (this *EmqxMessageService) Publish(ctx context.Context, clientId string, topic string, payload string, qos int, retain bool) error {
-	return this.getOpenApiFactory().Message().Publish(ctx, clientId, topic, payload, qos, retain)
+func (emqxMessageService *EmqxMessageService) Publish(ctx context.Context, clientId string, topic string, payload string, qos int, retain bool) error {
+	return emqxMessageService.getOpenApiFactory().Message().Publish(ctx, clientId, topic, payload, qos, retain)
 }
 
 func GetEmqxMessageService(container container.Container) *EmqxMessageService {

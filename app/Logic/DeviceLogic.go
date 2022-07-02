@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 	"errors"
+
 	"github.com/titrxw/smart-home-server/app/Adapter/Interface"
 	"github.com/titrxw/smart-home-server/config"
 
@@ -18,33 +19,41 @@ type DeviceLogic struct {
 	LogicAbstract
 }
 
-func (this *DeviceLogic) RegisterDevice(deviceType string, device config.Device) {
-	this.SupportDeviceMap[deviceType] = device
+func (deviceLogic *DeviceLogic) RegisterDevice(deviceType string, device config.Device) {
+	deviceLogic.SupportDeviceMap[deviceType] = device
 }
 
-func (this DeviceLogic) GetDeviceSupportMap() map[string]config.Device {
-	return this.SupportDeviceMap
+func (deviceLogic DeviceLogic) GetDeviceSupportMap() map[string]config.Device {
+	return deviceLogic.SupportDeviceMap
 }
 
-func (this *DeviceLogic) RegisterDeviceAdapter(deviceType string, adapterInterface Interface.DeviceAdapterInterface) {
-	this.SupportDeviceAdapter[deviceType] = adapterInterface
+func (deviceLogic *DeviceLogic) RegisterDeviceAdapter(deviceType string, adapterInterface Interface.DeviceAdapterInterface) {
+	deviceLogic.SupportDeviceAdapter[deviceType] = adapterInterface
 }
 
-func (this DeviceLogic) GetDeviceAdapter(deviceType string) Interface.DeviceAdapterInterface {
-	return this.SupportDeviceAdapter[deviceType]
+func (deviceLogic DeviceLogic) GetDeviceAdapter(deviceType string) Interface.DeviceAdapterInterface {
+	return deviceLogic.SupportDeviceAdapter[deviceType]
 }
 
-func (this DeviceLogic) GetDeviceById(deviceId uint) *model.Device {
-	return repository.DeviceRepository{}.GetDeviceById(this.GetDefaultDb(), deviceId)
+func (deviceLogic DeviceLogic) GetDeviceByDeviceId(deviceId string) *model.Device {
+	app := repository.AppRepository{}.GetByAppId(deviceLogic.GetDefaultDb(), deviceId)
+	if app == nil {
+		return nil
+	}
+	return repository.DeviceRepository{}.GetDeviceByApp(deviceLogic.GetDefaultDb(), app)
 }
 
-func (this DeviceLogic) CreateUserDevice(ctx context.Context, userId model.UID, deviceName string, deviceType string) (*model.Device, error) {
+func (deviceLogic DeviceLogic) GetDeviceById(deviceId uint) *model.Device {
+	return repository.DeviceRepository{}.GetDeviceById(deviceLogic.GetDefaultDb(), deviceId)
+}
+
+func (deviceLogic DeviceLogic) CreateUserDevice(ctx context.Context, userId model.UID, deviceName string, deviceType string) (*model.Device, error) {
 	device := &model.Device{
 		Name: deviceName,
 		Type: deviceType,
 	}
 
-	err := this.GetDefaultDb().Transaction(func(tx *gorm.DB) error {
+	err := deviceLogic.GetDefaultDb().Transaction(func(tx *gorm.DB) error {
 		app := repository.Repository.AppRepository.CreateDeviceApp(tx)
 		if app == nil {
 			return errors.New("创建app失败")
@@ -64,12 +73,12 @@ func (this DeviceLogic) CreateUserDevice(ctx context.Context, userId model.UID, 
 	return device, nil
 }
 
-func (this DeviceLogic) GetUserDevices(userId model.UID, page uint, pageSize uint) *repository.PageModel {
-	return repository.DeviceRepository{}.GetUserDevices(this.GetDefaultDb(), userId, page, pageSize)
+func (deviceLogic DeviceLogic) GetUserDevices(userId model.UID, page uint, pageSize uint) *repository.PageModel {
+	return repository.DeviceRepository{}.GetUserDevices(deviceLogic.GetDefaultDb(), userId, page, pageSize)
 }
 
-func (this DeviceLogic) GetUserDeviceById(userId model.UID, id uint) (*model.Device, error) {
-	device := repository.Repository.DeviceRepository.GetUserDeviceById(this.GetDefaultDb(), userId, id)
+func (deviceLogic DeviceLogic) GetUserDeviceById(userId model.UID, id uint) (*model.Device, error) {
+	device := repository.Repository.DeviceRepository.GetUserDeviceById(deviceLogic.GetDefaultDb(), userId, id)
 	if device == nil {
 		return nil, errors.New("设备不存在")
 	}
@@ -77,8 +86,8 @@ func (this DeviceLogic) GetUserDeviceById(userId model.UID, id uint) (*model.Dev
 	return device, nil
 }
 
-func (this DeviceLogic) UpdateUserDevice(ctx context.Context, device *model.Device) error {
-	return this.GetDefaultDb().Transaction(func(tx *gorm.DB) error {
+func (deviceLogic DeviceLogic) UpdateDevice(ctx context.Context, device *model.Device) error {
+	return deviceLogic.GetDefaultDb().Transaction(func(tx *gorm.DB) error {
 		if !repository.Repository.DeviceRepository.UpdateDevice(tx, device) {
 			return errors.New("更新设备失败")
 		}

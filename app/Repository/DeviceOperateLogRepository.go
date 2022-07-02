@@ -9,17 +9,17 @@ type DeviceOperateLogRepository struct {
 	RepositoryAbstract
 }
 
-func (this DeviceOperateLogRepository) AddDeviceOperateLog(db *gorm.DB, operateLog *model.DeviceOperateLog) bool {
+func (deviceOperateLogRepository DeviceOperateLogRepository) AddDeviceOperateLog(db *gorm.DB, operateLog *model.DeviceOperateLog) bool {
 	result := db.Create(operateLog)
 	return result.Error == nil
 }
 
-func (this DeviceOperateLogRepository) UpdateDeviceOperateLog(db *gorm.DB, operateLog *model.DeviceOperateLog) bool {
+func (deviceOperateLogRepository DeviceOperateLogRepository) UpdateDeviceOperateLog(db *gorm.DB, operateLog *model.DeviceOperateLog) bool {
 	result := db.Save(operateLog)
 	return result.Error == nil
 }
 
-func (this DeviceOperateLogRepository) GetDeviceOperateLogByOperateNumber(db *gorm.DB, operateNumber string) *model.DeviceOperateLog {
+func (deviceOperateLogRepository DeviceOperateLogRepository) GetDeviceOperateLogByOperateNumber(db *gorm.DB, operateNumber string) *model.DeviceOperateLog {
 	deviceOperateLog := new(model.DeviceOperateLog)
 	result := db.Where("operate_number = ?", operateNumber).First(deviceOperateLog)
 	if result.RowsAffected == 1 {
@@ -29,7 +29,7 @@ func (this DeviceOperateLogRepository) GetDeviceOperateLogByOperateNumber(db *go
 	return nil
 }
 
-func (this DeviceOperateLogRepository) GetDeviceOperates(db *gorm.DB, deviceId uint, page uint, pageSize uint) *PageModel {
+func (deviceOperateLogRepository DeviceOperateLogRepository) GetDeviceOperates(db *gorm.DB, deviceId uint, page uint, pageSize uint) *PageModel {
 	deviceOperates := make([]model.DeviceOperateLog, 0)
 	pageData := &PageModel{
 		CurPage:  page,

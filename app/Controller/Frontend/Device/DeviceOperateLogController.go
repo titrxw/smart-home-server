@@ -32,59 +32,59 @@ type DeviceOperatePageRequest struct {
 	PageSize uint `form:"page_size" binding:"required,page"`
 }
 
-func (this DeviceOperateLogController) TriggerOperate(ctx *gin.Context) {
+func (deviceOperateController DeviceOperateLogController) TriggerOperate(ctx *gin.Context) {
 	deviceOperateRequest := DeviceOperateRequest{}
-	if !this.ValidateFormPost(ctx, &deviceOperateRequest) {
+	if !deviceOperateController.ValidateFormPost(ctx, &deviceOperateRequest) {
 		return
 	}
 
-	device, err := logic.Logic.DeviceLogic.GetUserDeviceById(this.GetUserId(ctx), deviceOperateRequest.DeviceId)
+	device, err := logic.Logic.DeviceLogic.GetUserDeviceById(deviceOperateController.GetUserId(ctx), deviceOperateRequest.DeviceId)
 	if err != nil {
-		this.JsonResponseWithServerError(ctx, err)
+		deviceOperateController.JsonResponseWithServerError(ctx, err)
 		return
 	}
 
 	operateLog, err := logic.Logic.DeviceOperateLogic.TriggerOperate(ctx, device, deviceOperateRequest.OperateType, deviceOperateRequest.OperatePayload, 2)
 	if err != nil {
-		this.JsonResponseWithServerError(ctx, err)
+		deviceOperateController.JsonResponseWithServerError(ctx, err)
 		return
 	}
 
-	this.JsonResponseWithoutError(ctx, operateLog)
+	deviceOperateController.JsonResponseWithoutError(ctx, operateLog)
 }
 
-func (this DeviceOperateLogController) OperateDetail(ctx *gin.Context) {
+func (deviceOperateController DeviceOperateLogController) OperateDetail(ctx *gin.Context) {
 	deviceOperateDetailRequest := DeviceOperateDetailRequest{}
-	if !this.ValidateFormPost(ctx, &deviceOperateDetailRequest) {
+	if !deviceOperateController.ValidateFormPost(ctx, &deviceOperateDetailRequest) {
 		return
 	}
 
-	device, err := logic.Logic.DeviceLogic.GetUserDeviceById(this.GetUserId(ctx), deviceOperateDetailRequest.DeviceId)
+	device, err := logic.Logic.DeviceLogic.GetUserDeviceById(deviceOperateController.GetUserId(ctx), deviceOperateDetailRequest.DeviceId)
 	if err != nil {
-		this.JsonResponseWithServerError(ctx, err)
+		deviceOperateController.JsonResponseWithServerError(ctx, err)
 		return
 	}
 
 	operateLog, err := logic.Logic.DeviceOperateLogic.GetDeviceOperateLogResultByNumber(device, deviceOperateDetailRequest.OperateNumber)
 	if err != nil {
-		this.JsonResponseWithServerError(ctx, err)
+		deviceOperateController.JsonResponseWithServerError(ctx, err)
 		return
 	}
 
-	this.JsonResponseWithoutError(ctx, operateLog)
+	deviceOperateController.JsonResponseWithoutError(ctx, operateLog)
 }
 
-func (this DeviceOperateLogController) DeviceOperateLog(ctx *gin.Context) {
+func (deviceOperateController DeviceOperateLogController) DeviceOperateLog(ctx *gin.Context) {
 	deviceOperatePageRequest := DeviceOperatePageRequest{}
-	if !this.ValidateFormPost(ctx, &deviceOperatePageRequest) {
+	if !deviceOperateController.ValidateFormPost(ctx, &deviceOperatePageRequest) {
 		return
 	}
-	device, err := logic.Logic.DeviceLogic.GetUserDeviceById(this.GetUserId(ctx), deviceOperatePageRequest.DeviceId)
+	device, err := logic.Logic.DeviceLogic.GetUserDeviceById(deviceOperateController.GetUserId(ctx), deviceOperatePageRequest.DeviceId)
 	if err != nil {
-		this.JsonResponseWithServerError(ctx, err)
+		deviceOperateController.JsonResponseWithServerError(ctx, err)
 		return
 	}
 
 	pageData := logic.Logic.DeviceOperateLogic.GetDeviceOperates(device, deviceOperatePageRequest.Page, deviceOperatePageRequest.PageSize)
-	this.JsonResponseWithoutError(ctx, pageData)
+	deviceOperateController.JsonResponseWithoutError(ctx, pageData)
 }

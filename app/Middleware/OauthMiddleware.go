@@ -1,8 +1,9 @@
 package middleware
 
 import (
-	middleware "github.com/titrxw/go-framework/src/Http/Middleware"
 	"net/http"
+
+	middleware "github.com/titrxw/go-framework/src/Http/Middleware"
 
 	"github.com/gin-gonic/gin"
 	user "github.com/titrxw/smart-home-server/app/Controller/Frontend/User"
@@ -13,10 +14,10 @@ type OauthMiddleware struct {
 	user.UserOauth
 }
 
-func (this OauthMiddleware) Process(ctx *gin.Context) {
-	userId := this.GetUserIdFromSession(ctx)
+func (oauthMiddleware OauthMiddleware) Process(ctx *gin.Context) {
+	userId := oauthMiddleware.GetUserIdFromSession(ctx)
 	if userId <= 0 {
-		this.JsonResponseWithError(ctx, "未登录", http.StatusForbidden)
+		oauthMiddleware.JsonResponseWithError(ctx, "未登录", http.StatusForbidden)
 		return
 	}
 

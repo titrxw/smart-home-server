@@ -2,9 +2,10 @@ package logic
 
 import (
 	"context"
-	global "github.com/titrxw/go-framework/src/Global"
 	"strconv"
 	"time"
+
+	global "github.com/titrxw/go-framework/src/Global"
 
 	cloudevents "github.com/cloudevents/sdk-go/v2"
 	helper "github.com/titrxw/smart-home-server/app/Helper"
@@ -16,18 +17,22 @@ type EmqxLogic struct {
 	LogicAbstract
 }
 
-func (this EmqxLogic) AddEmqxClient(ctx context.Context, device *model.Device) error {
+func (emqxLogic EmqxLogic) AddEmqxClient(ctx context.Context, device *model.Device) error {
 	emqxService := emqx.GetEmqxClientService(global.FApp.Container)
 	err := emqxService.AddClient(ctx, device.App.AppId, device.App.AppSecret, "")
 	if err != nil {
 		return err
 	}
 
-	err = emqxService.AddClientSubAcl(ctx, device.App.AppId, this.GetClientSubTopic(device.App.AppId))
+	err = emqxService.AddClientSubAcl(ctx, device.App.AppId, emqxLogic.GetClientOperateSubTopic(device.App.AppId))
 	if err != nil {
 		return err
 	}
-	err = emqxService.AddClientPubAcl(ctx, device.App.AppId, this.GetClientPubTopic(device.App.AppId))
+	err = emqxService.AddClientPubAcl(ctx, device.App.AppId, emqxLogic.GetClientOperatePubTopic(device.App.AppId))
+	if err != nil {
+		return err
+	}
+	err = emqxService.AddClientPubAcl(ctx, device.App.AppId, emqxLogic.GetClientReportTopic(device.App.AppId))
 	if err != nil {
 		return err
 	}
@@ -35,18 +40,22 @@ func (this EmqxLogic) AddEmqxClient(ctx context.Context, device *model.Device) e
 	return nil
 }
 
-func (this EmqxLogic) DeleteEmqxClient(ctx context.Context, device *model.Device) error {
+func (emqxLogic EmqxLogic) DeleteEmqxClient(ctx context.Context, device *model.Device) error {
 	emqxService := emqx.GetEmqxClientService(global.FApp.Container)
 	err := emqxService.DeleteClient(ctx, device.App.AppId)
 	if err != nil {
 		return err
 	}
 
-	err = emqxService.DeleteClientAcl(ctx, device.App.AppId, this.GetClientSubTopic(device.App.AppId))
+	err = emqxService.DeleteClientAcl(ctx, device.App.AppId, emqxLogic.GetClientOperateSubTopic(device.App.AppId))
 	if err != nil {
 		return err
 	}
-	err = emqxService.DeleteClientAcl(ctx, device.App.AppId, this.GetClientPubTopic(device.App.AppId))
+	err = emqxService.DeleteClientAcl(ctx, device.App.AppId, emqxLogic.GetClientOperatePubTopic(device.App.AppId))
+	if err != nil {
+		return err
+	}
+	err = emqxService.DeleteClientAcl(ctx, device.App.AppId, emqxLogic.GetClientReportTopic(device.App.AppId))
 	if err != nil {
 		return err
 	}
@@ -54,7 +63,7 @@ func (this EmqxLogic) DeleteEmqxClient(ctx context.Context, device *model.Device
 	return nil
 }
 
-func (this EmqxLogic) PubClientOperate(ctx context.Context, device *model.Device, deviceOperateLog *model.DeviceOperateLog) error {
+func (emqxLogic EmqxLogic) PubClientOperate(ctx context.Context, device *model.Device, deviceOperateLog *model.DeviceOperateLog) error {
 	if deviceOperateLog.OperatePayload == nil {
 		deviceOperateLog.OperatePayload = make(model.OperatePayload)
 	}
@@ -81,13 +90,17 @@ func (this EmqxLogic) PubClientOperate(ctx context.Context, device *model.Device
 		retain = true
 	}
 
-	return emqx.GetEmqxMessageService(global.FApp.Container).Publish(ctx, device.App.AppId, EmqxLogic{}.GetClientSubTopic(device.App.AppId), string(tmpByte), int(deviceOperateLog.OperateLevel), retain)
+	return emqx.GetEmqxMessageService(global.FApp.Container).Publish(ctx, device.App.AppId, EmqxLogic{}.GetClientOperateSubTopic(device.App.AppId), string(tmpByte), int(deviceOperateLog.OperateLevel), retain)
 }
 
-func (this EmqxLogic) GetClientSubTopic(appId string) string {
+func (emqxLogic EmqxLogic) GetClientOperateSubTopic(appId string) string {
 	return "/iot/" + global.FApp.Name + "/device/" + appId + "/ctrl"
 }
 
-func (this EmqxLogic) GetClientPubTopic(appId string) string {
+func (emqxLogic EmqxLogic) GetClientOperatePubTopic(appId string) string {
 	return "/iot/" + global.FApp.Name + "/device/" + appId + "/reply"
+}
+
+func (emqxLogic EmqxLogic) GetClientReportTopic(appId string) string {
+	return "/iot/" + global.FApp.Name + "/device/" + appId + "/report"
 }

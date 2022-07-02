@@ -16,7 +16,7 @@ type ControllerAbstract struct {
 	controller.ControllerAbstract
 }
 
-func (this ControllerAbstract) translateValidationError(err error) string {
+func (controller ControllerAbstract) translateValidationError(err error) string {
 	if validationErrors, ok := err.(validator.ValidationErrors); !ok {
 		return err.Error()
 	} else {
@@ -29,30 +29,30 @@ func (this ControllerAbstract) translateValidationError(err error) string {
 	}
 }
 
-func (this ControllerAbstract) ValidateFormPost(ctx *gin.Context, request interface{}) bool {
+func (controller ControllerAbstract) ValidateFormPost(ctx *gin.Context, request interface{}) bool {
 	err := ctx.ShouldBind(request)
 	if err != nil {
-		this.JsonResponseWithServerError(ctx, this.translateValidationError(err))
+		controller.JsonResponseWithServerError(ctx, controller.translateValidationError(err))
 		return false
 	}
 
 	return true
 }
 
-func (this ControllerAbstract) ValidateQuery(ctx *gin.Context, request interface{}) bool {
+func (controller ControllerAbstract) ValidateQuery(ctx *gin.Context, request interface{}) bool {
 	err := ctx.BindQuery(request)
 	if err != nil {
-		this.JsonResponseWithServerError(ctx, this.translateValidationError(err))
+		controller.JsonResponseWithServerError(ctx, controller.translateValidationError(err))
 		return false
 	}
 
 	return true
 }
 
-func (this ControllerAbstract) ValidateFromUri(ctx *gin.Context, request interface{}) bool {
+func (controller ControllerAbstract) ValidateFromUri(ctx *gin.Context, request interface{}) bool {
 	err := ctx.BindUri(request)
 	if err != nil {
-		this.JsonResponseWithServerError(ctx, this.translateValidationError(err))
+		controller.JsonResponseWithServerError(ctx, controller.translateValidationError(err))
 		return false
 	}
 

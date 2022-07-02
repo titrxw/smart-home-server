@@ -13,14 +13,14 @@ type ServiceProvider struct {
 	provider.ProviderAbstract
 }
 
-func (this *ServiceProvider) Register(options interface{}) {
+func (serviceProvider *ServiceProvider) Register(options interface{}) {
 	config := options.(*config.Config)
-	this.registerJwtService(config)
-	this.registerEmqxService(config)
+	serviceProvider.registerJwtService(config)
+	serviceProvider.registerEmqxService(config)
 }
 
-func (this *ServiceProvider) registerJwtService(options *config.Config) {
-	this.RegisterAutoPanic(jwt.JWT_SERVICE, func() *jwt.JwtService {
+func (serviceProvider *ServiceProvider) registerJwtService(options *config.Config) {
+	serviceProvider.RegisterAutoPanic(jwt.JWT_SERVICE, func() *jwt.JwtService {
 		var err error
 		options.Jwt.PrivateKey, err = utils.Decrypt(options.Jwt.PrivateKey, options.Common.SecureKey)
 		if err != nil {
@@ -43,12 +43,12 @@ func (this *ServiceProvider) registerJwtService(options *config.Config) {
 	})
 }
 
-func (this *ServiceProvider) registerEmqxService(options *config.Config) {
+func (serviceProvider *ServiceProvider) registerEmqxService(options *config.Config) {
 	client := kernel.NewClient(options.Emqx.Host, options.Emqx.AppId, options.Emqx.AppSecret)
-	this.RegisterAutoPanic(emqx.EMQ_MESSAGE_SERVICE, func() *emqx.EmqxMessageService {
+	serviceProvider.RegisterAutoPanic(emqx.EMQ_MESSAGE_SERVICE, func() *emqx.EmqxMessageService {
 		return emqx.NewEmqxMessageService(client)
 	})
-	this.RegisterAutoPanic(emqx.EMQ_CLIENT_SERVICE, func() *emqx.EmqxClientService {
+	serviceProvider.RegisterAutoPanic(emqx.EMQ_CLIENT_SERVICE, func() *emqx.EmqxClientService {
 		return emqx.NewEmqxClientService(client)
 	})
 }

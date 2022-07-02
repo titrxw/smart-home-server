@@ -8,7 +8,7 @@ import (
 type Util struct {
 }
 
-func (this *Util) registerRoute(router *gin.RouterGroup) {
+func (urilr *Util) registerRoute(router *gin.RouterGroup) {
 	v2 := router.Group("/util")
 	{
 		v2.GET("/captcha", new(util.CaptchaController).Captcha)

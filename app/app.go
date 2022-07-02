@@ -23,13 +23,13 @@ func NewApp() *App {
 	return GApp
 }
 
-func (this *App) Bootstrap() {
-	this.App.Bootstrap()
-	this.InitConfig(&this.Config)
+func (app *App) Bootstrap() {
+	app.App.Bootstrap()
+	app.InitConfig(&app.Config)
 
-	this.App.HandlerExceptions.SetExceptionHandler(new(exception.ExceptionHandler))
+	app.App.HandlerExceptions.SetExceptionHandler(new(exception.ExceptionHandler))
 
-	this.ProviderManager.MakeProvider(new(provider.ServiceProvider)).Register(this.Config)
-	this.ProviderManager.MakeProvider(new(provider.ValidatorProvider)).Register(this.Config)
-	this.ProviderManager.MakeProvider(new(provider.DeviceProvider)).Register(this.Config)
+	app.ProviderManager.MakeProvider(new(provider.ServiceProvider)).Register(app.Config)
+	app.ProviderManager.MakeProvider(new(provider.ValidatorProvider)).Register(app.Config)
+	app.ProviderManager.MakeProvider(new(provider.DeviceProvider)).Register(app.Config)
 }

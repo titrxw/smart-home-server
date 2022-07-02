@@ -9,7 +9,7 @@ import (
 type DeviceOperate struct {
 }
 
-func (this *DeviceOperate) registerRoute(router *gin.RouterGroup) {
+func (deviceOperate *DeviceOperate) registerRoute(router *gin.RouterGroup) {
 	v2 := router.Group("/device-operate", new(middleware.OauthMiddleware).Process)
 	{
 		v2.POST("/trigger", new(device.DeviceOperateLogController).TriggerOperate)

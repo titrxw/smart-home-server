@@ -10,11 +10,11 @@ type InfoController struct {
 	frontend.ControllerAbstract
 }
 
-func (this InfoController) Info(ctx *gin.Context) {
-	user, err := logic.Logic.UserLogic.GetUserById(ctx, this.GetUserId(ctx))
+func (infoController InfoController) Info(ctx *gin.Context) {
+	user, err := logic.Logic.UserLogic.GetUserById(ctx, infoController.GetUserId(ctx))
 	if err != nil {
-		this.JsonResponseWithServerError(ctx, err)
+		infoController.JsonResponseWithServerError(ctx, err)
 		return
 	}
-	this.JsonResponseWithoutError(ctx, user)
+	infoController.JsonResponseWithoutError(ctx, user)
 }

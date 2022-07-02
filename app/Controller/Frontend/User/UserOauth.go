@@ -11,11 +11,11 @@ type SessionData map[string]interface{}
 type UserOauth struct {
 }
 
-func (this UserOauth) SaveUserToSession(ctx *gin.Context, user *model.User) error {
+func (userOauth UserOauth) SaveUserToSession(ctx *gin.Context, user *model.User) error {
 	return global.FHttpServer.Session.Set(ctx, "user_id", user.ID)
 }
 
-func (this UserOauth) GetUserIdFromSession(ctx *gin.Context) model.UID {
+func (userOauth UserOauth) GetUserIdFromSession(ctx *gin.Context) model.UID {
 	userId, ok := global.FHttpServer.Session.Get(ctx, "user_id").(uint)
 	if !ok {
 		return 0

@@ -12,25 +12,22 @@ type DeviceProvider struct {
 	provider.ProviderAbstract
 }
 
-func (this *DeviceProvider) Register(options interface{}) {
-	this.initDeviceMapInfo()
-	this.registerLight()
+func (deviceProvider *DeviceProvider) Register(options interface{}) {
+	deviceProvider.initDeviceMapInfo()
+	deviceProvider.registerLight()
 }
 
-func (this *DeviceProvider) initDeviceMapInfo() {
+func (deviceProvider *DeviceProvider) initDeviceMapInfo() {
 	logic.Logic.DeviceLogic.SupportDeviceMap = make(map[string]config.Device)
 	logic.Logic.DeviceLogic.SupportDeviceAdapter = make(map[string]Interface.DeviceAdapterInterface)
 }
 
-func (this *DeviceProvider) registerLight() {
+func (deviceProvider *DeviceProvider) registerLight() {
 	lightDeviceAdapter := new(device.LightDeviceAdapter)
 	logic.Logic.DeviceLogic.RegisterDevice(lightDeviceAdapter.GetDeviceType(), config.Device{
 		Name:           "电灯",
 		SupportOperate: []string{"on", "off"},
+		OperateDesc:    map[string]string{"on": "开灯", "off": "关灯"},
 	})
 	logic.Logic.DeviceLogic.RegisterDeviceAdapter(lightDeviceAdapter.GetDeviceType(), lightDeviceAdapter)
-	//err := global.FApp.Event.Subscribe(reflect.TypeOf(event.DeviceOperateEvent{}).Name(), listener.DeviceLightOperateListener{}.Handle)
-	//if err != nil {
-	//	panic(err)
-	//}
 }

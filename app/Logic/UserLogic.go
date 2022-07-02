@@ -16,8 +16,8 @@ type UserLogic struct {
 	LogicAbstract
 }
 
-func (this UserLogic) CreateUser(userName string, mobile string, password string) (*model.User, error) {
-	db := this.GetDefaultDb()
+func (userLogic UserLogic) CreateUser(userName string, mobile string, password string) (*model.User, error) {
+	db := userLogic.GetDefaultDb()
 	userRepository := repository.Repository.UserRepository
 
 	user := userRepository.GetByUserName(db, userName)
@@ -41,15 +41,15 @@ func (this UserLogic) CreateUser(userName string, mobile string, password string
 	return user, nil
 }
 
-func (this UserLogic) GetUserById(ctx context.Context, userId model.UID) (*model.User, error) {
+func (userLogic UserLogic) GetUserById(ctx context.Context, userId model.UID) (*model.User, error) {
 	cacheKey := fmt.Sprintf(USER_INFO_CACHE_KEY, userId)
-	data := this.GetDefaultRedis().Get(ctx, cacheKey)
+	data := userLogic.GetDefaultRedis().Get(ctx, cacheKey)
 	if data.Err() != nil {
 		return nil, data.Err()
 	}
 
 	if data.Val() == "" {
-		user := repository.Repository.UserRepository.GetById(this.GetDefaultDb(), userId)
+		user := repository.Repository.UserRepository.GetById(userLogic.GetDefaultDb(), userId)
 		if user == nil {
 			return nil, errors.New("用户不存在")
 		}
@@ -58,7 +58,7 @@ func (this UserLogic) GetUserById(ctx context.Context, userId model.UID) (*model
 		if err != nil {
 			return nil, err
 		}
-		result := this.GetDefaultRedis().Set(ctx, cacheKey, encodeData, 0)
+		result := userLogic.GetDefaultRedis().Set(ctx, cacheKey, encodeData, 0)
 		if result.Err() != nil {
 			return nil, result.Err()
 		}
@@ -75,8 +75,8 @@ func (this UserLogic) GetUserById(ctx context.Context, userId model.UID) (*model
 	}
 }
 
-func (this UserLogic) GetByMobileAndPwd(mobile string, password string) (*model.User, error) {
-	user := repository.Repository.UserRepository.GetByMobile(this.GetDefaultDb(), mobile)
+func (userLogic UserLogic) GetByMobileAndPwd(mobile string, password string) (*model.User, error) {
+	user := repository.Repository.UserRepository.GetByMobile(userLogic.GetDefaultDb(), mobile)
 	if user == nil {
 		return nil, errors.New("该手机号不存在")
 	}
@@ -85,4 +85,12 @@ func (this UserLogic) GetByMobileAndPwd(mobile string, password string) (*model.
 	}
 
 	return user, nil
+}
+
+func (userLogic UserLogic) UpdateUser(user *model.User) error {
+	if !repository.Repository.UserRepository.UpdateUser(userLogic.GetDefaultDb(), user) {
+		return errors.New("更新用户信息失败")
+	}
+
+	return nil
 }

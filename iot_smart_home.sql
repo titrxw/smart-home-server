@@ -11,7 +11,7 @@
  Target Server Version : 80025
  File Encoding         : 65001
 
- Date: 28/06/2022 22:09:07
+ Date: 01/07/2022 22:34:17
 */
 
 SET NAMES utf8mb4;
@@ -29,7 +29,7 @@ CREATE TABLE `iot_app` (
   PRIMARY KEY (`id`,`app_id`),
   UNIQUE KEY `idx_iot_app_app_id` (`app_id`,`app_secret`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Table structure for iot_device
@@ -44,12 +44,13 @@ CREATE TABLE `iot_device` (
   `device_status` tinyint unsigned NOT NULL DEFAULT '1',
   `device_cur_status` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '',
   `online_status` tinyint NOT NULL DEFAULT '0',
+  `last_ip` varchar(24) DEFAULT '',
   `latest_visit` varbinary(24) DEFAULT '',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `fk_iot_device_app` (`app_id`),
   CONSTRAINT `fk_iot_device_app` FOREIGN KEY (`app_id`) REFERENCES `iot_app` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Table structure for iot_device_operate_log
@@ -95,6 +96,7 @@ CREATE TABLE `iot_user` (
   `password` varchar(64) NOT NULL,
   `salt` varchar(12) NOT NULL,
   `status` tinyint unsigned NOT NULL DEFAULT '1',
+  `last_ip` varchar(24) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '',
   `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   `register_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   PRIMARY KEY (`id`),

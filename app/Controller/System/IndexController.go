@@ -9,6 +9,6 @@ type IndexController struct {
 	base.ControllerAbstract
 }
 
-func (this *IndexController) Index(ctx *gin.Context) {
-	this.JsonResponseWithoutError(ctx, "")
+func (indexController *IndexController) Index(ctx *gin.Context) {
+	indexController.JsonResponseWithoutError(ctx, "")
 }
