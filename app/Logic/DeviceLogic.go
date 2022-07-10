@@ -3,8 +3,8 @@ package logic
 import (
 	"context"
 	"errors"
+	"github.com/titrxw/smart-home-server/app/Device/Interface"
 
-	"github.com/titrxw/smart-home-server/app/Adapter/Interface"
 	"github.com/titrxw/smart-home-server/config"
 
 	model "github.com/titrxw/smart-home-server/app/Model"
@@ -19,16 +19,60 @@ type DeviceLogic struct {
 	LogicAbstract
 }
 
-func (deviceLogic *DeviceLogic) RegisterDevice(deviceType string, device config.Device) {
-	deviceLogic.SupportDeviceMap[deviceType] = device
+func (deviceLogic *DeviceLogic) RegisterDeviceAdapter(adapterInterface Interface.DeviceAdapterInterface) {
+	deviceConfig := adapterInterface.GetDeviceConfig()
+	deviceLogic.SupportDeviceAdapter[deviceConfig.Type] = adapterInterface
+	deviceLogic.SupportDeviceMap[deviceConfig.Type] = deviceConfig
 }
 
 func (deviceLogic DeviceLogic) GetDeviceSupportMap() map[string]config.Device {
 	return deviceLogic.SupportDeviceMap
 }
 
-func (deviceLogic *DeviceLogic) RegisterDeviceAdapter(deviceType string, adapterInterface Interface.DeviceAdapterInterface) {
-	deviceLogic.SupportDeviceAdapter[deviceType] = adapterInterface
+func (deviceLogic DeviceLogic) GetDeviceSupportOperateMap(device *model.Device) []string {
+	_, exists := deviceLogic.GetDeviceSupportMap()[device.Type]
+	if !exists {
+		return nil
+	}
+
+	return deviceLogic.GetDeviceSupportMap()[device.Type].SupportOperate
+}
+
+func (deviceLogic DeviceLogic) IsSupportOperate(device *model.Device, operate model.DeviceOperateType) bool {
+	supportOperateMap := deviceLogic.GetDeviceSupportOperateMap(device)
+	if supportOperateMap == nil {
+		return false
+	}
+
+	for _, element := range supportOperateMap {
+		if operate == model.DeviceOperateType(element) {
+			return true
+		}
+	}
+	return false
+}
+
+func (deviceLogic DeviceLogic) GetDeviceSupportReportMap(device *model.Device) []string {
+	_, exists := deviceLogic.GetDeviceSupportMap()[device.Type]
+	if !exists {
+		return nil
+	}
+
+	return deviceLogic.GetDeviceSupportMap()[device.Type].SupportReport
+}
+
+func (deviceLogic DeviceLogic) IsSupportReport(device *model.Device, operate model.DeviceReportType) bool {
+	supportReportMap := deviceLogic.GetDeviceSupportReportMap(device)
+	if supportReportMap == nil {
+		return false
+	}
+
+	for _, element := range supportReportMap {
+		if operate == model.DeviceReportType(element) {
+			return true
+		}
+	}
+	return false
 }
 
 func (deviceLogic DeviceLogic) GetDeviceAdapter(deviceType string) Interface.DeviceAdapterInterface {

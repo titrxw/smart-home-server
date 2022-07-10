@@ -2,6 +2,7 @@ package mqtt
 
 import (
 	"context"
+	subscribeInterface "github.com/titrxw/smart-home-server/app/Mqtt/Interface"
 	"time"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
@@ -25,8 +26,8 @@ func GetSubscribeManager() *SubscribeManager {
 	return subscribeManager
 }
 
-func (subscribeManager *SubscribeManager) RegisterSubscribe(topic string, callback mqtt.MessageHandler) {
-	subscribeManager.subscribeMap[topic] = callback
+func (subscribeManager *SubscribeManager) RegisterSubscribe(subscribeInterface subscribeInterface.SubscribeInterface) {
+	subscribeManager.subscribeMap[subscribeInterface.GetTopic()] = subscribeInterface.OnSubscribe
 }
 
 func (subscribeManager SubscribeManager) Start(EMQServerAddress string, port string, userName string, password string) {

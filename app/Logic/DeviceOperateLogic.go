@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 	"errors"
+	"gorm.io/gorm"
 	"reflect"
 	"time"
 
@@ -17,20 +18,6 @@ type DeviceOperateLogic struct {
 	LogicAbstract
 }
 
-func (deviceOperateLogic DeviceOperateLogic) IsSupportOperate(device *model.Device, operate model.DeviceOperateType) bool {
-	_, exists := Logic.DeviceLogic.GetDeviceSupportMap()[device.Type]
-	if !exists {
-		return false
-	}
-
-	for _, element := range Logic.DeviceLogic.GetDeviceSupportMap()[device.Type].SupportOperate {
-		if operate == model.DeviceOperateType(element) {
-			return true
-		}
-	}
-	return false
-}
-
 func (deviceOperateLogic DeviceOperateLogic) TriggerOperate(ctx context.Context, device *model.Device, operate model.DeviceOperateType, payload model.OperatePayload, operateLevel uint8) (*model.DeviceOperateLog, error) {
 	if device.IsDelete() {
 		return nil, errors.New("该设备已删除")
@@ -38,7 +25,7 @@ func (deviceOperateLogic DeviceOperateLogic) TriggerOperate(ctx context.Context,
 	if device.IsDisable() {
 		return nil, errors.New("该设备状态异常")
 	}
-	if !deviceOperateLogic.IsSupportOperate(device, operate) {
+	if !Logic.DeviceLogic.IsSupportOperate(device, operate) {
 		return nil, errors.New("该设备不支持当前操作")
 	}
 	if !device.IsOnline() {
@@ -83,6 +70,36 @@ func (deviceOperateLogic DeviceOperateLogic) TriggerOperate(ctx context.Context,
 	global.FApp.Event.Publish(reflect.TypeOf(event.DeviceOperateTriggerEvent{}).Name(), event.NewDeviceOperateTriggerEvent(device, deviceOperateLog))
 
 	return deviceOperateLog, nil
+}
+
+func (deviceOperateLogic DeviceOperateLogic) OnOperateResponse(replyMessage model.DeviceOperateReplyMessage) (*model.Device, *model.DeviceOperateLog, error) {
+	operateLog, err := deviceOperateLogic.GetOperateLogResultByNumber(replyMessage.OperateId)
+	var device *model.Device = nil
+	if err == nil {
+		err = deviceOperateLogic.GetDefaultDb().Transaction(func(tx *gorm.DB) error {
+			operateLog.ResponsePayload = replyMessage.PayLoad
+			operateLog.ResponseTime = time.Now().Format(model.TimeFormat)
+			if !repository.Repository.DeviceOperateLogRepository.UpdateDeviceOperateLog(tx, operateLog) {
+				return errors.New("更新操作记录失败")
+			}
+
+			status, exists := operateLog.ResponsePayload["cur_status"]
+			if exists && reflect.TypeOf(status).Name() == "string" {
+				device = Logic.DeviceLogic.GetDeviceById(operateLog.DeviceId)
+				if device == nil {
+					return errors.New("设备不存在")
+				}
+				device.DeviceCurStatus = status.(string)
+				if !repository.Repository.DeviceRepository.UpdateDevice(tx, device) {
+					return errors.New("更新设备失败")
+				}
+			}
+
+			return nil
+		})
+	}
+
+	return device, operateLog, err
 }
 
 func (deviceOperateLogic DeviceOperateLogic) UpdateOperateLog(operateLog *model.DeviceOperateLog) error {

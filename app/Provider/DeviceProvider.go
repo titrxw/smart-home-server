@@ -2,8 +2,8 @@ package provider
 
 import (
 	provider "github.com/titrxw/go-framework/src/Core/Provider"
-	device "github.com/titrxw/smart-home-server/app/Adapter/Device"
-	"github.com/titrxw/smart-home-server/app/Adapter/Interface"
+	"github.com/titrxw/smart-home-server/app/Device/Interface"
+	light "github.com/titrxw/smart-home-server/app/Device/Light"
 	logic "github.com/titrxw/smart-home-server/app/Logic"
 	"github.com/titrxw/smart-home-server/config"
 )
@@ -23,11 +23,5 @@ func (deviceProvider *DeviceProvider) initDeviceMapInfo() {
 }
 
 func (deviceProvider *DeviceProvider) registerLight() {
-	lightDeviceAdapter := new(device.LightDeviceAdapter)
-	logic.Logic.DeviceLogic.RegisterDevice(lightDeviceAdapter.GetDeviceType(), config.Device{
-		Name:           "电灯",
-		SupportOperate: []string{"on", "off"},
-		OperateDesc:    map[string]string{"on": "开灯", "off": "关灯"},
-	})
-	logic.Logic.DeviceLogic.RegisterDeviceAdapter(lightDeviceAdapter.GetDeviceType(), lightDeviceAdapter)
+	logic.Logic.DeviceLogic.RegisterDeviceAdapter(new(light.LightDeviceAdapter))
 }

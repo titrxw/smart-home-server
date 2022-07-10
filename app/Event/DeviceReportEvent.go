@@ -1,15 +1,18 @@
 package event
 
-import model "github.com/titrxw/smart-home-server/app/Model"
+import (
+	cloudevents "github.com/cloudevents/sdk-go/v2"
+	model "github.com/titrxw/smart-home-server/app/Model"
+)
 
 type DeviceReportEvent struct {
-	Device  *model.Device
-	Payload string
+	Device     *model.Device
+	CloudEvent *cloudevents.Event
 }
 
-func NewDeviceReportEvent(device *model.Device, payload string) DeviceReportEvent {
+func NewDeviceReportEvent(device *model.Device, cloudEvent *cloudevents.Event) DeviceReportEvent {
 	return DeviceReportEvent{
-		Device:  device,
-		Payload: payload,
+		Device:     device,
+		CloudEvent: cloudEvent,
 	}
 }

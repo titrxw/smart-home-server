@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/go-redis/redis/v8"
 
 	helper "github.com/titrxw/smart-home-server/app/Helper"
 	model "github.com/titrxw/smart-home-server/app/Model"
@@ -41,10 +42,20 @@ func (userLogic UserLogic) CreateUser(userName string, mobile string, password s
 	return user, nil
 }
 
+func (userLogic UserLogic) ResetUserCache(ctx context.Context, user *model.User) error {
+	cacheKey := fmt.Sprintf(USER_INFO_CACHE_KEY, user.ID)
+	data := userLogic.GetDefaultRedis().Del(ctx, cacheKey)
+	if data.Err() != nil && data.Err() != redis.Nil {
+		return data.Err()
+	}
+
+	return nil
+}
+
 func (userLogic UserLogic) GetUserById(ctx context.Context, userId model.UID) (*model.User, error) {
 	cacheKey := fmt.Sprintf(USER_INFO_CACHE_KEY, userId)
 	data := userLogic.GetDefaultRedis().Get(ctx, cacheKey)
-	if data.Err() != nil {
+	if data.Err() != nil && data.Err() != redis.Nil {
 		return nil, data.Err()
 	}
 

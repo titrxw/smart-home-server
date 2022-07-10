@@ -2,6 +2,7 @@ package model
 
 type DeviceType string
 type DeviceOperateType string
+type DeviceReportType string
 
 const (
 	DEVICE_ENABLE  uint8 = 1

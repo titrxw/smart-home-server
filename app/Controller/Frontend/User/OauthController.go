@@ -2,7 +2,9 @@ package user
 
 import (
 	"errors"
+	model "github.com/titrxw/smart-home-server/app/Model"
 	"strings"
+	"time"
 
 	base "github.com/titrxw/smart-home-server/app/Controller/Base"
 	frontend "github.com/titrxw/smart-home-server/app/Controller/Frontend/Frontend"
@@ -45,13 +47,7 @@ func (oauthController OauthController) Register(ctx *gin.Context) {
 		return
 	}
 
-	err = oauthController.SaveUserToSession(ctx, user)
-	if err != nil {
-		oauthController.JsonResponseWithServerError(ctx, err)
-		return
-	}
-
-	oauthController.JsonSuccessResponse(ctx)
+	oauthController.triggerLogin(ctx, user)
 }
 
 func (oauthController OauthController) Login(ctx *gin.Context) {
@@ -69,8 +65,19 @@ func (oauthController OauthController) Login(ctx *gin.Context) {
 		oauthController.JsonResponseWithServerError(ctx, "用户已被禁用")
 		return
 	}
+
+	oauthController.triggerLogin(ctx, user)
+}
+
+func (oauthController OauthController) triggerLogin(ctx *gin.Context, user *model.User) {
 	user.LastIp = ctx.ClientIP()
-	err = logic.Logic.UserLogic.UpdateUser(user)
+	user.LatestVisit = time.Now().Format(model.TimeFormat)
+	err := logic.Logic.UserLogic.UpdateUser(user)
+	if err != nil {
+		oauthController.JsonResponseWithServerError(ctx, err)
+		return
+	}
+	err = logic.Logic.UserLogic.ResetUserCache(ctx, user)
 	if err != nil {
 		oauthController.JsonResponseWithServerError(ctx, err)
 		return

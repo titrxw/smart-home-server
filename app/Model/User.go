@@ -17,14 +17,15 @@ const (
 type User struct {
 	Model
 
-	UserName   string    `json:"user_name" gorm:"type:varchar(32);not null"`
-	Mobile     string    `json:"mobile" gorm:"type:varchar(11);not null;uniqueIndex"`
-	Password   string    `json:"-" gorm:"type:varchar(64);not null"`
-	Salt       string    `json:"-" gorm:"type:varchar(12);not null"`
-	Status     uint8     `json:"status" gorm:"not null;default:1"`
-	LastIp     string    `json:"last_ip" gorm:"type:varchar(20);not null;default:''"`
-	CreatedAt  LocalTime `json:"created_at"`
-	RegisterAt LocalTime `json:"register_at"`
+	UserName    string    `json:"user_name" gorm:"type:varchar(32);not null"`
+	Mobile      string    `json:"mobile" gorm:"type:varchar(11);not null;uniqueIndex"`
+	Password    string    `json:"-" gorm:"type:varchar(64);not null"`
+	Salt        string    `json:"-" gorm:"type:varchar(12);not null"`
+	Status      uint8     `json:"status" gorm:"not null;default:1"`
+	LastIp      string    `json:"last_ip" gorm:"type:varchar(20);not null;default:''"`
+	LatestVisit string    `json:"latest_visit" gorm:"type:varchar(12);not null;default:''"`
+	CreatedAt   LocalTime `json:"created_at"`
+	RegisterAt  LocalTime `json:"register_at"`
 
 	Devices []Device `json:"-"`
 }

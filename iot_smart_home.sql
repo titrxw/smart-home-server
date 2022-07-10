@@ -11,7 +11,7 @@
  Target Server Version : 80025
  File Encoding         : 65001
 
- Date: 01/07/2022 22:34:17
+ Date: 06/07/2022 22:05:43
 */
 
 SET NAMES utf8mb4;
@@ -45,7 +45,7 @@ CREATE TABLE `iot_device` (
   `device_cur_status` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '',
   `online_status` tinyint NOT NULL DEFAULT '0',
   `last_ip` varchar(24) DEFAULT '',
-  `latest_visit` varbinary(24) DEFAULT '',
+  `latest_visit` varchar(24) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `fk_iot_device_app` (`app_id`),
@@ -99,6 +99,7 @@ CREATE TABLE `iot_user` (
   `last_ip` varchar(24) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '',
   `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   `register_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `latest_visit` varchar(24) DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `index2` (`mobile`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

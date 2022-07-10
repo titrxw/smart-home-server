@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"encoding/json"
 	"strconv"
 	"time"
 
@@ -15,6 +16,25 @@ import (
 
 type EmqxLogic struct {
 	LogicAbstract
+}
+
+func (emqxLogic EmqxLogic) PackMessage(event *cloudevents.Event) (string, error) {
+	message, err := event.MarshalJSON()
+	if err != nil {
+		return "", err
+	}
+
+	return string(message), nil
+}
+
+func (emqxLogic EmqxLogic) UnPackMessage(message string) (*cloudevents.Event, error) {
+	newEvent := cloudevents.NewEvent()
+	err := json.Unmarshal([]byte(message), &newEvent)
+	if err != nil {
+		return nil, err
+	}
+
+	return &newEvent, nil
 }
 
 func (emqxLogic EmqxLogic) AddEmqxClient(ctx context.Context, device *model.Device) error {
@@ -80,7 +100,7 @@ func (emqxLogic EmqxLogic) PubClientOperate(ctx context.Context, device *model.D
 	if err != nil {
 		return err
 	}
-	tmpByte, err := message.MarshalJSON()
+	payload, err := emqxLogic.PackMessage(&message)
 	if err != nil {
 		return err
 	}
@@ -90,7 +110,7 @@ func (emqxLogic EmqxLogic) PubClientOperate(ctx context.Context, device *model.D
 		retain = true
 	}
 
-	return emqx.GetEmqxMessageService(global.FApp.Container).Publish(ctx, device.App.AppId, EmqxLogic{}.GetClientOperateSubTopic(device.App.AppId), string(tmpByte), int(deviceOperateLog.OperateLevel), retain)
+	return emqx.GetEmqxMessageService(global.FApp.Container).Publish(ctx, device.App.AppId, EmqxLogic{}.GetClientOperateSubTopic(device.App.AppId), payload, int(deviceOperateLog.OperateLevel), retain)
 }
 
 func (emqxLogic EmqxLogic) GetClientOperateSubTopic(appId string) string {

@@ -1,0 +1,397 @@
+{
+	"info": {
+		"_postman_id": "2f6386e5-9f12-423a-b174-dd0452a1c037",
+		"name": "iot_smart_home",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "captcha",
+							"value": "00359",
+							"type": "text"
+						},
+						{
+							"key": "mobile",
+							"value": "15903466276",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "102410Yun",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/frontend/user/oauth/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"frontend",
+						"user",
+						"oauth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{url}}/api/util/captcha",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "captcha",
+							"value": "32343",
+							"type": "text"
+						},
+						{
+							"key": "mobile",
+							"value": "234234",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/util/captcha",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"util",
+						"captcha"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{url}}/api/frontend/user/oauth/register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "captcha",
+							"value": "75867",
+							"type": "text"
+						},
+						{
+							"key": "user_name",
+							"value": "rxwyun",
+							"type": "text"
+						},
+						{
+							"key": "mobile",
+							"value": "15903466276",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "102410Yun",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/frontend/user/oauth/register",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"frontend",
+						"user",
+						"oauth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{url}}/api/frontend/user/device/list",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "page",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "page_size",
+							"value": "10",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/frontend/user/device/list",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"frontend",
+						"user",
+						"device",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{url}}/api/frontend/user/device/list",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "device_name",
+							"value": "灯泡",
+							"type": "text"
+						},
+						{
+							"key": "device_type",
+							"value": "light",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/frontend/user/device/add",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"frontend",
+						"user",
+						"device",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{url}}/api/frontend/user/device/detail/11",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/frontend/user/device/detail/17",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"frontend",
+						"user",
+						"device",
+						"detail",
+						"17"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{url}}/api/frontend/user/device-operate/trigger",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "device_id",
+							"value": "17",
+							"type": "text"
+						},
+						{
+							"key": "operate_type",
+							"value": "on",
+							"type": "text"
+						},
+						{
+							"key": "operate_payload",
+							"value": "{\"gsdfdgsfdgsg\":\"no324234234234w\"}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/frontend/user/device-operate/trigger",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"frontend",
+						"user",
+						"device-operate",
+						"trigger"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{url}}/api/frontend/user/device-operate/detail?device_id=16&operate_number",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "device_id",
+							"value": "17",
+							"type": "text"
+						},
+						{
+							"key": "operate_number",
+							"value": "d22b732b54b776282ac3386816e7069b743f950b",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/frontend/user/device-operate/detail?device_id=16&operate_number",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"frontend",
+						"user",
+						"device-operate",
+						"detail"
+					],
+					"query": [
+						{
+							"key": "device_id",
+							"value": "16"
+						},
+						{
+							"key": "operate_number",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{url}}/api/frontend/user/device-operate/list",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "device_id",
+							"value": "17",
+							"type": "text"
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "page_size",
+							"value": "10",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/frontend/user/device-operate/list",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"frontend",
+						"user",
+						"device-operate",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{url}}/api/frontend/user/device/setting",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/frontend/user/device/setting",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"frontend",
+						"user",
+						"device",
+						"setting"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{url}}/api/frontend/user/oauth/info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/frontend/user/oauth/info",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"frontend",
+						"user",
+						"oauth",
+						"info"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

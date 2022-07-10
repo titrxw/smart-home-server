@@ -16,6 +16,17 @@ func (t LocalTime) MarshalJSON() ([]byte, error) {
 	return []byte(fmt.Sprintf("\"%v\"", tTime.Format(TimeFormat))), nil
 }
 
+func (t *LocalTime) UnmarshalJSON(formatTime []byte) error {
+	if formatTime != nil {
+		tmp, err := time.ParseInLocation(`"`+TimeFormat+`"`, string(formatTime), time.Local)
+		if err != nil {
+			return err
+		}
+		*t = LocalTime(tmp)
+	}
+	return nil
+}
+
 func (t LocalTime) Value() (driver.Value, error) {
 	var zeroTime time.Time
 	tlt := time.Time(t)
