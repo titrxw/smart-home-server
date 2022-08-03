@@ -22,6 +22,7 @@ func (settingRepository SettingRepository) Set(db *gorm.DB, key string, value in
 	if result.RowsAffected == 1 {
 		return true
 	}
+
 	return false
 }
 
@@ -35,5 +36,6 @@ func (settingRepository SettingRepository) Get(db *gorm.DB, key string, defaultV
 			return data
 		}
 	}
+
 	return defaultValue
 }

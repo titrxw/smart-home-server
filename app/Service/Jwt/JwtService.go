@@ -64,6 +64,7 @@ func (jwtService *JwtService) MakeToken(Payload interface{}) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
 	return token.SignedString(key)
 }
 

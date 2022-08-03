@@ -11,11 +11,13 @@ type DeviceOperateLogRepository struct {
 
 func (deviceOperateLogRepository DeviceOperateLogRepository) AddDeviceOperateLog(db *gorm.DB, operateLog *model.DeviceOperateLog) bool {
 	result := db.Create(operateLog)
+
 	return result.Error == nil
 }
 
 func (deviceOperateLogRepository DeviceOperateLogRepository) UpdateDeviceOperateLog(db *gorm.DB, operateLog *model.DeviceOperateLog) bool {
 	result := db.Save(operateLog)
+
 	return result.Error == nil
 }
 

@@ -2,7 +2,9 @@ package logic
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	cloudevents "github.com/cloudevents/sdk-go/v2"
 	"gorm.io/gorm"
 	"reflect"
 	"time"
@@ -34,7 +36,7 @@ func (deviceOperateLogic DeviceOperateLogic) TriggerOperate(ctx context.Context,
 
 	deviceOperateLog := &model.DeviceOperateLog{
 		DeviceId:       device.ID,
-		Type:           device.Type,
+		DeviceType:     device.Type,
 		Source:         global.FApp.Name,
 		OperateName:    string(operate),
 		OperateNumber:  helper.Sha1(device.App.AppId + helper.UUid()),
@@ -72,23 +74,27 @@ func (deviceOperateLogic DeviceOperateLogic) TriggerOperate(ctx context.Context,
 	return deviceOperateLog, nil
 }
 
-func (deviceOperateLogic DeviceOperateLogic) OnOperateResponse(replyMessage model.DeviceOperateReplyMessage) (*model.Device, *model.DeviceOperateLog, error) {
-	operateLog, err := deviceOperateLogic.GetOperateLogResultByNumber(replyMessage.OperateId)
-	var device *model.Device = nil
+func (deviceOperateLogic DeviceOperateLogic) OnOperateResponse(device *model.Device, cloudEvent *cloudevents.Event) (*model.DeviceOperateLog, error) {
+	payLoad := model.OperatePayload{}
+	err := json.Unmarshal(cloudEvent.Data(), &payLoad)
+	if err != nil {
+		return nil, err
+	}
+
+	operateLog, err := deviceOperateLogic.GetOperateLogByNumber(cloudEvent.ID())
 	if err == nil {
+		if device.ID != operateLog.DeviceId {
+			return nil, errors.New("设备不匹配")
+		}
 		err = deviceOperateLogic.GetDefaultDb().Transaction(func(tx *gorm.DB) error {
-			operateLog.ResponsePayload = replyMessage.PayLoad
-			operateLog.ResponseTime = time.Now().Format(model.TimeFormat)
+			operateLog.ResponsePayload = payLoad
+			operateLog.ResponseTime = cloudEvent.Time().String()
 			if !repository.Repository.DeviceOperateLogRepository.UpdateDeviceOperateLog(tx, operateLog) {
 				return errors.New("更新操作记录失败")
 			}
 
 			status, exists := operateLog.ResponsePayload["cur_status"]
 			if exists && reflect.TypeOf(status).Name() == "string" {
-				device = Logic.DeviceLogic.GetDeviceById(operateLog.DeviceId)
-				if device == nil {
-					return errors.New("设备不存在")
-				}
 				device.DeviceCurStatus = status.(string)
 				if !repository.Repository.DeviceRepository.UpdateDevice(tx, device) {
 					return errors.New("更新设备失败")
@@ -99,7 +105,7 @@ func (deviceOperateLogic DeviceOperateLogic) OnOperateResponse(replyMessage mode
 		})
 	}
 
-	return device, operateLog, err
+	return operateLog, err
 }
 
 func (deviceOperateLogic DeviceOperateLogic) UpdateOperateLog(operateLog *model.DeviceOperateLog) error {
@@ -110,8 +116,8 @@ func (deviceOperateLogic DeviceOperateLogic) UpdateOperateLog(operateLog *model.
 	return nil
 }
 
-func (deviceOperateLogic DeviceOperateLogic) GetDeviceOperateLogResultByNumber(device *model.Device, operateNumber string) (*model.DeviceOperateLog, error) {
-	operateLog, _ := deviceOperateLogic.GetOperateLogResultByNumber(operateNumber)
+func (deviceOperateLogic DeviceOperateLogic) GetDeviceOperateLogByNumber(device *model.Device, operateNumber string) (*model.DeviceOperateLog, error) {
+	operateLog, _ := deviceOperateLogic.GetOperateLogByNumber(operateNumber)
 	if operateLog.DeviceId != device.ID {
 		return nil, errors.New("非法操作")
 	}
@@ -119,7 +125,7 @@ func (deviceOperateLogic DeviceOperateLogic) GetDeviceOperateLogResultByNumber(d
 	return operateLog, nil
 }
 
-func (deviceOperateLogic DeviceOperateLogic) GetOperateLogResultByNumber(operateNumber string) (*model.DeviceOperateLog, error) {
+func (deviceOperateLogic DeviceOperateLogic) GetOperateLogByNumber(operateNumber string) (*model.DeviceOperateLog, error) {
 	operateLog := repository.Repository.DeviceOperateLogRepository.GetDeviceOperateLogByOperateNumber(deviceOperateLogic.GetDefaultDb(), operateNumber)
 	if operateLog == nil {
 		return nil, errors.New("设备操作记录不存在")
@@ -129,5 +135,5 @@ func (deviceOperateLogic DeviceOperateLogic) GetOperateLogResultByNumber(operate
 }
 
 func (deviceOperateLogic DeviceOperateLogic) GetDeviceOperates(device *model.Device, page uint, pageSize uint) *repository.PageModel {
-	return repository.DeviceOperateLogRepository{}.GetDeviceOperates(deviceOperateLogic.GetDefaultDb(), device.ID, page, pageSize)
+	return repository.Repository.DeviceOperateLogRepository.GetDeviceOperates(deviceOperateLogic.GetDefaultDb(), device.ID, page, pageSize)
 }

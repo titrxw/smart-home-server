@@ -57,5 +57,6 @@ func (appRepository AppRepository) make(db *gorm.DB, appid string, appSecret str
 	if result.RowsAffected == 1 {
 		return appModel
 	}
+
 	return nil
 }

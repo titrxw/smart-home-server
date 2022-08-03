@@ -65,7 +65,7 @@ func (deviceOperateController DeviceOperateLogController) OperateDetail(ctx *gin
 		return
 	}
 
-	operateLog, err := logic.Logic.DeviceOperateLogic.GetDeviceOperateLogResultByNumber(device, deviceOperateDetailRequest.OperateNumber)
+	operateLog, err := logic.Logic.DeviceOperateLogic.GetDeviceOperateLogByNumber(device, deviceOperateDetailRequest.OperateNumber)
 	if err != nil {
 		deviceOperateController.JsonResponseWithServerError(ctx, err)
 		return
@@ -79,6 +79,7 @@ func (deviceOperateController DeviceOperateLogController) DeviceOperateLog(ctx *
 	if !deviceOperateController.ValidateFormPost(ctx, &deviceOperatePageRequest) {
 		return
 	}
+
 	device, err := logic.Logic.DeviceLogic.GetUserDeviceById(deviceOperateController.GetUserId(ctx), deviceOperatePageRequest.DeviceId)
 	if err != nil {
 		deviceOperateController.JsonResponseWithServerError(ctx, err)
@@ -86,5 +87,6 @@ func (deviceOperateController DeviceOperateLogController) DeviceOperateLog(ctx *
 	}
 
 	pageData := logic.Logic.DeviceOperateLogic.GetDeviceOperates(device, deviceOperatePageRequest.Page, deviceOperatePageRequest.PageSize)
+
 	deviceOperateController.JsonResponseWithoutError(ctx, pageData)
 }

@@ -33,6 +33,6 @@ func (lightAdapter LightDeviceAdapter) OnOperateResponse(device *model.Device, d
 	return nil
 }
 
-func (lightAdapter LightDeviceAdapter) OnReport(device *model.Device, cloudEvent *cloudevents.Event) error {
+func (lightAdapter LightDeviceAdapter) OnReport(device *model.Device, deviceReportLog *model.DeviceReportLog, cloudEvent *cloudevents.Event) error {
 	return nil
 }

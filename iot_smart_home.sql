@@ -11,7 +11,7 @@
  Target Server Version : 80025
  File Encoding         : 65001
 
- Date: 06/07/2022 22:05:43
+ Date: 03/08/2022 21:08:08
 */
 
 SET NAMES utf8mb4;
@@ -29,7 +29,7 @@ CREATE TABLE `iot_app` (
   PRIMARY KEY (`id`,`app_id`),
   UNIQUE KEY `idx_iot_app_app_id` (`app_id`,`app_secret`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Table structure for iot_device
@@ -50,7 +50,7 @@ CREATE TABLE `iot_device` (
   PRIMARY KEY (`id`),
   KEY `fk_iot_device_app` (`app_id`),
   CONSTRAINT `fk_iot_device_app` FOREIGN KEY (`app_id`) REFERENCES `iot_app` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Table structure for iot_device_operate_log
@@ -66,11 +66,31 @@ CREATE TABLE `iot_device_operate_log` (
   `operate_payload` varchar(500) NOT NULL,
   `operate_level` tinyint NOT NULL DEFAULT '0',
   `response_payload` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
-  `operate_time` datetime DEFAULT NULL,
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  `response_ip` varchar(24) DEFAULT NULL,
-  `response_port` varchar(12) DEFAULT NULL,
-  `response_time` varchar(24) DEFAULT '',
+  `operate_time` datetime NOT NULL DEFAULT '',
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `response_ip` varchar(24) NOT NULL DEFAULT '',
+  `response_port` varchar(12) NOT NULL DEFAULT '',
+  `response_time` varchar(24) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Table structure for iot_device_report_log
+-- ----------------------------
+DROP TABLE IF EXISTS `iot_device_report_log`;
+CREATE TABLE `iot_device_report_log` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `device_id` int NOT NULL,
+  `device_type` varchar(12) DEFAULT NULL,
+  `source` varchar(12) NOT NULL,
+  `report_name` varchar(64) NOT NULL,
+  `report_number` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
+  `report_payload` varchar(500) NOT NULL,
+  `report_level` tinyint NOT NULL DEFAULT '0',
+  `report_time` datetime NOT NULL DEFAULT '',
+  `report_ip` varchar(24) NOT NULL DEFAULT '',
+  `report_port` varchar(12) NOT NULL DEFAULT '',
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -99,7 +119,7 @@ CREATE TABLE `iot_user` (
   `last_ip` varchar(24) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '',
   `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   `register_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-  `latest_visit` varchar(24) DEFAULT '',
+  `latest_visit` varchar(24) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `index2` (`mobile`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

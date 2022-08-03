@@ -49,6 +49,7 @@ func (deviceLogic DeviceLogic) IsSupportOperate(device *model.Device, operate mo
 			return true
 		}
 	}
+
 	return false
 }
 
@@ -72,6 +73,7 @@ func (deviceLogic DeviceLogic) IsSupportReport(device *model.Device, operate mod
 			return true
 		}
 	}
+
 	return false
 }
 
@@ -84,6 +86,7 @@ func (deviceLogic DeviceLogic) GetDeviceByDeviceId(deviceId string) *model.Devic
 	if app == nil {
 		return nil
 	}
+
 	return repository.DeviceRepository{}.GetDeviceByApp(deviceLogic.GetDefaultDb(), app)
 }
 

@@ -2,6 +2,7 @@ package provider
 
 import (
 	provider "github.com/titrxw/go-framework/src/Core/Provider"
+	faceIdentify "github.com/titrxw/smart-home-server/app/Device/FaceIdentify"
 	"github.com/titrxw/smart-home-server/app/Device/Interface"
 	light "github.com/titrxw/smart-home-server/app/Device/Light"
 	logic "github.com/titrxw/smart-home-server/app/Logic"
@@ -24,4 +25,5 @@ func (deviceProvider *DeviceProvider) initDeviceMapInfo() {
 
 func (deviceProvider *DeviceProvider) registerLight() {
 	logic.Logic.DeviceLogic.RegisterDeviceAdapter(new(light.LightDeviceAdapter))
+	logic.Logic.DeviceLogic.RegisterDeviceAdapter(new(faceIdentify.FaceIdentifyDeviceAdapter))
 }

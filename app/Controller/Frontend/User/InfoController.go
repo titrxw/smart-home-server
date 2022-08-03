@@ -16,5 +16,6 @@ func (infoController InfoController) Info(ctx *gin.Context) {
 		infoController.JsonResponseWithServerError(ctx, err)
 		return
 	}
+
 	infoController.JsonResponseWithoutError(ctx, user)
 }

@@ -55,5 +55,6 @@ func (userRepository UserRepository) GetByMobile(db *gorm.DB, mobile string) *mo
 
 func (userRepository UserRepository) UpdateUser(db *gorm.DB, user *model.User) bool {
 	result := db.Save(user)
+
 	return result.Error == nil
 }

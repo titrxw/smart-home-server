@@ -31,23 +31,19 @@ func (payload *OperatePayload) Scan(value interface{}) error {
 type DeviceOperateLog struct {
 	Model
 
-	DeviceId        uint           `json:"-" gorm:"not null"`
-	Type            string         `json:"type" gorm:"type:varchar(12);not null"`
-	Source          string         `json:"source" gorm:"type:varchar(12);not null"`
-	OperateName     string         `json:"operate_name" gorm:"type:varchar(64);not null"`
-	OperateNumber   string         `json:"operate_number"  gorm:"type:varchar(64);not null"`
-	OperateTime     LocalTime      `json:"operate_time"`
-	OperatePayload  OperatePayload `json:"operate_payload" gorm:"type:varchar(500);not null;default:''"`
-	OperateLevel    uint8          `json:"operate_level" gorm:"not null;default:0"`
+	DeviceId       uint           `json:"-" gorm:"not null"`
+	DeviceType     string         `json:"device_type" gorm:"type:varchar(12);not null"`
+	Source         string         `json:"source" gorm:"type:varchar(12);not null"`
+	OperateName    string         `json:"operate_name" gorm:"type:varchar(64);not null"`
+	OperateNumber  string         `json:"operate_number"  gorm:"type:varchar(64);not null"`
+	OperateTime    LocalTime      `json:"operate_time"`
+	OperatePayload OperatePayload `json:"operate_payload" gorm:"type:varchar(500);not null;default:''"`
+	OperateLevel   uint8          `json:"operate_level" gorm:"not null;default:0"`
+
 	ResponsePayload OperatePayload `json:"response_payload" gorm:"type:varchar(500);not null;default:''"`
-	CreatedAt       LocalTime      `json:"created_at"`
+	ResponseIp      string         `json:"response_ip" gorm:"type:varchar(24);not null;default:''"`
+	ResponsePort    string         `json:"response_port" gorm:"type:varchar(12);not null;default:''"`
+	ResponseTime    string         `json:"response_time" gorm:"type:varchar(24);not null;default:''"`
 
-	ResponseIp   string `json:"response_ip" gorm:"type:varchar(24);not null;default:''"`
-	ResponsePort string `json:"response_port" gorm:"type:varchar(12);not null;default:''"`
-	ResponseTime string `json:"response_time" gorm:"type:varchar(24);not null;default:''"`
-}
-
-type DeviceOperateReplyMessage struct {
-	OperateId string         `json:"oid"`
-	PayLoad   OperatePayload `json:"payload"`
+	CreatedAt LocalTime `json:"created_at"`
 }

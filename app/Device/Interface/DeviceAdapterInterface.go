@@ -11,5 +11,5 @@ type DeviceAdapterInterface interface {
 	BeforeTriggerOperate(device *model.Device, deviceOperateLog *model.DeviceOperateLog) error
 	AfterTriggerOperate(device *model.Device, deviceOperateLog *model.DeviceOperateLog) error
 	OnOperateResponse(device *model.Device, deviceOperateLog *model.DeviceOperateLog, cloudEvent *cloudevents.Event) error
-	OnReport(device *model.Device, cloudEvent *cloudevents.Event) error
+	OnReport(device *model.Device, deviceReportLog *model.DeviceReportLog, cloudEvent *cloudevents.Event) error
 }

@@ -1,14 +1,12 @@
 package subscribe
 
 import (
-	"encoding/json"
 	"reflect"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	global "github.com/titrxw/go-framework/src/Global"
 	event "github.com/titrxw/smart-home-server/app/Event"
 	logic "github.com/titrxw/smart-home-server/app/Logic"
-	model "github.com/titrxw/smart-home-server/app/Model"
 )
 
 type DeviceReplaySubscribe struct {
@@ -29,18 +27,13 @@ func (deviceReplaySubscribe DeviceReplaySubscribe) GetTopic() string {
 }
 
 func (deviceReplaySubscribe DeviceReplaySubscribe) OnSubscribe(client mqtt.Client, message mqtt.Message) {
-	cloudEvent, err := deviceReplaySubscribe.validateAndGetPayload(message)
+	cloudEvent, device, err := deviceReplaySubscribe.validateAndGetPayload(message)
 	if err == nil {
-		replyMessage := model.DeviceOperateReplyMessage{}
-		err := json.Unmarshal(cloudEvent.Data(), &replyMessage)
+		operateLog, err := logic.Logic.DeviceOperateLogic.OnOperateResponse(device, cloudEvent)
 		if err == nil {
-			device, operateLog, err := logic.Logic.DeviceOperateLogic.OnOperateResponse(replyMessage)
-			if err == nil {
-				err = logic.Logic.DeviceLogic.GetDeviceAdapter(operateLog.Type).OnOperateResponse(device, operateLog, cloudEvent)
-				global.FApp.Event.Publish(reflect.TypeOf(event.DeviceOperateReplyEvent{}).Name(), event.NewDeviceOperateReplyEvent(device, operateLog, cloudEvent))
-			}
+			err = logic.Logic.DeviceLogic.GetDeviceAdapter(operateLog.DeviceType).OnOperateResponse(device, operateLog, cloudEvent)
+			global.FApp.Event.Publish(reflect.TypeOf(event.DeviceOperateReplyEvent{}).Name(), event.NewDeviceOperateReplyEvent(device, operateLog, cloudEvent))
 		}
-
 	}
 
 	if err != nil {

@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 	"encoding/json"
+	utils "github.com/titrxw/smart-home-server/app/Utils"
 	"strconv"
 	"time"
 
@@ -18,18 +19,23 @@ type EmqxLogic struct {
 	LogicAbstract
 }
 
-func (emqxLogic EmqxLogic) PackMessage(event *cloudevents.Event) (string, error) {
+func (emqxLogic EmqxLogic) PackMessage(device *model.Device, event *cloudevents.Event) (string, error) {
 	message, err := event.MarshalJSON()
 	if err != nil {
 		return "", err
 	}
 
-	return string(message), nil
+	return utils.Encrypt(string(message), device.App.AppSecret)
 }
 
-func (emqxLogic EmqxLogic) UnPackMessage(message string) (*cloudevents.Event, error) {
+func (emqxLogic EmqxLogic) UnPackMessage(device *model.Device, message string) (*cloudevents.Event, error) {
+	message, err := utils.Decrypt(message, device.App.AppSecret)
+	if err != nil {
+		return nil, err
+	}
+
 	newEvent := cloudevents.NewEvent()
-	err := json.Unmarshal([]byte(message), &newEvent)
+	err = json.Unmarshal([]byte(message), &newEvent)
 	if err != nil {
 		return nil, err
 	}
@@ -100,7 +106,7 @@ func (emqxLogic EmqxLogic) PubClientOperate(ctx context.Context, device *model.D
 	if err != nil {
 		return err
 	}
-	payload, err := emqxLogic.PackMessage(&message)
+	payload, err := emqxLogic.PackMessage(device, &message)
 	if err != nil {
 		return err
 	}

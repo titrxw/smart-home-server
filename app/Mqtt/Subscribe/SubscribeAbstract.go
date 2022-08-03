@@ -5,6 +5,7 @@ import (
 	cloudevents "github.com/cloudevents/sdk-go/v2"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	logic "github.com/titrxw/smart-home-server/app/Logic"
+	model "github.com/titrxw/smart-home-server/app/Model"
 	"github.com/titrxw/smart-home-server/app/Mqtt/Interface"
 	"regexp"
 	"strings"
@@ -36,21 +37,26 @@ func (subscribe SubscribeAbstract) getDeviceIdFromTopic(topic string) string {
 	return ""
 }
 
-func (subscribe SubscribeAbstract) validateAndGetPayload(message mqtt.Message) (*cloudevents.Event, error) {
+func (subscribe SubscribeAbstract) validateAndGetPayload(message mqtt.Message) (*cloudevents.Event, *model.Device, error) {
 	deviceId := subscribe.getDeviceIdFromTopic(message.Topic())
 	if deviceId == "" {
-		return nil, errors.New("订阅获取到topic的数据非法")
+		return nil, nil, errors.New("订阅获取到topic的数据非法")
 	}
 
-	newEvent, err := logic.Logic.EmqxLogic.UnPackMessage(string(message.Payload()))
+	device := logic.Logic.DeviceLogic.GetDeviceByDeviceId(deviceId)
+	if device == nil {
+		return nil, nil, errors.New("订阅获取到topic的数据非法")
+	}
+
+	newEvent, err := logic.Logic.EmqxLogic.UnPackMessage(device, string(message.Payload()))
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	if newEvent.Source() == "" || newEvent.Type() == "" || newEvent.Subject() == "" {
-		return nil, errors.New("订阅获取到payload的数据非法")
+		return nil, nil, errors.New("订阅获取到payload的数据非法")
 	}
 
 	newEvent.SetID(deviceId)
-	return newEvent, nil
+	return newEvent, device, nil
 }

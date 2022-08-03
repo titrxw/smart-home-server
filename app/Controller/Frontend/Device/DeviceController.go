@@ -47,6 +47,7 @@ func (deviceController DeviceController) AddUserDevice(ctx *gin.Context) {
 	if !deviceController.ValidateFormPost(ctx, &deviceAddRequest) {
 		return
 	}
+
 	if words := logic.Logic.SysSensitiveWordsLogic.GetSensitiveWord(deviceAddRequest.DeviceName); len(words) > 0 {
 		deviceController.JsonResponseWithServerError(ctx, errors.New("设备名包含敏感字符 "+strings.Join(words, ",")))
 		return
@@ -57,6 +58,7 @@ func (deviceController DeviceController) AddUserDevice(ctx *gin.Context) {
 		deviceController.JsonResponseWithServerError(ctx, err)
 		return
 	}
+
 	deviceController.JsonResponseWithoutError(ctx, device)
 }
 
@@ -67,6 +69,7 @@ func (deviceController DeviceController) UserDevices(ctx *gin.Context) {
 	}
 
 	pageData := logic.Logic.DeviceLogic.GetUserDevices(deviceController.GetUserId(ctx), devicePageRequest.Page, devicePageRequest.PageSize)
+
 	deviceController.JsonResponseWithoutError(ctx, pageData)
 }
 
@@ -81,6 +84,7 @@ func (deviceController DeviceController) UserDeviceDetail(ctx *gin.Context) {
 		deviceController.JsonResponseWithServerError(ctx, err)
 		return
 	}
+
 	deviceController.JsonResponseWithoutError(ctx, device)
 }
 
@@ -89,6 +93,7 @@ func (deviceController DeviceController) UpdateUserDevice(ctx *gin.Context) {
 	if !deviceController.ValidateFormPost(ctx, &deviceUpdateRequest) {
 		return
 	}
+
 	if deviceUpdateRequest.DeviceName == "" || deviceUpdateRequest.DeviceStatus == 0 {
 		deviceController.JsonResponseWithServerError(ctx, "参数错误")
 		return

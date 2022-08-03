@@ -39,11 +39,13 @@ func (redisStore *RedisStore) Get(key string, clear bool) string {
 			return ""
 		}
 	}
+
 	return val
 }
 
 func (redisStore *RedisStore) Verify(id, answer string, clear bool) bool {
 	key := redisStore.PreKey + id
 	v := redisStore.Get(key, clear)
+
 	return v == answer
 }

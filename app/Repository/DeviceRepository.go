@@ -22,6 +22,7 @@ func (deviceRepository DeviceRepository) AddUserDeviceByApp(db *gorm.DB, userId 
 	}
 
 	device.App = app
+
 	return device
 }
 
@@ -86,5 +87,6 @@ func (deviceRepository DeviceRepository) GetDeviceById(db *gorm.DB, id uint) *mo
 
 func (deviceRepository DeviceRepository) UpdateDevice(db *gorm.DB, device *model.Device) bool {
 	result := db.Save(device)
+
 	return result.Error == nil
 }

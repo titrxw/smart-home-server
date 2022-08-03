@@ -4,10 +4,7 @@ import (
 	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
-	"crypto/rand"
 	"encoding/base64"
-	"errors"
-	"io"
 )
 
 func pKCS7Padding(ciphertext []byte, blockSize int) []byte {
@@ -30,14 +27,10 @@ func aesCBCEncrypt(payload []byte, key []byte) ([]byte, error) {
 
 	blockSize := block.BlockSize()
 	payload = pKCS7Padding(payload, blockSize)
-	cipherText := make([]byte, blockSize+len(payload))
-	iv := cipherText[:blockSize]
-	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
-		return nil, err
-	}
-
+	iv := key[:blockSize]
+	cipherText := make([]byte, len(payload))
 	mode := cipher.NewCBCEncrypter(block, iv)
-	mode.CryptBlocks(cipherText[blockSize:], payload)
+	mode.CryptBlocks(cipherText, payload)
 
 	return cipherText, nil
 }
@@ -47,19 +40,12 @@ func aesCBCDecrypt(encryptStr []byte, key []byte) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	blockSize := block.BlockSize()
-	if len(encryptStr) < blockSize {
-		return nil, errors.New("ciphertext too short")
-	}
-	iv := encryptStr[:blockSize]
-	encryptStr = encryptStr[blockSize:]
-	if len(encryptStr)%blockSize != 0 {
-		return nil, errors.New("ciphertext is not a multiple of the block size")
-	}
 
+	iv := key[:block.BlockSize()]
 	mode := cipher.NewCBCDecrypter(block, iv)
-	mode.CryptBlocks(encryptStr, encryptStr)
-	encryptStr = pKCS7UnPadding(encryptStr)
+	cipherText := make([]byte, len(encryptStr))
+	mode.CryptBlocks(cipherText, encryptStr)
+	encryptStr = pKCS7UnPadding(cipherText)
 
 	return encryptStr, nil
 }
