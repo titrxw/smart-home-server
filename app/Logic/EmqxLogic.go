@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"encoding/json"
 	utils "github.com/titrxw/smart-home-server/app/Utils"
 	"strconv"
 	"time"
@@ -35,7 +34,7 @@ func (emqxLogic EmqxLogic) UnPackMessage(device *model.Device, message string) (
 	}
 
 	newEvent := cloudevents.NewEvent()
-	err = json.Unmarshal([]byte(message), &newEvent)
+	err = newEvent.UnmarshalJSON([]byte(message))
 	if err != nil {
 		return nil, err
 	}

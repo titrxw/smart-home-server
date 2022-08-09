@@ -8,7 +8,7 @@ import (
 func TestAes(t *testing.T) {
 	t.Run("testAes", func(t *testing.T) {
 		var data = "qwer"
-		var key = "12345678912345678909876543212345"
+		var key = "123456789874546321"
 		result, _ := utils.Encrypt(data, key)
 
 		result1, _ := utils.Decrypt(result, key)

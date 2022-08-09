@@ -26,7 +26,6 @@ func (deviceReportLogic DeviceReportLogic) OnReport(device *model.Device, cloudE
 		return nil, err
 	}
 
-	payLoad["report_id"] = cloudEvent.ID()
 	deviceReportLog := &model.DeviceReportLog{
 		DeviceId:      device.ID,
 		DeviceType:    device.Type,

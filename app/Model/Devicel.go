@@ -21,7 +21,7 @@ type Device struct {
 	Name            string    `json:"name" gorm:"type:varchar(64);not null"`
 	UserId          UID       `json:"user_id" gorm:"not null"`
 	AppId           uint      `json:"-" gorm:"not null"`
-	Type            string    `json:"type" gorm:"type:varchar(12);not null"`
+	Type            string    `json:"type" gorm:"type:varchar(64);not null"`
 	LatestVisit     string    `json:"latest_visit" gorm:"type:varchar(12);not null;default:''"`
 	OnlineStatus    uint8     `json:"online_status" gorm:"not null;default:0"`
 	LastIp          string    `json:"last_ip" gorm:"type:varchar(20);not null;default:''"`

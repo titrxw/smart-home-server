@@ -1,6 +1,7 @@
 package logic
 
 type LogicFactory struct {
+	AppLogic
 	DeviceLogic
 	DeviceOperateLogic
 	DeviceReportLogic

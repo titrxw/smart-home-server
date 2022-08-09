@@ -40,7 +40,7 @@ CREATE TABLE `iot_device` (
   `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `user_id` bigint unsigned NOT NULL,
   `app_id` bigint unsigned NOT NULL,
-  `type` varchar(12) NOT NULL,
+  `type` varchar(64) NOT NULL,
   `device_status` tinyint unsigned NOT NULL DEFAULT '1',
   `device_cur_status` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '',
   `online_status` tinyint NOT NULL DEFAULT '0',
@@ -59,7 +59,7 @@ DROP TABLE IF EXISTS `iot_device_operate_log`;
 CREATE TABLE `iot_device_operate_log` (
   `id` int NOT NULL AUTO_INCREMENT,
   `device_id` int NOT NULL,
-  `type` varchar(12) DEFAULT NULL,
+  `device_type` varchar(64) DEFAULT NULL,
   `source` varchar(12) NOT NULL,
   `operate_name` varchar(64) NOT NULL,
   `operate_number` varchar(64) NOT NULL,
@@ -81,7 +81,7 @@ DROP TABLE IF EXISTS `iot_device_report_log`;
 CREATE TABLE `iot_device_report_log` (
   `id` int NOT NULL AUTO_INCREMENT,
   `device_id` int NOT NULL,
-  `device_type` varchar(12) DEFAULT NULL,
+  `device_type` varchar(64) DEFAULT NULL,
   `source` varchar(12) NOT NULL,
   `report_name` varchar(64) NOT NULL,
   `report_number` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',

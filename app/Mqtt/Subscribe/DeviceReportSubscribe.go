@@ -37,6 +37,9 @@ func (deviceReportSubscribe DeviceReportSubscribe) OnSubscribe(client mqtt.Clien
 		}
 
 		if err == nil {
+			if cloudEvent.ID() == device.App.AppId {
+				cloudEvent.SetID(logic.Logic.DeviceReportLogic.GetOperateOrReportNumber(device.App.AppId))
+			}
 			reportLog, err := logic.Logic.DeviceReportLogic.OnReport(device, cloudEvent)
 			if err == nil {
 				err = logic.Logic.DeviceLogic.GetDeviceAdapter(device.Type).OnReport(device, reportLog, cloudEvent)

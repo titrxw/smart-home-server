@@ -11,7 +11,6 @@ import (
 
 	global "github.com/titrxw/go-framework/src/Global"
 	event "github.com/titrxw/smart-home-server/app/Event"
-	helper "github.com/titrxw/smart-home-server/app/Helper"
 	model "github.com/titrxw/smart-home-server/app/Model"
 	repository "github.com/titrxw/smart-home-server/app/Repository"
 )
@@ -39,7 +38,7 @@ func (deviceOperateLogic DeviceOperateLogic) TriggerOperate(ctx context.Context,
 		DeviceType:     device.Type,
 		Source:         global.FApp.Name,
 		OperateName:    string(operate),
-		OperateNumber:  helper.Sha1(device.App.AppId + helper.UUid()),
+		OperateNumber:  deviceOperateLogic.GetOperateOrReportNumber(device.App.AppId),
 		OperateTime:    model.LocalTime(time.Now()),
 		OperatePayload: payload,
 		OperateLevel:   operateLevel,
@@ -88,7 +87,7 @@ func (deviceOperateLogic DeviceOperateLogic) OnOperateResponse(device *model.Dev
 		}
 		err = deviceOperateLogic.GetDefaultDb().Transaction(func(tx *gorm.DB) error {
 			operateLog.ResponsePayload = payLoad
-			operateLog.ResponseTime = cloudEvent.Time().String()
+			operateLog.ResponseTime = cloudEvent.Time().Format(model.TimeFormat)
 			if !repository.Repository.DeviceOperateLogRepository.UpdateDeviceOperateLog(tx, operateLog) {
 				return errors.New("更新操作记录失败")
 			}

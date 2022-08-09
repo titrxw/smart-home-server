@@ -13,6 +13,7 @@ type Router struct {
 
 func (r *Router) Register(router *gin.Engine) {
 	router.Static("/static", "./public/static")
+	router.Static("/img", "./public/upload/img")
 
 	v1 := router.Group("/api")
 	{

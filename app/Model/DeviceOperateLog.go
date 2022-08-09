@@ -32,7 +32,7 @@ type DeviceOperateLog struct {
 	Model
 
 	DeviceId       uint           `json:"-" gorm:"not null"`
-	DeviceType     string         `json:"device_type" gorm:"type:varchar(12);not null"`
+	DeviceType     string         `json:"device_type" gorm:"type:varchar(64);not null"`
 	Source         string         `json:"source" gorm:"type:varchar(12);not null"`
 	OperateName    string         `json:"operate_name" gorm:"type:varchar(64);not null"`
 	OperateNumber  string         `json:"operate_number"  gorm:"type:varchar(64);not null"`

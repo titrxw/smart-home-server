@@ -32,7 +32,7 @@ type DeviceReportLog struct {
 	Model
 
 	DeviceId      uint          `json:"-" gorm:"not null"`
-	DeviceType    string        `json:"device_type" gorm:"type:varchar(12);not null"`
+	DeviceType    string        `json:"device_type" gorm:"type:varchar(64);not null"`
 	Source        string        `json:"source" gorm:"type:varchar(12);not null"`
 	ReportName    string        `json:"report_name" gorm:"type:varchar(64);not null"`
 	ReportNumber  string        `json:"report_number"  gorm:"type:varchar(64);not null"`

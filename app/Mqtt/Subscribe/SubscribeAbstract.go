@@ -57,6 +57,5 @@ func (subscribe SubscribeAbstract) validateAndGetPayload(message mqtt.Message) (
 		return nil, nil, errors.New("订阅获取到payload的数据非法")
 	}
 
-	newEvent.SetID(deviceId)
 	return newEvent, device, nil
 }

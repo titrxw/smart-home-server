@@ -82,7 +82,7 @@ func (deviceLogic DeviceLogic) GetDeviceAdapter(deviceType string) Interface.Dev
 }
 
 func (deviceLogic DeviceLogic) GetDeviceByDeviceId(deviceId string) *model.Device {
-	app := repository.AppRepository{}.GetByAppId(deviceLogic.GetDefaultDb(), deviceId)
+	app := Logic.AppLogic.GetAppByAppId(deviceId)
 	if app == nil {
 		return nil
 	}
