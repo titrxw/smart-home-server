@@ -18,6 +18,7 @@ func (lightAdapter LightDeviceAdapter) GetDeviceConfig() config.Device {
 		SupportOperate: []string{"on", "off"},
 		OperateDesc:    map[string]string{"on": "开灯", "off": "关灯"},
 		SupportReport:  nil,
+		Setting:        nil,
 	}
 }
 

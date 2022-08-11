@@ -20,6 +20,13 @@ type DeviceLogic struct {
 }
 
 func (deviceLogic *DeviceLogic) RegisterDeviceAdapter(adapterInterface Interface.DeviceAdapterInterface) {
+	if deviceLogic.SupportDeviceMap == nil {
+		deviceLogic.SupportDeviceMap = make(map[string]config.Device)
+	}
+	if deviceLogic.SupportDeviceAdapter == nil {
+		deviceLogic.SupportDeviceAdapter = make(map[string]Interface.DeviceAdapterInterface)
+	}
+
 	deviceConfig := adapterInterface.GetDeviceConfig()
 	deviceLogic.SupportDeviceAdapter[deviceConfig.Type] = adapterInterface
 	deviceLogic.SupportDeviceMap[deviceConfig.Type] = deviceConfig

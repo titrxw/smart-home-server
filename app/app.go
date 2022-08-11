@@ -3,6 +3,8 @@ package app
 import (
 	app "github.com/titrxw/go-framework/src/App"
 	global "github.com/titrxw/go-framework/src/Global"
+	faceIdentify "github.com/titrxw/smart-home-server/app/Device/FaceIdentify"
+	light "github.com/titrxw/smart-home-server/app/Device/Light"
 	exception "github.com/titrxw/smart-home-server/app/Handler/Exception"
 	provider "github.com/titrxw/smart-home-server/app/Provider"
 	"github.com/titrxw/smart-home-server/config"
@@ -31,5 +33,7 @@ func (app *App) Bootstrap() {
 
 	app.ProviderManager.MakeProvider(new(provider.ServiceProvider)).Register(app.Config)
 	app.ProviderManager.MakeProvider(new(provider.ValidatorProvider)).Register(app.Config)
-	app.ProviderManager.MakeProvider(new(provider.DeviceProvider)).Register(app.Config)
+
+	app.ProviderManager.MakeProvider(new(faceIdentify.FaceIdentifyDeviceProvider)).Register(app.Config)
+	app.ProviderManager.MakeProvider(new(light.LightDeviceProvider)).Register(app.Config)
 }

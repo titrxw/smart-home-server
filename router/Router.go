@@ -7,11 +7,21 @@ import (
 )
 
 type Router struct {
+	routerProviders []func(engine *gin.Engine)
+
 	system.SysRouteGroup
 	frontend.FrontendRouteGroup
 }
 
+func (r *Router) RegisterRouterProvider(routerProvider func(engine *gin.Engine)) {
+	r.routerProviders = append(r.routerProviders, routerProvider)
+}
+
 func (r *Router) Register(router *gin.Engine) {
+	for _, routerProvider := range r.routerProviders {
+		routerProvider(router)
+	}
+
 	router.Static("/static", "./public/static")
 	router.Static("/img", "./public/upload/img")
 

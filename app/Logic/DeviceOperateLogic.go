@@ -19,6 +19,21 @@ type DeviceOperateLogic struct {
 	LogicAbstract
 }
 
+func (deviceOperateLogic DeviceOperateLogic) IsSuccessResponse(operatePayload model.OperatePayload) (bool, error) {
+	if _, ok := operatePayload["status"]; !ok {
+		return false, errors.New("status 参数缺失")
+	}
+	if _, ok := operatePayload["status"].(string); !ok {
+		return false, errors.New("status 参数格式错误")
+	}
+
+	if operatePayload["status"] == "success" {
+		return true, nil
+	}
+
+	return false, nil
+}
+
 func (deviceOperateLogic DeviceOperateLogic) TriggerOperate(ctx context.Context, device *model.Device, operate model.DeviceOperateType, payload model.OperatePayload, operateLevel uint8) (*model.DeviceOperateLog, error) {
 	if device.IsDelete() {
 		return nil, errors.New("该设备已删除")

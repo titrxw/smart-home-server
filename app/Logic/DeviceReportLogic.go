@@ -49,6 +49,9 @@ func (deviceReportLogic DeviceReportLogic) GetDeviceReportLogByNumber(device *mo
 	if reportLog == nil {
 		return nil, errors.New("设备上报记录不存在")
 	}
+	if reportLog.DeviceId != device.ID {
+		return nil, errors.New("非法操作")
+	}
 
 	return reportLog, nil
 }
