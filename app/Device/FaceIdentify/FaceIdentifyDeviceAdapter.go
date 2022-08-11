@@ -47,14 +47,24 @@ func (faceIdentifyDeviceAdapter FaceIdentifyDeviceAdapter) BeforeTriggerOperate(
 		if _, ok := deviceOperateLog.OperatePayload["user_name"].(string); !ok {
 			return errors.New("user_name 参数格式错误")
 		}
-		if _, ok := deviceOperateLog.OperatePayload["urls"].(model2.FaceUrls); !ok {
+		if _, ok := deviceOperateLog.OperatePayload["urls"].([]interface{}); !ok {
 			return errors.New("urls 参数格式错误")
 		}
-		if len(deviceOperateLog.OperatePayload["urls"].(model2.FaceUrls)) < FACE_IDENTIFY_DEVICE_OPERATE_ADD_MODEL_SETTING_MIN_IMG_LENGTH {
+		var urlsMap model2.FaceUrls
+		for _, param := range deviceOperateLog.OperatePayload["urls"].([]interface{}) {
+			switch v := param.(type) {
+			case string:
+				urlsMap = append(urlsMap, v)
+			default:
+				return errors.New("urls 参数格式错误")
+			}
+		}
+
+		if len(urlsMap) < FACE_IDENTIFY_DEVICE_OPERATE_ADD_MODEL_SETTING_MIN_IMG_LENGTH {
 			return errors.New("模型数量不能小于" + strconv.Itoa(FACE_IDENTIFY_DEVICE_OPERATE_ADD_MODEL_SETTING_MIN_IMG_LENGTH))
 		}
 
-		faceModel, err := logic.FaceIdentifyDeviceLogic.FaceIdentifyLogic.AddDeviceFaceModel(device, deviceOperateLog.OperatePayload["user_name"].(string), deviceOperateLog.OperatePayload["urls"].(model2.FaceUrls))
+		faceModel, err := logic.FaceIdentifyDeviceLogic.FaceIdentifyLogic.AddDeviceFaceModel(device, deviceOperateLog.OperatePayload["user_name"].(string), urlsMap)
 		if err != nil {
 			return err
 		}
@@ -90,7 +100,7 @@ func (faceIdentifyDeviceAdapter FaceIdentifyDeviceAdapter) OnOperateResponse(dev
 		}
 
 		if result {
-			logic.FaceIdentifyDeviceLogic.FaceIdentifyLogic.UpdateFaceModelStatus(device, deviceOperateLog.ResponsePayload["label"].(uint), model2.FACE_MODEL_STATUS_ENABLE)
+			//logic.FaceIdentifyDeviceLogic.FaceIdentifyLogic.UpdateFaceModelStatus(device, deviceOperateLog.ResponsePayload["label"].(uint), model2.FACE_MODEL_STATUS_ENABLE)
 		}
 	}
 
