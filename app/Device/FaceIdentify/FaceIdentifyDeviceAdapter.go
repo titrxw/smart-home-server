@@ -76,11 +76,11 @@ func (faceIdentifyDeviceAdapter FaceIdentifyDeviceAdapter) BeforeTriggerOperate(
 		if _, ok := deviceOperateLog.OperatePayload["label"]; !ok {
 			return errors.New("label 参数缺失")
 		}
-		if _, ok := deviceOperateLog.OperatePayload["label"].(uint); !ok {
+		if _, ok := deviceOperateLog.OperatePayload["label"].(int64); !ok {
 			return errors.New("label 参数格式错误")
 		}
 
-		if !logic.FaceIdentifyDeviceLogic.FaceIdentifyLogic.UpdateFaceModelStatus(device, deviceOperateLog.OperatePayload["label"].(uint), model2.FACE_MODEL_STATUS_DISABLE) {
+		if !logic.FaceIdentifyDeviceLogic.FaceIdentifyLogic.UpdateFaceModelStatus(device, uint(deviceOperateLog.OperatePayload["label"].(float64)), model2.FACE_MODEL_STATUS_DISABLE) {
 			return errors.New("删除模型失败")
 		}
 	}
@@ -100,7 +100,7 @@ func (faceIdentifyDeviceAdapter FaceIdentifyDeviceAdapter) OnOperateResponse(dev
 		}
 
 		if result {
-			//logic.FaceIdentifyDeviceLogic.FaceIdentifyLogic.UpdateFaceModelStatus(device, deviceOperateLog.ResponsePayload["label"].(uint), model2.FACE_MODEL_STATUS_ENABLE)
+			logic.FaceIdentifyDeviceLogic.FaceIdentifyLogic.UpdateFaceModelStatus(device, uint(deviceOperateLog.OperatePayload["label"].(float64)), model2.FACE_MODEL_STATUS_ENABLE)
 		}
 	}
 
@@ -112,11 +112,11 @@ func (faceIdentifyDeviceAdapter FaceIdentifyDeviceAdapter) OnReport(device *mode
 		if _, ok := deviceReportLog.ReportPayload["label"]; !ok {
 			return errors.New("label 参数缺失")
 		}
-		if _, ok := deviceReportLog.ReportPayload["label"].(uint); !ok {
+		if _, ok := deviceReportLog.ReportPayload["label"].(int64); !ok {
 			return errors.New("label 参数格式错误")
 		}
 
-		faceModel := logic.FaceIdentifyDeviceLogic.FaceIdentifyLogic.GetByLabel(deviceReportLog.ReportPayload["label"].(uint))
+		faceModel := logic.FaceIdentifyDeviceLogic.FaceIdentifyLogic.GetByLabel(uint(deviceReportLog.ReportPayload["label"].(int64)))
 		if faceModel == nil {
 			return errors.New("模型不存在")
 		}
