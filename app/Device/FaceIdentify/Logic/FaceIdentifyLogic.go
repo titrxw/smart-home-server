@@ -6,6 +6,7 @@ import (
 	repository "github.com/titrxw/smart-home-server/app/Device/FaceIdentify/Repository"
 	logic "github.com/titrxw/smart-home-server/app/Logic"
 	model "github.com/titrxw/smart-home-server/app/Model"
+	repository2 "github.com/titrxw/smart-home-server/app/Repository"
 	"time"
 )
 
@@ -44,4 +45,21 @@ func (faceIdentifyLogic FaceIdentifyLogic) UpdateFaceModelStatus(device *model.D
 
 	faceModel.Status = status
 	return repository.FaceIdentifyDeviceRepository.FaceModelRepository.UpdateFaceModel(faceIdentifyLogic.GetDefaultDb(), faceModel)
+}
+
+func (faceIdentifyLogic FaceIdentifyLogic) GetDeviceFaceModels(device *model.Device, page uint, pageSize uint) *repository2.PageModel {
+	return repository.FaceIdentifyDeviceRepository.GetDeviceFaceModels(faceIdentifyLogic.GetDefaultDb(), device.ID, page, pageSize)
+}
+
+func (faceIdentifyLogic FaceIdentifyLogic) GetDeviceFaceModel(device *model.Device, label uint) (*model2.FaceModel, error) {
+	faceModel := faceIdentifyLogic.GetByLabel(label)
+	if faceModel == nil {
+		return nil, errors.New("模型不存在")
+	}
+
+	if faceModel.DeviceId != device.ID {
+		return nil, errors.New("非法操作")
+	}
+
+	return faceModel, nil
 }

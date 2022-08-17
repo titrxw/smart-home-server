@@ -31,3 +31,23 @@ func (faceModelRepository FaceModelRepository) GetByLabel(db *gorm.DB, label uin
 
 	return nil
 }
+
+func (faceModelRepository FaceModelRepository) GetDeviceFaceModels(db *gorm.DB, deviceId uint, page uint, pageSize uint) *repository.PageModel {
+	faceModels := make([]model.FaceModel, 0)
+	pageData := &repository.PageModel{
+		CurPage:  page,
+		Total:    0,
+		PageSize: pageSize,
+		Data:     &faceModels,
+	}
+
+	totalQuery := db.Model(&model.FaceModel{}).Where("device_id = ?", deviceId).Where("status != ?", model.FACE_MODEL_STATUS_DISABLE)
+	var total int64
+	totalQuery.Count(&total)
+	if total > 0 {
+		totalQuery.Limit(int(pageSize)).Offset(int((page - 1) * pageSize)).Find(&faceModels)
+		pageData.Total = uint64(total)
+	}
+
+	return pageData
+}
