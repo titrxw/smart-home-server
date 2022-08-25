@@ -1,7 +1,7 @@
 package jwt
 
 import (
-	"errors"
+	exception "github.com/titrxw/smart-home-server/app/Exception"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -82,13 +82,13 @@ func (jwtService *JwtService) ParseToken(tokenStr string) (*jwt.Token, error) {
 func (jwtService *JwtService) ValidateToken(token *jwt.Token) error {
 	clams := token.Claims.(Claims)
 	if clams.Issuer != jwtService.Iss {
-		return errors.New("issued error")
+		return exception.NewRuntimeError("issued error")
 	}
 	if clams.Subject != jwtService.Subject {
-		return errors.New("subject error")
+		return exception.NewRuntimeError("subject error")
 	}
 	if !clams.VerifyAudience(jwtService.Audience, false) {
-		return errors.New("audience error")
+		return exception.NewRuntimeError("audience error")
 	}
 	if err := clams.Valid(); err != nil {
 		return err

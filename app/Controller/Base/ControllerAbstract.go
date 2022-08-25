@@ -5,6 +5,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	controller "github.com/titrxw/go-framework/src/Core/Controller"
 	global "github.com/titrxw/go-framework/src/Global"
+	http "github.com/titrxw/smart-home-server/app/Http"
 )
 
 type RequestAbstract struct {
@@ -14,6 +15,7 @@ type RequestAbstract struct {
 
 type ControllerAbstract struct {
 	controller.ControllerAbstract
+	http.ResponseFormat
 }
 
 func (controller ControllerAbstract) translateValidationError(err error) string {

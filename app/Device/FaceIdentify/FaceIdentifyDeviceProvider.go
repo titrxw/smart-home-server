@@ -18,7 +18,7 @@ func (faceIdentifyDeviceProvider *FaceIdentifyDeviceProvider) Register(options i
 	logic.Logic.DeviceLogic.RegisterDeviceAdapter(adapter)
 
 	router.GRouter.RegisterRouterProvider(func(engine *gin.Engine) {
-		v1 := engine.Group("/api/device/"+adapter.GetDeviceConfig().Type, new(middleware.OauthMiddleware).Process)
+		v1 := engine.Group("/api/frontend/device/"+adapter.GetDeviceConfig().Type, new(middleware.OauthMiddleware).Process)
 		{
 			v1.GET("/detail/:device_id/:face_model_id", new(controller.FaceModelController).GetDeviceFaceModelDetail)
 			v1.POST("/list", new(controller.FaceModelController).GetDeviceFaceModels)

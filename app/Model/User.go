@@ -18,7 +18,8 @@ type User struct {
 	Model
 
 	UserName    string    `json:"user_name" gorm:"type:varchar(32);not null"`
-	Mobile      string    `json:"mobile" gorm:"type:varchar(11);not null;uniqueIndex"`
+	Email       string    `json:"email" gorm:"type:varchar(32);not null;uniqueIndex"`
+	Mobile      string    `json:"mobile" gorm:"type:varchar(11);not null;default:'';uniqueIndex"`
 	Password    string    `json:"-" gorm:"type:varchar(64);not null"`
 	Salt        string    `json:"-" gorm:"type:varchar(12);not null"`
 	Status      uint8     `json:"status" gorm:"not null;default:1"`

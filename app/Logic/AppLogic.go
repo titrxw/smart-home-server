@@ -3,8 +3,8 @@ package logic
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"errors"
 	"fmt"
+	exception "github.com/titrxw/smart-home-server/app/Exception"
 	model "github.com/titrxw/smart-home-server/app/Model"
 	repository "github.com/titrxw/smart-home-server/app/Repository"
 	"os"
@@ -22,7 +22,7 @@ type AppLogic struct {
 func (appLogic *AppLogic) GetAppAttachPath(appId string, ext string) (string, error) {
 	dir := "./public/upload/img/" + appId + "/" + time.Now().Format("20060102")
 	if err := os.MkdirAll(dir, os.ModePerm); err != nil {
-		return "", errors.New("创建文件夹失败")
+		return "", exception.NewLogicError("创建文件夹失败")
 	}
 
 	fileUnixName := strconv.FormatInt(time.Now().UnixMicro(), 10) + ext

@@ -1,7 +1,7 @@
 package user
 
 import (
-	"errors"
+	exception "github.com/titrxw/smart-home-server/app/Exception"
 	model "github.com/titrxw/smart-home-server/app/Model"
 	"strings"
 	"time"
@@ -13,16 +13,22 @@ import (
 	logic "github.com/titrxw/smart-home-server/app/Logic"
 )
 
+type RegisterEmailRequest struct {
+	base.RequestAbstract
+	Email string `form:"email" binding:"required,email"`
+}
+
 type RegisterRequest struct {
 	base.RequestAbstract
-	Username string `form:"user_name" binding:"required,user_name"`
-	Mobile   string `form:"mobile" binding:"required,mobile"`
-	Password string `form:"password" binding:"required,password"`
+	Username        string `form:"user_name" binding:"required,user_name"`
+	Email           string `form:"email" binding:"required,email"`
+	Password        string `form:"password" binding:"required,password"`
+	EmailVerifyCode string `form:"email_code" binding:"required,len=6"`
 }
 
 type LoginRequest struct {
 	base.RequestAbstract
-	Mobile   string `form:"mobile" binding:"required,mobile"`
+	Email    string `form:"email" binding:"required,email"`
 	Password string `form:"password" binding:"required,password"`
 }
 
@@ -31,17 +37,43 @@ type OauthController struct {
 	UserOauth
 }
 
+func (oauthController OauthController) SendRegisterEmailCode(ctx *gin.Context) {
+	registerEmailRequest := RegisterEmailRequest{}
+	if !oauthController.ValidateFormPost(ctx, &registerEmailRequest) {
+		return
+	}
+
+	user := logic.Logic.UserLogic.GetByEmail(registerEmailRequest.Email)
+	if user != nil {
+		oauthController.JsonResponseWithServerError(ctx, exception.NewLogicError("该email已存在"))
+		return
+	}
+
+	err := logic.Logic.EmailLogic.Send(ctx, registerEmailRequest.Email, "register")
+	if err != nil {
+		oauthController.JsonResponseWithServerError(ctx, err)
+		return
+	}
+
+	oauthController.JsonSuccessResponse(ctx)
+}
+
 func (oauthController OauthController) Register(ctx *gin.Context) {
 	registerRequest := RegisterRequest{}
 	if !oauthController.ValidateFormPost(ctx, &registerRequest) {
 		return
 	}
 	if words := logic.Logic.SysSensitiveWordsLogic.GetSensitiveWord(registerRequest.Username); len(words) > 0 {
-		oauthController.JsonResponseWithServerError(ctx, errors.New("用户名包含敏感字符 "+strings.Join(words, ",")))
+		oauthController.JsonResponseWithServerError(ctx, exception.NewLogicError("用户名包含敏感字符 "+strings.Join(words, ",")))
+		return
+	}
+	err := logic.Logic.EmailLogic.Verify(ctx, registerRequest.Email, registerRequest.EmailVerifyCode, "register")
+	if err != nil {
+		oauthController.JsonResponseWithServerError(ctx, err)
 		return
 	}
 
-	user, err := logic.Logic.UserLogic.CreateUser(registerRequest.Username, registerRequest.Mobile, registerRequest.Password)
+	user, err := logic.Logic.UserLogic.CreateUser(registerRequest.Username, registerRequest.Email, registerRequest.Password)
 	if err != nil {
 		oauthController.JsonResponseWithServerError(ctx, err)
 		return
@@ -56,13 +88,13 @@ func (oauthController OauthController) Login(ctx *gin.Context) {
 		return
 	}
 
-	user, err := logic.Logic.UserLogic.GetByMobileAndPwd(loginRequest.Mobile, loginRequest.Password)
+	user, err := logic.Logic.UserLogic.GetByEmailAndPwd(loginRequest.Email, loginRequest.Password)
 	if err != nil {
 		oauthController.JsonResponseWithServerError(ctx, err)
 		return
 	}
 	if user.IsDisable() {
-		oauthController.JsonResponseWithServerError(ctx, "用户已被禁用")
+		oauthController.JsonResponseWithServerError(ctx, exception.NewLogicError("用户已被禁用"))
 		return
 	}
 

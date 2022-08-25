@@ -2,6 +2,7 @@ package light
 
 import (
 	cloudevents "github.com/cloudevents/sdk-go/v2"
+	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/titrxw/smart-home-server/app/Device/Interface"
 	model "github.com/titrxw/smart-home-server/app/Model"
 	"github.com/titrxw/smart-home-server/config"
@@ -30,10 +31,10 @@ func (lightAdapter LightDeviceAdapter) AfterTriggerOperate(device *model.Device,
 	return nil
 }
 
-func (lightAdapter LightDeviceAdapter) OnOperateResponse(device *model.Device, deviceOperateLog *model.DeviceOperateLog, cloudEvent *cloudevents.Event) error {
+func (lightAdapter LightDeviceAdapter) OnOperateResponse(client mqtt.Client, device *model.Device, deviceOperateLog *model.DeviceOperateLog, cloudEvent *cloudevents.Event) error {
 	return nil
 }
 
-func (lightAdapter LightDeviceAdapter) OnReport(device *model.Device, deviceReportLog *model.DeviceReportLog, cloudEvent *cloudevents.Event) error {
+func (lightAdapter LightDeviceAdapter) OnReport(client mqtt.Client, device *model.Device, deviceReportLog *model.DeviceReportLog, cloudEvent *cloudevents.Event) error {
 	return nil
 }

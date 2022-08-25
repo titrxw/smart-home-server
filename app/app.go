@@ -28,6 +28,7 @@ func NewApp() *App {
 func (app *App) Bootstrap() {
 	app.App.Bootstrap()
 	app.InitConfig(&app.Config)
+	config.GConfig = app.Config
 
 	app.App.HandlerExceptions.SetExceptionHandler(new(exception.ExceptionHandler))
 

@@ -43,6 +43,16 @@ func (userRepository UserRepository) GetByUserName(db *gorm.DB, userName string)
 	return nil
 }
 
+func (userRepository UserRepository) GetByEmail(db *gorm.DB, email string) *model.User {
+	user := new(model.User)
+	result := db.Where("email = ?", email).First(user)
+	if result.RowsAffected == 1 {
+		return user
+	}
+
+	return nil
+}
+
 func (userRepository UserRepository) GetByMobile(db *gorm.DB, mobile string) *model.User {
 	user := new(model.User)
 	result := db.Where("mobile = ?", mobile).First(user)

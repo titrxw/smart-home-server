@@ -14,6 +14,7 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.1.0
 	github.com/golobby/container/v3 v3.0.2
 	github.com/gookit/goutil v0.4.0
+	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible
 	github.com/mojocn/base64Captcha v1.3.5
 	github.com/satori/go.uuid v1.2.0
 	github.com/titrxw/emqx-sdk v0.0.0-20211130142505-b7b21dcc04c4

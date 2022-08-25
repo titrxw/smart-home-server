@@ -1,11 +1,12 @@
 package faceIdentify
 
 import (
-	"errors"
 	cloudevents "github.com/cloudevents/sdk-go/v2"
+	mqtt "github.com/eclipse/paho.mqtt.golang"
 	logic "github.com/titrxw/smart-home-server/app/Device/FaceIdentify/Logic"
 	model2 "github.com/titrxw/smart-home-server/app/Device/FaceIdentify/Model"
 	"github.com/titrxw/smart-home-server/app/Device/Interface"
+	exception "github.com/titrxw/smart-home-server/app/Exception"
 	logic2 "github.com/titrxw/smart-home-server/app/Logic"
 	model "github.com/titrxw/smart-home-server/app/Model"
 	"github.com/titrxw/smart-home-server/config"
@@ -39,16 +40,16 @@ func (faceIdentifyDeviceAdapter FaceIdentifyDeviceAdapter) GetDeviceConfig() con
 func (faceIdentifyDeviceAdapter FaceIdentifyDeviceAdapter) BeforeTriggerOperate(device *model.Device, deviceOperateLog *model.DeviceOperateLog) error {
 	if deviceOperateLog.OperateName == FACE_IDENTIFY_DEVICE_OPERATE_ADD_MODEL {
 		if _, ok := deviceOperateLog.OperatePayload["user_name"]; !ok {
-			return errors.New("user_name 参数缺失")
+			return exception.NewArgsError("user_name 参数缺失")
 		}
 		if _, ok := deviceOperateLog.OperatePayload["urls"]; !ok {
-			return errors.New("urls 参数缺失")
+			return exception.NewArgsError("urls 参数缺失")
 		}
 		if _, ok := deviceOperateLog.OperatePayload["user_name"].(string); !ok {
-			return errors.New("user_name 参数格式错误")
+			return exception.NewArgsError("user_name 参数格式错误")
 		}
 		if _, ok := deviceOperateLog.OperatePayload["urls"].([]interface{}); !ok {
-			return errors.New("urls 参数格式错误")
+			return exception.NewArgsError("urls 参数格式错误")
 		}
 		var urlsMap model2.FaceUrls
 		for _, param := range deviceOperateLog.OperatePayload["urls"].([]interface{}) {
@@ -56,12 +57,12 @@ func (faceIdentifyDeviceAdapter FaceIdentifyDeviceAdapter) BeforeTriggerOperate(
 			case string:
 				urlsMap = append(urlsMap, v)
 			default:
-				return errors.New("urls 参数格式错误")
+				return exception.NewArgsError("urls 参数格式错误")
 			}
 		}
 
 		if len(urlsMap) < FACE_IDENTIFY_DEVICE_OPERATE_ADD_MODEL_SETTING_MIN_IMG_LENGTH {
-			return errors.New("模型数量不能小于" + strconv.Itoa(FACE_IDENTIFY_DEVICE_OPERATE_ADD_MODEL_SETTING_MIN_IMG_LENGTH))
+			return exception.NewLogicError("模型数量不能小于" + strconv.Itoa(FACE_IDENTIFY_DEVICE_OPERATE_ADD_MODEL_SETTING_MIN_IMG_LENGTH))
 		}
 
 		faceModel, err := logic.FaceIdentifyDeviceLogic.FaceIdentifyLogic.AddDeviceFaceModel(device, deviceOperateLog.OperatePayload["user_name"].(string), urlsMap)
@@ -74,14 +75,14 @@ func (faceIdentifyDeviceAdapter FaceIdentifyDeviceAdapter) BeforeTriggerOperate(
 
 	if deviceOperateLog.OperateName == FACE_IDENTIFY_DEVICE_OPERATE_DEL_MODEL {
 		if _, ok := deviceOperateLog.OperatePayload["label"]; !ok {
-			return errors.New("label 参数缺失")
+			return exception.NewArgsError("label 参数缺失")
 		}
 		if _, ok := deviceOperateLog.OperatePayload["label"].(int64); !ok {
-			return errors.New("label 参数格式错误")
+			return exception.NewArgsError("label 参数格式错误")
 		}
 
 		if !logic.FaceIdentifyDeviceLogic.FaceIdentifyLogic.UpdateFaceModelStatus(device, uint(deviceOperateLog.OperatePayload["label"].(float64)), model2.FACE_MODEL_STATUS_DISABLE) {
-			return errors.New("删除模型失败")
+			return exception.NewLogicError("删除模型失败")
 		}
 	}
 
@@ -92,7 +93,7 @@ func (faceIdentifyDeviceAdapter FaceIdentifyDeviceAdapter) AfterTriggerOperate(d
 	return nil
 }
 
-func (faceIdentifyDeviceAdapter FaceIdentifyDeviceAdapter) OnOperateResponse(device *model.Device, deviceOperateLog *model.DeviceOperateLog, cloudEvent *cloudevents.Event) error {
+func (faceIdentifyDeviceAdapter FaceIdentifyDeviceAdapter) OnOperateResponse(client mqtt.Client, device *model.Device, deviceOperateLog *model.DeviceOperateLog, cloudEvent *cloudevents.Event) error {
 	if deviceOperateLog.OperateName == FACE_IDENTIFY_DEVICE_OPERATE_ADD_MODEL {
 		result, err := logic2.Logic.DeviceOperateLogic.IsSuccessResponse(deviceOperateLog.ResponsePayload)
 		if err != nil {
@@ -107,21 +108,21 @@ func (faceIdentifyDeviceAdapter FaceIdentifyDeviceAdapter) OnOperateResponse(dev
 	return nil
 }
 
-func (faceIdentifyDeviceAdapter FaceIdentifyDeviceAdapter) OnReport(device *model.Device, deviceReportLog *model.DeviceReportLog, cloudEvent *cloudevents.Event) error {
+func (faceIdentifyDeviceAdapter FaceIdentifyDeviceAdapter) OnReport(client mqtt.Client, device *model.Device, deviceReportLog *model.DeviceReportLog, cloudEvent *cloudevents.Event) error {
 	if deviceReportLog.ReportName == FACE_IDENTIFY_DEVICE_IDENTIFY_REPORT {
 		if _, ok := deviceReportLog.ReportPayload["label"]; !ok {
-			return errors.New("label 参数缺失")
+			return exception.NewArgsError("label 参数缺失")
 		}
 		if _, ok := deviceReportLog.ReportPayload["label"].(int64); !ok {
-			return errors.New("label 参数格式错误")
+			return exception.NewArgsError("label 参数格式错误")
 		}
 
 		faceModel := logic.FaceIdentifyDeviceLogic.FaceIdentifyLogic.GetByLabel(uint(deviceReportLog.ReportPayload["label"].(int64)))
 		if faceModel == nil {
-			return errors.New("模型不存在")
+			return exception.NewLogicError("模型不存在")
 		}
 		if !faceModel.IsEnable() {
-			return errors.New("模型不可用")
+			return exception.NewLogicError("模型不可用")
 		}
 
 		//处理其他业务

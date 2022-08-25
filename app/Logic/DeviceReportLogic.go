@@ -2,9 +2,9 @@ package logic
 
 import (
 	"encoding/json"
-	"errors"
 	cloudevents "github.com/cloudevents/sdk-go/v2"
 	global "github.com/titrxw/go-framework/src/Global"
+	exception "github.com/titrxw/smart-home-server/app/Exception"
 	helper "github.com/titrxw/smart-home-server/app/Helper"
 	model "github.com/titrxw/smart-home-server/app/Model"
 	repository "github.com/titrxw/smart-home-server/app/Repository"
@@ -17,7 +17,7 @@ type DeviceReportLogic struct {
 
 func (deviceReportLogic DeviceReportLogic) OnReport(device *model.Device, cloudEvent *cloudevents.Event) (*model.DeviceReportLog, error) {
 	if !Logic.DeviceLogic.IsSupportReport(device, model.DeviceReportType(cloudEvent.Type())) {
-		return nil, errors.New("report 不支持")
+		return nil, exception.NewLogicError("report 不支持")
 	}
 
 	payLoad := model.ReportPayload{}
@@ -38,7 +38,7 @@ func (deviceReportLogic DeviceReportLogic) OnReport(device *model.Device, cloudE
 		CreatedAt:     model.LocalTime(time.Now()),
 	}
 	if !repository.Repository.DeviceReportLogRepository.AddDeviceReportLog(deviceReportLogic.GetDefaultDb(), deviceReportLog) {
-		return nil, errors.New("添加上报记录失败")
+		return nil, exception.NewLogicError("添加上报记录失败")
 	}
 
 	return deviceReportLog, nil
@@ -47,10 +47,10 @@ func (deviceReportLogic DeviceReportLogic) OnReport(device *model.Device, cloudE
 func (deviceReportLogic DeviceReportLogic) GetDeviceReportLogByNumber(device *model.Device, reportNumber string) (*model.DeviceReportLog, error) {
 	reportLog := repository.Repository.DeviceReportLogRepository.GetDeviceReportLogByReportNumber(deviceReportLogic.GetDefaultDb(), reportNumber)
 	if reportLog == nil {
-		return nil, errors.New("设备上报记录不存在")
+		return nil, exception.NewLogicError("设备上报记录不存在")
 	}
 	if reportLog.DeviceId != device.ID {
-		return nil, errors.New("非法操作")
+		return nil, exception.NewLogicError("非法操作")
 	}
 
 	return reportLog, nil

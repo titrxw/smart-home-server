@@ -31,7 +31,7 @@ func (deviceReplaySubscribe DeviceReplaySubscribe) OnSubscribe(client mqtt.Clien
 	if err == nil {
 		operateLog, err := logic.Logic.DeviceOperateLogic.OnOperateResponse(device, cloudEvent)
 		if err == nil {
-			err = logic.Logic.DeviceLogic.GetDeviceAdapter(operateLog.DeviceType).OnOperateResponse(device, operateLog, cloudEvent)
+			err = logic.Logic.DeviceLogic.GetDeviceAdapter(operateLog.DeviceType).OnOperateResponse(client, device, operateLog, cloudEvent)
 			global.FApp.Event.Publish(reflect.TypeOf(event.DeviceOperateReplyEvent{}).Name(), event.NewDeviceOperateReplyEvent(device, operateLog, cloudEvent))
 		}
 	}

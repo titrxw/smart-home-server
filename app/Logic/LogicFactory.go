@@ -8,6 +8,7 @@ type LogicFactory struct {
 	EmqxLogic
 	UserLogic
 	SysSensitiveWordsLogic
+	EmailLogic
 }
 
 var Logic = new(LogicFactory)

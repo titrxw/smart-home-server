@@ -1,9 +1,9 @@
 package logic
 
 import (
-	"errors"
 	model2 "github.com/titrxw/smart-home-server/app/Device/FaceIdentify/Model"
 	repository "github.com/titrxw/smart-home-server/app/Device/FaceIdentify/Repository"
+	exception "github.com/titrxw/smart-home-server/app/Exception"
 	logic "github.com/titrxw/smart-home-server/app/Logic"
 	model "github.com/titrxw/smart-home-server/app/Model"
 	repository2 "github.com/titrxw/smart-home-server/app/Repository"
@@ -24,7 +24,7 @@ func (faceIdentifyLogic FaceIdentifyLogic) AddDeviceFaceModel(device *model.Devi
 	}
 
 	if !repository.FaceIdentifyDeviceRepository.FaceModelRepository.AddFaceModel(faceIdentifyLogic.GetDefaultDb(), faceModel) {
-		return nil, errors.New("添加模型失败")
+		return nil, exception.NewLogicError("添加模型失败")
 	}
 
 	return faceModel, nil
@@ -54,11 +54,11 @@ func (faceIdentifyLogic FaceIdentifyLogic) GetDeviceFaceModels(device *model.Dev
 func (faceIdentifyLogic FaceIdentifyLogic) GetDeviceFaceModel(device *model.Device, label uint) (*model2.FaceModel, error) {
 	faceModel := faceIdentifyLogic.GetByLabel(label)
 	if faceModel == nil {
-		return nil, errors.New("模型不存在")
+		return nil, exception.NewLogicError("模型不存在")
 	}
 
 	if faceModel.DeviceId != device.ID {
-		return nil, errors.New("非法操作")
+		return nil, exception.NewLogicError("非法操作")
 	}
 
 	return faceModel, nil

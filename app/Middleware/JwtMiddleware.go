@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	http2 "github.com/titrxw/smart-home-server/app/Http"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,6 +12,7 @@ import (
 
 type JwtMiddleware struct {
 	middleware.MiddlewareAbstract
+	http2.ResponseFormat
 }
 
 func (jwtMiddleware JwtMiddleware) Process(ctx *gin.Context) {

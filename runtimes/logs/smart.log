@@ -1,0 +1,1222 @@
+2021-11-16T16:49:51.832+0800	DEBUG	dsfdsfdsfd
+2021-11-16T16:49:51.849+0800	INFO	
+
+[31m2021/11/16 16:49:51 [Recovery] 2021/11/16 - 16:49:51 panic recovered:
+GET / HTTP/1.1
+Host: 127.0.0.1:8080
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Connection: keep-alive
+Sec-Ch-Ua: "Chromium";v="94", "Google Chrome";v="94", ";Not A Brand";v="99"
+Sec-Ch-Ua-Mobile: ?0
+Sec-Ch-Ua-Platform: "Linux"
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36
+
+
+runtime error: invalid memory address or nil pointer dereference
+/usr/local/go/src/runtime/panic.go:212 (0x43dc1a)
+	panicmem: panic(memoryError)
+/usr/local/go/src/runtime/signal_unix.go:734 (0x458074)
+	sigpanic: panicmem()
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Database/DatabaseFactory.go:40 (0xb08f6c)
+	(*DatabaseFactory).Channel: db, exists := this.channelMap[channel]
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Helper/Function.go:11 (0xd811d5)
+	DefaultDb: return app.GApp.DbFactory.Channel("default")
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Controller/System/IndexController.go:20 (0xd814a4)
+	(*IndexController).Index: helper.DefaultDb().Debug().Exec("show table")
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xd56fae)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xd75ba4)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xd56fae)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xd75ba4)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xd56fae)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xd74524)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xd56fae)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xd65833)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xd6531e)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x8f194a)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x8ebb44)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x479860)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2021-11-16T17:07:56.651+0800	DEBUG	dsfdsfdsfd
+2021-11-16T17:08:15.714+0800	DEBUG	dsfdsfdsfd
+2021-11-16T17:08:55.220+0800	DEBUG	dsfdsfdsfd
+2022-03-09T17:05:35.730+0800	INFO	
+
+[31m2022/03/09 17:05:35 [Recovery] 2022/03/09 - 17:05:35 panic recovered:
+GET /frontend/user/oauth/info HTTP/1.1
+Host: 127.0.0.1:8080
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Connection: keep-alive
+Sec-Ch-Ua: " Not;A Brand";v="99", "Google Chrome";v="97", "Chromium";v="97"
+Sec-Ch-Ua-Mobile: ?0
+Sec-Ch-Ua-Platform: "Linux"
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36
+
+
+interface conversion: interface {} is nil, not user.SessionData
+/usr/local/go/src/runtime/iface.go:261 (0x40ca8e)
+	panicdottypeE: panic(&TypeAssertionError{iface, have, want, ""})
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Controller/Frontend/User/UserOauth.go:25 (0xc0b592)
+	UserOauth.GetUserFromSession: userSessionInfo := app.GApp.Session.Get(ctx, "user").(SessionData)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Middleware/OauthMiddleware.go:16 (0xc0b78e)
+	OauthMiddleware.Process: user := this.GetUserFromSession(ctx)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbd3c29)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Middleware/SessionMiddleware.go:21 (0xbd3c0b)
+	SessionMiddleware.Process: ctx.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae39)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcae20)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae39)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcae20)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc9f13)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xbc9ed2)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc02a9)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xbc028f)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xbbfd7b)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x71ce42)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x71826c)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x46dd80)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2022-03-09T17:12:32.301+0800	INFO	
+
+[31m2022/03/09 17:12:32 [Recovery] 2022/03/09 - 17:12:32 panic recovered:
+GET /frontend/user/oauth/info HTTP/1.1
+Host: 127.0.0.1:8080
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cache-Control: max-age=0
+Connection: keep-alive
+Sec-Ch-Ua: " Not;A Brand";v="99", "Google Chrome";v="97", "Chromium";v="97"
+Sec-Ch-Ua-Mobile: ?0
+Sec-Ch-Ua-Platform: "Linux"
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36
+
+
+runtime error: invalid memory address or nil pointer dereference
+/usr/local/go/src/runtime/panic.go:212 (0x435a5a)
+	panicmem: panic(memoryError)
+/usr/local/go/src/runtime/signal_unix.go:734 (0x44e652)
+	sigpanic: panicmem()
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Middleware/OauthMiddleware.go:21 (0xc0b7bd)
+	OauthMiddleware.Process: ctx.Set("user_id", user.ID)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbd3c29)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Middleware/SessionMiddleware.go:21 (0xbd3c0b)
+	SessionMiddleware.Process: ctx.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae39)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcae20)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae39)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcae20)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc9f13)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xbc9ed2)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc02a9)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xbc028f)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xbbfd7b)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x71ce42)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x71826c)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x46dd80)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2022-03-09T17:12:49.403+0800	INFO	
+
+[31m2022/03/09 17:12:49 [Recovery] 2022/03/09 - 17:12:49 panic recovered:
+GET /frontend/user/oauth/info HTTP/1.1
+Host: 127.0.0.1:8080
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cache-Control: max-age=0
+Connection: keep-alive
+Sec-Ch-Ua: " Not;A Brand";v="99", "Google Chrome";v="97", "Chromium";v="97"
+Sec-Ch-Ua-Mobile: ?0
+Sec-Ch-Ua-Platform: "Linux"
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36
+
+
+runtime error: invalid memory address or nil pointer dereference
+/usr/local/go/src/runtime/panic.go:212 (0x435a5a)
+	panicmem: panic(memoryError)
+/usr/local/go/src/runtime/signal_unix.go:734 (0x44e652)
+	sigpanic: panicmem()
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Middleware/OauthMiddleware.go:21 (0xc0b7bd)
+	OauthMiddleware.Process: ctx.Set("user_id", user.ID)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbd3c29)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Middleware/SessionMiddleware.go:21 (0xbd3c0b)
+	SessionMiddleware.Process: ctx.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae39)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcae20)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae39)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcae20)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc9f13)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xbc9ed2)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc02a9)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xbc028f)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xbbfd7b)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x71ce42)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x71826c)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x46dd80)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2022-03-09T17:12:51.575+0800	INFO	
+
+[31m2022/03/09 17:12:51 [Recovery] 2022/03/09 - 17:12:51 panic recovered:
+GET /frontend/user/oauth/info HTTP/1.1
+Host: 127.0.0.1:8080
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cache-Control: max-age=0
+Connection: keep-alive
+Sec-Ch-Ua: " Not;A Brand";v="99", "Google Chrome";v="97", "Chromium";v="97"
+Sec-Ch-Ua-Mobile: ?0
+Sec-Ch-Ua-Platform: "Linux"
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36
+
+
+runtime error: invalid memory address or nil pointer dereference
+/usr/local/go/src/runtime/panic.go:212 (0x435a5a)
+	panicmem: panic(memoryError)
+/usr/local/go/src/runtime/signal_unix.go:734 (0x44e652)
+	sigpanic: panicmem()
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Middleware/OauthMiddleware.go:21 (0xc0b7bd)
+	OauthMiddleware.Process: ctx.Set("user_id", user.ID)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbd3c29)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Middleware/SessionMiddleware.go:21 (0xbd3c0b)
+	SessionMiddleware.Process: ctx.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae39)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcae20)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae39)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcae20)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc9f13)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xbc9ed2)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc02a9)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xbc028f)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xbbfd7b)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x71ce42)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x71826c)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x46dd80)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2022-03-09T17:12:52.936+0800	INFO	
+
+[31m2022/03/09 17:12:52 [Recovery] 2022/03/09 - 17:12:52 panic recovered:
+GET /frontend/user/oauth/info HTTP/1.1
+Host: 127.0.0.1:8080
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cache-Control: max-age=0
+Connection: keep-alive
+Sec-Ch-Ua: " Not;A Brand";v="99", "Google Chrome";v="97", "Chromium";v="97"
+Sec-Ch-Ua-Mobile: ?0
+Sec-Ch-Ua-Platform: "Linux"
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36
+
+
+runtime error: invalid memory address or nil pointer dereference
+/usr/local/go/src/runtime/panic.go:212 (0x435a5a)
+	panicmem: panic(memoryError)
+/usr/local/go/src/runtime/signal_unix.go:734 (0x44e652)
+	sigpanic: panicmem()
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Middleware/OauthMiddleware.go:21 (0xc0b7bd)
+	OauthMiddleware.Process: ctx.Set("user_id", user.ID)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbd3c29)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Middleware/SessionMiddleware.go:21 (0xbd3c0b)
+	SessionMiddleware.Process: ctx.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae39)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcae20)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae39)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcae20)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc9f13)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xbc9ed2)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc02a9)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xbc028f)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xbbfd7b)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x71ce42)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x71826c)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x46dd80)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2022-03-09T17:12:58.727+0800	INFO	
+
+[31m2022/03/09 17:12:58 [Recovery] 2022/03/09 - 17:12:58 panic recovered:
+GET /frontend/user/oauth/info HTTP/1.1
+Host: 127.0.0.1:8080
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cache-Control: max-age=0
+Connection: keep-alive
+Sec-Ch-Ua: " Not;A Brand";v="99", "Google Chrome";v="97", "Chromium";v="97"
+Sec-Ch-Ua-Mobile: ?0
+Sec-Ch-Ua-Platform: "Linux"
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36
+
+
+runtime error: invalid memory address or nil pointer dereference
+/usr/local/go/src/runtime/panic.go:212 (0x435a5a)
+	panicmem: panic(memoryError)
+/usr/local/go/src/runtime/signal_unix.go:734 (0x44e652)
+	sigpanic: panicmem()
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Middleware/OauthMiddleware.go:21 (0xc0b7bd)
+	OauthMiddleware.Process: ctx.Set("user_id", user.ID)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbd3c29)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Middleware/SessionMiddleware.go:21 (0xbd3c0b)
+	SessionMiddleware.Process: ctx.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae39)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcae20)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae39)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcae20)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc9f13)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xbc9ed2)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc02a9)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xbc028f)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xbbfd7b)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x71ce42)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x71826c)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x46dd80)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2022-03-10T17:35:04.778+0800	INFO	
+
+[31m2022/03/10 17:35:04 [Recovery] 2022/03/10 - 17:35:04 panic recovered:
+GET /util/captcha HTTP/1.1
+Host: 127.0.0.1:8080
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cache-Control: max-age=0
+Connection: keep-alive
+Sec-Ch-Ua: " Not;A Brand";v="99", "Google Chrome";v="97", "Chromium";v="97"
+Sec-Ch-Ua-Mobile: ?0
+Sec-Ch-Ua-Platform: "Linux"
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36
+
+
+scs: no session data in context
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:597 (0x74ea30)
+	(*SessionManager).getSessionDataFromContext: panic("scs: no session data in context")
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:155 (0x74e8e1)
+	(*SessionManager).Put: sd := s.getSessionDataFromContext(ctx)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Session/Session.go:35 (0xbd35ca)
+	(*Session).Set: this.Put(this.getContext(ctx), key, value)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Controller/System/Util/CaptchaController.go:18 (0xc2533b)
+	CaptchaController.Captcha: err := app.GApp.Session.Set(ctx, "captcha", captchaId)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae33)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xbcadf2)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc11c9)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xbc11af)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xbc0c9b)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x71e502)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x71992c)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x46dd80)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2022-03-10T17:38:04.666+0800	INFO	
+
+[31m2022/03/10 17:38:04 [Recovery] 2022/03/10 - 17:38:04 panic recovered:
+scs: no session data in context
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:597 (0x74ea30)
+	(*SessionManager).getSessionDataFromContext: panic("scs: no session data in context")
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:155 (0x74e8e1)
+	(*SessionManager).Put: sd := s.getSessionDataFromContext(ctx)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Session/Session.go:35 (0xbd35ca)
+	(*Session).Set: this.Put(this.getContext(ctx), key, value)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Controller/System/Util/CaptchaController.go:18 (0xc2533b)
+	CaptchaController.Captcha: err := app.GApp.Session.Set(ctx, "captcha", captchaId)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae33)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xbcadf2)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc11c9)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xbc11af)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xbc0c9b)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x71e502)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x71992c)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x46dd80)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2022-03-10T17:38:05.525+0800	INFO	
+
+[31m2022/03/10 17:38:05 [Recovery] 2022/03/10 - 17:38:05 panic recovered:
+scs: no session data in context
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:597 (0x74ea30)
+	(*SessionManager).getSessionDataFromContext: panic("scs: no session data in context")
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:155 (0x74e8e1)
+	(*SessionManager).Put: sd := s.getSessionDataFromContext(ctx)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Session/Session.go:35 (0xbd35ca)
+	(*Session).Set: this.Put(this.getContext(ctx), key, value)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Controller/System/Util/CaptchaController.go:18 (0xc2533b)
+	CaptchaController.Captcha: err := app.GApp.Session.Set(ctx, "captcha", captchaId)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae33)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xbcadf2)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc11c9)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xbc11af)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xbc0c9b)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x71e502)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x71992c)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x46dd80)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2022-03-10T17:38:05.988+0800	INFO	
+
+[31m2022/03/10 17:38:05 [Recovery] 2022/03/10 - 17:38:05 panic recovered:
+scs: no session data in context
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:597 (0x74ea30)
+	(*SessionManager).getSessionDataFromContext: panic("scs: no session data in context")
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:155 (0x74e8e1)
+	(*SessionManager).Put: sd := s.getSessionDataFromContext(ctx)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Session/Session.go:35 (0xbd35ca)
+	(*Session).Set: this.Put(this.getContext(ctx), key, value)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Controller/System/Util/CaptchaController.go:18 (0xc2533b)
+	CaptchaController.Captcha: err := app.GApp.Session.Set(ctx, "captcha", captchaId)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae33)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xbcadf2)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc11c9)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xbc11af)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xbc0c9b)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x71e502)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x71992c)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x46dd80)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2022-03-10T17:38:06.317+0800	INFO	
+
+[31m2022/03/10 17:38:06 [Recovery] 2022/03/10 - 17:38:06 panic recovered:
+scs: no session data in context
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:597 (0x74ea30)
+	(*SessionManager).getSessionDataFromContext: panic("scs: no session data in context")
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:155 (0x74e8e1)
+	(*SessionManager).Put: sd := s.getSessionDataFromContext(ctx)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Session/Session.go:35 (0xbd35ca)
+	(*Session).Set: this.Put(this.getContext(ctx), key, value)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Controller/System/Util/CaptchaController.go:18 (0xc2533b)
+	CaptchaController.Captcha: err := app.GApp.Session.Set(ctx, "captcha", captchaId)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae33)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xbcadf2)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc11c9)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xbc11af)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xbc0c9b)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x71e502)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x71992c)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x46dd80)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2022-03-10T17:38:06.565+0800	INFO	
+
+[31m2022/03/10 17:38:06 [Recovery] 2022/03/10 - 17:38:06 panic recovered:
+scs: no session data in context
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:597 (0x74ea30)
+	(*SessionManager).getSessionDataFromContext: panic("scs: no session data in context")
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:155 (0x74e8e1)
+	(*SessionManager).Put: sd := s.getSessionDataFromContext(ctx)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Session/Session.go:35 (0xbd35ca)
+	(*Session).Set: this.Put(this.getContext(ctx), key, value)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Controller/System/Util/CaptchaController.go:18 (0xc2533b)
+	CaptchaController.Captcha: err := app.GApp.Session.Set(ctx, "captcha", captchaId)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae33)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xbcadf2)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc11c9)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xbc11af)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xbc0c9b)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x71e502)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x71992c)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x46dd80)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2022-03-10T17:38:06.785+0800	INFO	
+
+[31m2022/03/10 17:38:06 [Recovery] 2022/03/10 - 17:38:06 panic recovered:
+scs: no session data in context
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:597 (0x74ea30)
+	(*SessionManager).getSessionDataFromContext: panic("scs: no session data in context")
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:155 (0x74e8e1)
+	(*SessionManager).Put: sd := s.getSessionDataFromContext(ctx)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Session/Session.go:35 (0xbd35ca)
+	(*Session).Set: this.Put(this.getContext(ctx), key, value)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Controller/System/Util/CaptchaController.go:18 (0xc2533b)
+	CaptchaController.Captcha: err := app.GApp.Session.Set(ctx, "captcha", captchaId)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae33)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xbcadf2)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc11c9)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xbc11af)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xbc0c9b)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x71e502)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x71992c)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x46dd80)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2022-03-10T17:38:06.963+0800	INFO	
+
+[31m2022/03/10 17:38:06 [Recovery] 2022/03/10 - 17:38:06 panic recovered:
+scs: no session data in context
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:597 (0x74ea30)
+	(*SessionManager).getSessionDataFromContext: panic("scs: no session data in context")
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:155 (0x74e8e1)
+	(*SessionManager).Put: sd := s.getSessionDataFromContext(ctx)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Session/Session.go:35 (0xbd35ca)
+	(*Session).Set: this.Put(this.getContext(ctx), key, value)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Controller/System/Util/CaptchaController.go:18 (0xc2533b)
+	CaptchaController.Captcha: err := app.GApp.Session.Set(ctx, "captcha", captchaId)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae33)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xbcadf2)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc11c9)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xbc11af)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xbc0c9b)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x71e502)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x71992c)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x46dd80)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2022-03-10T17:38:07.175+0800	INFO	
+
+[31m2022/03/10 17:38:07 [Recovery] 2022/03/10 - 17:38:07 panic recovered:
+scs: no session data in context
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:597 (0x74ea30)
+	(*SessionManager).getSessionDataFromContext: panic("scs: no session data in context")
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:155 (0x74e8e1)
+	(*SessionManager).Put: sd := s.getSessionDataFromContext(ctx)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Session/Session.go:35 (0xbd35ca)
+	(*Session).Set: this.Put(this.getContext(ctx), key, value)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Controller/System/Util/CaptchaController.go:18 (0xc2533b)
+	CaptchaController.Captcha: err := app.GApp.Session.Set(ctx, "captcha", captchaId)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae33)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xbcadf2)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc11c9)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xbc11af)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xbc0c9b)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x71e502)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x71992c)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x46dd80)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2022-03-10T17:38:07.390+0800	INFO	
+
+[31m2022/03/10 17:38:07 [Recovery] 2022/03/10 - 17:38:07 panic recovered:
+scs: no session data in context
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:597 (0x74ea30)
+	(*SessionManager).getSessionDataFromContext: panic("scs: no session data in context")
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:155 (0x74e8e1)
+	(*SessionManager).Put: sd := s.getSessionDataFromContext(ctx)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Session/Session.go:35 (0xbd35ca)
+	(*Session).Set: this.Put(this.getContext(ctx), key, value)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Controller/System/Util/CaptchaController.go:18 (0xc2533b)
+	CaptchaController.Captcha: err := app.GApp.Session.Set(ctx, "captcha", captchaId)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae33)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xbcadf2)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc11c9)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xbc11af)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xbc0c9b)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x71e502)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x71992c)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x46dd80)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2022-03-10T17:38:07.537+0800	INFO	
+
+[31m2022/03/10 17:38:07 [Recovery] 2022/03/10 - 17:38:07 panic recovered:
+scs: no session data in context
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:597 (0x74ea30)
+	(*SessionManager).getSessionDataFromContext: panic("scs: no session data in context")
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:155 (0x74e8e1)
+	(*SessionManager).Put: sd := s.getSessionDataFromContext(ctx)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Session/Session.go:35 (0xbd35ca)
+	(*Session).Set: this.Put(this.getContext(ctx), key, value)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Controller/System/Util/CaptchaController.go:18 (0xc2533b)
+	CaptchaController.Captcha: err := app.GApp.Session.Set(ctx, "captcha", captchaId)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae33)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xbcadf2)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc11c9)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xbc11af)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xbc0c9b)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x71e502)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x71992c)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x46dd80)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2022-03-10T18:03:05.592+0800	INFO	
+
+[31m2022/03/10 18:03:05 [Recovery] 2022/03/10 - 18:03:05 panic recovered:
+scs: no session data in context
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:597 (0x74ea30)
+	(*SessionManager).getSessionDataFromContext: panic("scs: no session data in context")
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:155 (0x74e8e1)
+	(*SessionManager).Put: sd := s.getSessionDataFromContext(ctx)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Session/Session.go:35 (0xbd35ca)
+	(*Session).Set: this.Put(this.getContext(ctx), key, value)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Controller/System/Util/CaptchaController.go:18 (0xc2537b)
+	CaptchaController.Captcha: err := app.GApp.Session.Set(ctx, "captcha", captchaId)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae33)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xbcadf2)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc11c9)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xbc11af)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xbc0c9b)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x71e502)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x71992c)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x46dd80)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2022-03-10T18:03:06.306+0800	INFO	
+
+[31m2022/03/10 18:03:06 [Recovery] 2022/03/10 - 18:03:06 panic recovered:
+scs: no session data in context
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:597 (0x74ea30)
+	(*SessionManager).getSessionDataFromContext: panic("scs: no session data in context")
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:155 (0x74e8e1)
+	(*SessionManager).Put: sd := s.getSessionDataFromContext(ctx)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Session/Session.go:35 (0xbd35ca)
+	(*Session).Set: this.Put(this.getContext(ctx), key, value)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Controller/System/Util/CaptchaController.go:18 (0xc2537b)
+	CaptchaController.Captcha: err := app.GApp.Session.Set(ctx, "captcha", captchaId)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae33)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xbcadf2)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc11c9)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xbc11af)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xbc0c9b)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x71e502)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x71992c)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x46dd80)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2022-03-10T18:03:06.686+0800	INFO	
+
+[31m2022/03/10 18:03:06 [Recovery] 2022/03/10 - 18:03:06 panic recovered:
+scs: no session data in context
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:597 (0x74ea30)
+	(*SessionManager).getSessionDataFromContext: panic("scs: no session data in context")
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:155 (0x74e8e1)
+	(*SessionManager).Put: sd := s.getSessionDataFromContext(ctx)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Session/Session.go:35 (0xbd35ca)
+	(*Session).Set: this.Put(this.getContext(ctx), key, value)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Controller/System/Util/CaptchaController.go:18 (0xc2537b)
+	CaptchaController.Captcha: err := app.GApp.Session.Set(ctx, "captcha", captchaId)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd59)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd40)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae33)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xbcadf2)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc11c9)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xbc11af)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xbc0c9b)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x71e502)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x71992c)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x46dd80)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2022-03-11T17:35:28.723+0800	INFO	
+
+[31m2022/03/11 17:35:28 [Recovery] 2022/03/11 - 17:35:28 panic recovered:
+GET /util/captcha HTTP/1.1
+Host: 127.0.0.1:8080
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cache-Control: max-age=0
+Connection: keep-alive
+Sec-Ch-Ua: " Not;A Brand";v="99", "Google Chrome";v="97", "Chromium";v="97"
+Sec-Ch-Ua-Mobile: ?0
+Sec-Ch-Ua-Platform: "Linux"
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36
+
+
+scs: no session data in context
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:597 (0xb2ed70)
+	(*SessionManager).getSessionDataFromContext: panic("scs: no session data in context")
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:155 (0xb2ec21)
+	(*SessionManager).Put: sd := s.getSessionDataFromContext(ctx)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Session/Session.go:35 (0xbd360a)
+	(*Session).Set: this.Put(this.getContext(ctx), key, value)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Controller/System/Util/CaptchaController.go:18 (0xc25fbe)
+	CaptchaController.Captcha: err := app.GApp.Session.Set(ctx, "captcha", captchaId)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd99)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd80)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd99)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd80)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae73)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xbcae32)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc1209)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xbc11ef)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xbc0cdb)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x716d22)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x71214c)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x46dd80)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2022-03-11T17:35:30.497+0800	INFO	
+
+[31m2022/03/11 17:35:30 [Recovery] 2022/03/11 - 17:35:30 panic recovered:
+GET /util/captcha HTTP/1.1
+Host: 127.0.0.1:8080
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cache-Control: max-age=0
+Connection: keep-alive
+Sec-Ch-Ua: " Not;A Brand";v="99", "Google Chrome";v="97", "Chromium";v="97"
+Sec-Ch-Ua-Mobile: ?0
+Sec-Ch-Ua-Platform: "Linux"
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36
+
+
+scs: no session data in context
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:597 (0xb2ed70)
+	(*SessionManager).getSessionDataFromContext: panic("scs: no session data in context")
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:155 (0xb2ec21)
+	(*SessionManager).Put: sd := s.getSessionDataFromContext(ctx)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Session/Session.go:35 (0xbd360a)
+	(*Session).Set: this.Put(this.getContext(ctx), key, value)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Controller/System/Util/CaptchaController.go:18 (0xc25fbe)
+	CaptchaController.Captcha: err := app.GApp.Session.Set(ctx, "captcha", captchaId)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd99)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd80)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcbd99)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xbcbd80)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbcae73)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xbcae32)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xbc1209)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xbc11ef)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xbc0cdb)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x716d22)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x71214c)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x46dd80)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2022-03-11T17:36:24.514+0800	INFO	
+
+[31m2022/03/11 17:36:24 [Recovery] 2022/03/11 - 17:36:24 panic recovered:
+scs: no session data in context
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:597 (0xdeabeb)
+	(*SessionManager).getSessionDataFromContext: panic("scs: no session data in context")
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:155 (0xdea744)
+	(*SessionManager).Put: sd := s.getSessionDataFromContext(ctx)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Session/Session.go:35 (0xeb5e15)
+	(*Session).Set: this.Put(this.getContext(ctx), key, value)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Controller/System/Util/CaptchaController.go:18 (0xf29bf7)
+	CaptchaController.Captcha: err := app.GApp.Session.Set(ctx, "captcha", captchaId)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xe8c08e)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xeaac84)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xe8c08e)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xeaac84)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xe8c08e)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xea9604)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xe8c08e)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xe9a913)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xe9a3fe)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x8565ea)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x850784)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x4797a0)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2022-03-11T17:36:25.137+0800	INFO	
+
+[31m2022/03/11 17:36:25 [Recovery] 2022/03/11 - 17:36:25 panic recovered:
+scs: no session data in context
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:597 (0xdeabeb)
+	(*SessionManager).getSessionDataFromContext: panic("scs: no session data in context")
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:155 (0xdea744)
+	(*SessionManager).Put: sd := s.getSessionDataFromContext(ctx)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Session/Session.go:35 (0xeb5e15)
+	(*Session).Set: this.Put(this.getContext(ctx), key, value)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Controller/System/Util/CaptchaController.go:18 (0xf29bf7)
+	CaptchaController.Captcha: err := app.GApp.Session.Set(ctx, "captcha", captchaId)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xe8c08e)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xeaac84)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xe8c08e)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xeaac84)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xe8c08e)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xea9604)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xe8c08e)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xe9a913)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xe9a3fe)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x8565ea)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x850784)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x4797a0)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2022-03-11T17:36:25.397+0800	INFO	
+
+[31m2022/03/11 17:36:25 [Recovery] 2022/03/11 - 17:36:25 panic recovered:
+scs: no session data in context
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:597 (0xdeabeb)
+	(*SessionManager).getSessionDataFromContext: panic("scs: no session data in context")
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:155 (0xdea744)
+	(*SessionManager).Put: sd := s.getSessionDataFromContext(ctx)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Session/Session.go:35 (0xeb5e15)
+	(*Session).Set: this.Put(this.getContext(ctx), key, value)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Controller/System/Util/CaptchaController.go:18 (0xf29bf7)
+	CaptchaController.Captcha: err := app.GApp.Session.Set(ctx, "captcha", captchaId)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xe8c08e)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xeaac84)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xe8c08e)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xeaac84)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xe8c08e)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xea9604)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xe8c08e)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xe9a913)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xe9a3fe)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x8565ea)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x850784)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x4797a0)
+	goexit: BYTE	$0x90	// NOP
+[0m
+
+2022-03-11T17:41:12.375+0800	INFO	
+
+[31m2022/03/11 17:41:12 [Recovery] 2022/03/11 - 17:41:12 panic recovered:
+scs: no session data in context
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:597 (0xdeabeb)
+	(*SessionManager).getSessionDataFromContext: panic("scs: no session data in context")
+/home/rxw/go/pkg/mod/github.com/alexedwards/scs/v2@v2.5.0/data.go:155 (0xdea744)
+	(*SessionManager).Put: sd := s.getSessionDataFromContext(ctx)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/framework/Core/Session/Session.go:35 (0xeb5e15)
+	(*Session).Set: this.Put(this.getContext(ctx), key, value)
+/home/rxw/lnmpdocker/Workspace/go/smart-home-server/app/Controller/System/Util/CaptchaController.go:18 (0xf29b57)
+	CaptchaController.Captcha: err := app.GApp.App.Session.Set(ctx, "captcha", captchaId)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xe8c08e)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xeaac84)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xe8c08e)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/recovery.go:99 (0xeaac84)
+	CustomRecoveryWithWriter.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xe8c08e)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/logger.go:241 (0xea9604)
+	LoggerWithConfig.func1: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/context.go:165 (0xe8c08e)
+	(*Context).Next: c.handlers[c.index](c)
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:489 (0xe9a913)
+	(*Engine).handleHTTPRequest: c.Next()
+/home/rxw/go/pkg/mod/github.com/gin-gonic/gin@v1.7.4/gin.go:445 (0xe9a3fe)
+	(*Engine).ServeHTTP: engine.handleHTTPRequest(c)
+/usr/local/go/src/net/http/server.go:2887 (0x8565ea)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+/usr/local/go/src/net/http/server.go:1952 (0x850784)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+/usr/local/go/src/runtime/asm_amd64.s:1371 (0x4797a0)
+	goexit: BYTE	$0x90	// NOP
+[0m
+

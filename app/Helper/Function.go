@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	mathRand "math/rand"
 	"strings"
+	"time"
 
 	"github.com/gookit/goutil/strutil"
 	uuid "github.com/satori/go.uuid"
@@ -17,6 +19,19 @@ func UUid() string {
 
 func RandomStr(len int) string {
 	return strutil.RandomCharsV3(len)
+}
+
+func RandomNumber(len int) string {
+	AlphaNum := "0123456789"
+
+	cs := make([]byte, len)
+	for i := 0; i < len; i++ {
+		mathRand.Seed(time.Now().UnixNano())
+		idx := mathRand.Intn(10)
+		cs[i] = AlphaNum[idx]
+	}
+
+	return string(cs)
 }
 
 func Sha1(str string) string {

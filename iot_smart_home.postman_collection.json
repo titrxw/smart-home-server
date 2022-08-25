@@ -15,12 +15,12 @@
 					"urlencoded": [
 						{
 							"key": "captcha",
-							"value": "00359",
+							"value": "86060",
 							"type": "text"
 						},
 						{
-							"key": "mobile",
-							"value": "15903466276",
+							"key": "email",
+							"value": "titrxw@163.com",
 							"type": "text"
 						},
 						{
@@ -28,7 +28,12 @@
 							"value": "102410Yun",
 							"type": "text"
 						}
-					]
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
 				},
 				"url": {
 					"raw": "{{url}}/api/frontend/user/oauth/login",
@@ -98,17 +103,22 @@
 						},
 						{
 							"key": "user_name",
-							"value": "rxwyun",
+							"value": "rxwyun123",
 							"type": "text"
 						},
 						{
-							"key": "mobile",
-							"value": "15903466276",
+							"key": "email",
+							"value": "titrxw@163.com",
 							"type": "text"
 						},
 						{
 							"key": "password",
 							"value": "102410Yun",
+							"type": "text"
+						},
+						{
+							"key": "email_code",
+							"value": "148224",
 							"type": "text"
 						}
 					]
@@ -175,12 +185,12 @@
 					"urlencoded": [
 						{
 							"key": "device_name",
-							"value": "灯泡",
+							"value": "灯泡而为",
 							"type": "text"
 						},
 						{
 							"key": "device_type",
-							"value": "light",
+							"value": "face_identify",
 							"type": "text"
 						}
 					]
@@ -233,17 +243,22 @@
 					"urlencoded": [
 						{
 							"key": "device_id",
-							"value": "17",
+							"value": "21",
 							"type": "text"
 						},
 						{
 							"key": "operate_type",
-							"value": "on",
+							"value": "add_face_model",
 							"type": "text"
 						},
 						{
 							"key": "operate_payload",
-							"value": "{\"gsdfdgsfdgsg\":\"no324234234234w\"}",
+							"value": "{\"user_name\":\"fdgfdsgf\",\"urls\":[\n\"https://img1.baidu.com/it/u=176639176,3646433368&fm=253&fmt=auto&app=138&f=JPEG?w=200&h=200\",\n\"https://img2.baidu.com/it/u=3143881363,3394976794&fm=253&fmt=auto&app=138&f=JPEG?w=300&h=300\",\n\"https://img2.baidu.com/it/u=4128150756,1169221268&fm=253&fmt=auto&app=138&f=JPEG?w=320&h=361\",\n\"https://img1.baidu.com/it/u=3258909437,1298493878&fm=253&fmt=auto&app=138&f=PNG?w=421&h=473\",\n\"https://img0.baidu.com/it/u=507653260,3712503451&fm=253&fmt=auto&app=138&f=JPEG?w=320&h=320\",\n\"https://img2.baidu.com/it/u=3788766609,2938029358&fm=253&fmt=auto&app=138&f=JPEG?w=400&h=400\",\n\"https://img0.baidu.com/it/u=1338043292,3478296996&fm=253&fmt=auto&app=138&f=JPEG?w=200&h=200\",\n\"https://img1.baidu.com/it/u=501959153,2432287788&fm=253&fmt=auto&app=138&f=JPEG?w=300&h=300\",\n\"https://img0.baidu.com/it/u=4075378823,2577739116&fm=253&fmt=auto&app=138&f=JPEG?w=200&h=200\"\n]}",
+							"type": "text"
+						},
+						{
+							"key": "user_name",
+							"value": "rxw",
 							"type": "text"
 						}
 					]
@@ -501,6 +516,42 @@
 						"detail",
 						"21",
 						"37"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{url}}/api/frontend/user/oauth/register-email",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "captcha",
+							"value": "92255",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "titrxw@qq.com",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/frontend/user/oauth/register-email",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"frontend",
+						"user",
+						"oauth",
+						"register-email"
 					]
 				}
 			},

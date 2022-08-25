@@ -4,7 +4,7 @@ import (
 	"strconv"
 
 	global "github.com/titrxw/go-framework/src/Global"
-	app "github.com/titrxw/smart-home-server/app"
+	"github.com/titrxw/smart-home-server/app"
 	"github.com/titrxw/smart-home-server/mqtt"
 	"github.com/titrxw/smart-home-server/server"
 )

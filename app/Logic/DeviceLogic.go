@@ -2,8 +2,8 @@ package logic
 
 import (
 	"context"
-	"errors"
 	"github.com/titrxw/smart-home-server/app/Device/Interface"
+	exception "github.com/titrxw/smart-home-server/app/Exception"
 
 	"github.com/titrxw/smart-home-server/config"
 
@@ -110,12 +110,12 @@ func (deviceLogic DeviceLogic) CreateUserDevice(ctx context.Context, userId mode
 	err := deviceLogic.GetDefaultDb().Transaction(func(tx *gorm.DB) error {
 		app := repository.Repository.AppRepository.CreateDeviceApp(tx)
 		if app == nil {
-			return errors.New("创建app失败")
+			return exception.NewLogicError("创建app失败")
 		}
 
 		device = repository.Repository.DeviceRepository.AddUserDeviceByApp(tx, userId, app, device)
 		if device == nil {
-			return errors.New("创建设备失败")
+			return exception.NewLogicError("创建设备失败")
 		}
 
 		return Logic.EmqxLogic.AddEmqxClient(ctx, device)
@@ -134,7 +134,7 @@ func (deviceLogic DeviceLogic) GetUserDevices(userId model.UID, page uint, pageS
 func (deviceLogic DeviceLogic) GetUserDeviceById(userId model.UID, id uint) (*model.Device, error) {
 	device := repository.Repository.DeviceRepository.GetUserDeviceById(deviceLogic.GetDefaultDb(), userId, id)
 	if device == nil {
-		return nil, errors.New("设备不存在")
+		return nil, exception.NewLogicError("设备不存在")
 	}
 
 	return device, nil
@@ -143,7 +143,7 @@ func (deviceLogic DeviceLogic) GetUserDeviceById(userId model.UID, id uint) (*mo
 func (deviceLogic DeviceLogic) UpdateDevice(ctx context.Context, device *model.Device) error {
 	return deviceLogic.GetDefaultDb().Transaction(func(tx *gorm.DB) error {
 		if !repository.Repository.DeviceRepository.UpdateDevice(tx, device) {
-			return errors.New("更新设备失败")
+			return exception.NewLogicError("更新设备失败")
 		}
 
 		if device.IsDelete() {

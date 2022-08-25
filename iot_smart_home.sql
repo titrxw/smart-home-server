@@ -126,7 +126,8 @@ DROP TABLE IF EXISTS `iot_user`;
 CREATE TABLE `iot_user` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `user_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `mobile` varchar(11) NOT NULL,
+  `mobile` varchar(11) NOT NULL DEFAULT '',
+  `email` varchar(64) NOT NULL,
   `password` varchar(64) NOT NULL,
   `salt` varchar(12) NOT NULL,
   `status` tinyint unsigned NOT NULL DEFAULT '1',

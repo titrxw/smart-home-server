@@ -10,7 +10,6 @@ import (
 )
 
 const CTRL_EXCEPTION = "ctrl_exception"
-const REPLY_EXCEPTION = "reply_exception"
 
 type DeviceReportSubscribe struct {
 	SubscribeAbstract
@@ -32,7 +31,7 @@ func (deviceReportSubscribe DeviceReportSubscribe) GetTopic() string {
 func (deviceReportSubscribe DeviceReportSubscribe) OnSubscribe(client mqtt.Client, message mqtt.Message) {
 	cloudEvent, device, err := deviceReportSubscribe.validateAndGetPayload(message)
 	if err == nil {
-		if cloudEvent.Type() == CTRL_EXCEPTION || cloudEvent.Type() == REPLY_EXCEPTION {
+		if cloudEvent.Type() == CTRL_EXCEPTION {
 			_, err = logic.Logic.DeviceOperateLogic.OnOperateResponse(device, cloudEvent)
 		}
 
@@ -42,7 +41,7 @@ func (deviceReportSubscribe DeviceReportSubscribe) OnSubscribe(client mqtt.Clien
 			}
 			reportLog, err := logic.Logic.DeviceReportLogic.OnReport(device, cloudEvent)
 			if err == nil {
-				err = logic.Logic.DeviceLogic.GetDeviceAdapter(device.Type).OnReport(device, reportLog, cloudEvent)
+				err = logic.Logic.DeviceLogic.GetDeviceAdapter(device.Type).OnReport(client, device, reportLog, cloudEvent)
 				global.FApp.Event.Publish(reflect.TypeOf(event.DeviceReportEvent{}).Name(), event.NewDeviceReportEvent(device, cloudEvent))
 			}
 		}

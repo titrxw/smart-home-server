@@ -1,7 +1,7 @@
 package device
 
 import (
-	"errors"
+	exception "github.com/titrxw/smart-home-server/app/Exception"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -49,7 +49,7 @@ func (deviceController DeviceController) AddUserDevice(ctx *gin.Context) {
 	}
 
 	if words := logic.Logic.SysSensitiveWordsLogic.GetSensitiveWord(deviceAddRequest.DeviceName); len(words) > 0 {
-		deviceController.JsonResponseWithServerError(ctx, errors.New("设备名包含敏感字符 "+strings.Join(words, ",")))
+		deviceController.JsonResponseWithServerError(ctx, exception.NewLogicError("设备名包含敏感字符 "+strings.Join(words, ",")))
 		return
 	}
 
@@ -95,12 +95,12 @@ func (deviceController DeviceController) UpdateUserDevice(ctx *gin.Context) {
 	}
 
 	if deviceUpdateRequest.DeviceName == "" || deviceUpdateRequest.DeviceStatus == 0 {
-		deviceController.JsonResponseWithServerError(ctx, "参数错误")
+		deviceController.JsonResponseWithServerError(ctx, exception.NewArgsError("参数错误"))
 		return
 	}
 	if deviceUpdateRequest.DeviceName != "" {
 		if words := logic.Logic.SysSensitiveWordsLogic.GetSensitiveWord(deviceUpdateRequest.DeviceName); len(words) > 0 {
-			deviceController.JsonResponseWithServerError(ctx, errors.New("设备名包含敏感字符 "+strings.Join(words, ",")))
+			deviceController.JsonResponseWithServerError(ctx, exception.NewLogicError("设备名包含敏感字符 "+strings.Join(words, ",")))
 			return
 		}
 	}

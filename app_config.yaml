@@ -43,3 +43,9 @@ mqtt:
   port: 1883
   user_name: 'iot_device_replay'
   password: '66b2d1a5b79b4fa9b34629009a952827'
+email:
+  host: 'smtp.qq.com'
+  port: '25'
+  from_user_name: '1120309488@qq.com'
+  user_name: '1120309488@qq.com'
+  password: ''

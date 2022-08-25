@@ -1,5 +1,7 @@
 package config
 
+var GConfig *Config
+
 type Config struct {
 	Server    Server            `mapstructure:"server" json:"server" yaml:"server"`
 	Mqtt      Mqtt              `mapstructure:"mqtt" json:"mqtt" yaml:"mqtt"`
@@ -8,4 +10,5 @@ type Config struct {
 	Emqx      Emqx              `mapstructure:"emqx" json:"emqx" yaml:"emqx"`
 	Jwt       Jwt               `mapstructure:"jwt" json:"jwt" yaml:"jwt"`
 	DeviceMap map[string]Device `mapstructure:"device" json:"device" yaml:"device"`
+	Email     Email             `mapstructure:"email" json:"email" yaml:"email"`
 }
