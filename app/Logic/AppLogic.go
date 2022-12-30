@@ -7,40 +7,37 @@ import (
 	exception "github.com/titrxw/smart-home-server/app/Exception"
 	model "github.com/titrxw/smart-home-server/app/Model"
 	repository "github.com/titrxw/smart-home-server/app/Repository"
-	"os"
-	"path"
+	"gorm.io/gorm"
 	"sort"
-	"strconv"
 	"strings"
-	"time"
 )
 
 type AppLogic struct {
 	LogicAbstract
 }
 
-func (appLogic *AppLogic) GetAppAttachPath(appId string, ext string) (string, error) {
-	dir := "./public/upload/img/" + appId + "/" + time.Now().Format("20060102")
-	if err := os.MkdirAll(dir, os.ModePerm); err != nil {
-		return "", exception.NewLogicError("创建文件夹失败")
-	}
-
-	fileUnixName := strconv.FormatInt(time.Now().UnixMicro(), 10) + ext
-
-	return path.Join(dir, fileUnixName), nil
-}
-
-func (appLogic *AppLogic) GetRemoteFileUrlByAttachPath(filePath string) string {
-	return strings.NewReplacer("public/upload", "").Replace(filePath)
-}
-
 func (appLogic *AppLogic) GetAppByAppId(appid string) *model.App {
-	app := repository.AppRepository{}.GetByAppId(appLogic.GetDefaultDb(), appid)
+	app := repository.Repository.AppRepository.GetByAppId(appLogic.GetDefaultDb(), appid)
 	if app == nil {
 		return nil
 	}
 
 	return app
+}
+
+func (appLogic *AppLogic) addAppProxy(app *model.App, componentApp *model.App) error {
+	return appLogic.GetDefaultDb().Transaction(func(tx *gorm.DB) error {
+		err := repository.Repository.AppProxyRepository.ClearComponentAppProxy(tx, componentApp)
+		if err != nil {
+			return err
+		}
+		appProxy := repository.Repository.AppProxyRepository.AddAppProxy(tx, app, componentApp)
+		if appProxy == nil {
+			return exception.NewLogicError("设备绑定失败")
+		}
+
+		return nil
+	})
 }
 
 func (appLogic *AppLogic) GetSign(app *model.App, params map[string]string) string {

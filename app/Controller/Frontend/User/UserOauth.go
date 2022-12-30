@@ -15,6 +15,10 @@ func (userOauth UserOauth) SaveUserToSession(ctx *gin.Context, user *model.User)
 	return global.FHttpServer.Session.Set(ctx, "user_id", user.ID)
 }
 
+func (userOauth UserOauth) RemoveUserFromSession(ctx *gin.Context) error {
+	return global.FHttpServer.Session.Delete(ctx, "user_id")
+}
+
 func (userOauth UserOauth) GetUserIdFromSession(ctx *gin.Context) model.UID {
 	userId, ok := global.FHttpServer.Session.Get(ctx, "user_id").(uint)
 	if !ok {

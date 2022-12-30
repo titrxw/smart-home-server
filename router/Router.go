@@ -25,7 +25,7 @@ func (r *Router) Register(router *gin.Engine) {
 	router.Static("/static", "./public/static")
 	router.Static("/img", "./public/upload/img")
 
-	v1 := router.Group("/api")
+	v1 := router.Group("/api/v1")
 	{
 		r.SysRouteGroup.RegisterBaseRouteGroup(v1)
 		r.FrontendRouteGroup.RegisterBaseRouteGroup(v1)

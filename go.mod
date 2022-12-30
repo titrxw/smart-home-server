@@ -5,7 +5,6 @@ go 1.18
 require (
 	github.com/alexedwards/scs/mysqlstore v0.0.0-20211203064041-370cc303b69f
 	github.com/alexedwards/scs/v2 v2.5.0
-	github.com/cloudevents/sdk-go/v2 v2.6.0
 	github.com/eclipse/paho.mqtt.golang v1.4.1
 	github.com/gin-gonic/gin v1.7.4
 	github.com/go-playground/universal-translator v0.18.0
@@ -31,7 +30,6 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/google/uuid v1.1.1 // indirect
 	github.com/gookit/config/v2 v2.0.27 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/imdario/mergo v0.3.12 // indirect

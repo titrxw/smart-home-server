@@ -15,7 +15,7 @@
 					"urlencoded": [
 						{
 							"key": "captcha",
-							"value": "86060",
+							"value": "08687",
 							"type": "text"
 						},
 						{
@@ -28,20 +28,16 @@
 							"value": "102410Yun",
 							"type": "text"
 						}
-					],
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					]
 				},
 				"url": {
-					"raw": "{{url}}/api/frontend/user/oauth/login",
+					"raw": "{{url}}/api/v1/frontend/user/oauth/login",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"api",
+						"v1",
 						"frontend",
 						"user",
 						"oauth",
@@ -75,12 +71,13 @@
 					]
 				},
 				"url": {
-					"raw": "{{url}}/api/util/captcha",
+					"raw": "{{url}}/api/v1/util/captcha",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"api",
+						"v1",
 						"util",
 						"captcha"
 					]
@@ -160,12 +157,13 @@
 					]
 				},
 				"url": {
-					"raw": "{{url}}/api/frontend/user/device/list",
+					"raw": "{{url}}/api/v1/frontend/user/device/list",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"api",
+						"v1",
 						"frontend",
 						"user",
 						"device",
@@ -185,23 +183,24 @@
 					"urlencoded": [
 						{
 							"key": "device_name",
-							"value": "灯泡而为",
+							"value": "灯泡而gatewa",
 							"type": "text"
 						},
 						{
 							"key": "device_type",
-							"value": "face_identify",
+							"value": "light",
 							"type": "text"
 						}
 					]
 				},
 				"url": {
-					"raw": "{{url}}/api/frontend/user/device/add",
+					"raw": "{{url}}/api/v1/frontend/user/device/add",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"api",
+						"v1",
 						"frontend",
 						"user",
 						"device",
@@ -217,17 +216,18 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{url}}/api/frontend/user/device/detail/17",
+					"raw": "{{url}}/api/v1/frontend/user/device/detail/22",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"api",
+						"v1",
 						"frontend",
 						"user",
 						"device",
 						"detail",
-						"17"
+						"22"
 					]
 				}
 			},
@@ -243,12 +243,12 @@
 					"urlencoded": [
 						{
 							"key": "device_id",
-							"value": "21",
+							"value": "24",
 							"type": "text"
 						},
 						{
 							"key": "operate_type",
-							"value": "add_face_model",
+							"value": "on",
 							"type": "text"
 						},
 						{
@@ -264,12 +264,13 @@
 					]
 				},
 				"url": {
-					"raw": "{{url}}/api/frontend/user/device-operate/trigger",
+					"raw": "{{url}}/api/v1/frontend/user/device-operate/trigger",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"api",
+						"v1",
 						"frontend",
 						"user",
 						"device-operate",
@@ -300,12 +301,13 @@
 					]
 				},
 				"url": {
-					"raw": "{{url}}/api/frontend/user/device-operate/detail?device_id=16&operate_number",
+					"raw": "{{url}}/api/v1/frontend/user/device-operate/detail?device_id=16&operate_number",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"api",
+						"v1",
 						"frontend",
 						"user",
 						"device-operate",
@@ -335,7 +337,7 @@
 					"urlencoded": [
 						{
 							"key": "device_id",
-							"value": "17",
+							"value": "24",
 							"type": "text"
 						},
 						{
@@ -351,12 +353,13 @@
 					]
 				},
 				"url": {
-					"raw": "{{url}}/api/frontend/user/device-operate/list",
+					"raw": "{{url}}/api/v1/frontend/user/device-operate/list",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"api",
+						"v1",
 						"frontend",
 						"user",
 						"device-operate",
@@ -372,12 +375,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{url}}/api/frontend/user/device/setting",
+					"raw": "{{url}}/api/v1/frontend/user/device/setting",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"api",
+						"v1",
 						"frontend",
 						"user",
 						"device",
@@ -393,12 +397,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{url}}/api/frontend/user/oauth/info",
+					"raw": "{{url}}/api/v1/frontend/user/oauth/info",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"api",
+						"v1",
 						"frontend",
 						"user",
 						"oauth",
@@ -444,12 +449,13 @@
 					]
 				},
 				"url": {
-					"raw": "{{url}}/api/util/attach/upload/image",
+					"raw": "{{url}}/api/v1/util/attach/upload/image",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"api",
+						"v1",
 						"util",
 						"attach",
 						"upload",
@@ -485,12 +491,14 @@
 					]
 				},
 				"url": {
-					"raw": "{{url}}/api/device/face_identify/list",
+					"raw": "{{url}}/api/v1/frontend/device/face_identify/list",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"api",
+						"v1",
+						"frontend",
 						"device",
 						"face_identify",
 						"list"
@@ -505,12 +513,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{url}}/api/device/face_identify/detail/21/37",
+					"raw": "{{url}}/api/v1/frontend/device/face_identify/detail/21/37",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"api",
+						"v1",
+						"frontend",
 						"device",
 						"face_identify",
 						"detail",
@@ -542,16 +552,54 @@
 					]
 				},
 				"url": {
-					"raw": "{{url}}/api/frontend/user/oauth/register-email",
+					"raw": "{{url}}/api/v1/frontend/user/oauth/register-email",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"api",
+						"v1",
 						"frontend",
 						"user",
 						"oauth",
 						"register-email"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{url}}/api/v1/frontend/user/device-gateway/bind",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "device_id",
+							"value": "24",
+							"type": "text"
+						},
+						{
+							"key": "device_gateway_id",
+							"value": "23",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/v1/frontend/user/device-gateway/bind",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"frontend",
+						"user",
+						"device-gateway",
+						"bind"
 					]
 				}
 			},

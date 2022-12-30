@@ -31,19 +31,19 @@ func (uploadController UploadController) UploadImage(ctx *gin.Context) {
 		return
 	}
 
-	path, err := logic.Logic.AppLogic.GetAppAttachPath(ctx.MustGet("app").(*model.App).AppId, extName)
+	path, err := logic.Logic.AttachLogic.GetAppImgAttachPath(ctx.MustGet("app").(*model.App).AppId, extName)
 	if err != nil {
 		uploadController.JsonResponseWithServerError(ctx, err)
 		return
 	}
 
-	err = ctx.SaveUploadedFile(file, path)
+	err = logic.Logic.AttachLogic.SaveUploadAttach(ctx, file, path)
 	if err != nil {
 		uploadController.JsonResponseWithServerError(ctx, err)
 		return
 	}
 
 	uploadController.JsonResponseWithoutError(ctx, gin.H{
-		"url": logic.Logic.AppLogic.GetRemoteFileUrlByAttachPath(path),
+		"url": logic.Logic.AttachLogic.GetRemoteFileUrlByAttachPath(path),
 	})
 }

@@ -5,6 +5,7 @@ import (
 	global "github.com/titrxw/go-framework/src/Global"
 	faceIdentify "github.com/titrxw/smart-home-server/app/Device/FaceIdentify"
 	light "github.com/titrxw/smart-home-server/app/Device/Light"
+	mqttGateway "github.com/titrxw/smart-home-server/app/Device/MqttZigbeeGateway"
 	exception "github.com/titrxw/smart-home-server/app/Handler/Exception"
 	provider "github.com/titrxw/smart-home-server/app/Provider"
 	"github.com/titrxw/smart-home-server/config"
@@ -37,4 +38,5 @@ func (app *App) Bootstrap() {
 
 	app.ProviderManager.MakeProvider(new(faceIdentify.FaceIdentifyDeviceProvider)).Register(app.Config)
 	app.ProviderManager.MakeProvider(new(light.LightDeviceProvider)).Register(app.Config)
+	app.ProviderManager.MakeProvider(new(mqttGateway.MqttZigbeeGatewayProvider)).Register(app.Config)
 }

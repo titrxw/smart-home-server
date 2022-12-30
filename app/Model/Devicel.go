@@ -4,6 +4,9 @@ type DeviceType string
 type DeviceOperateType string
 type DeviceReportType string
 
+const DEVICE_APP_TYPE uint8 = 1
+const DEVICE_GATEWAY_APP_TYPE uint8 = 2
+
 const (
 	DEVICE_ENABLE  uint8 = 1
 	DEVICE_DISABLE uint8 = 2
@@ -21,7 +24,9 @@ type Device struct {
 	Name            string    `json:"name" gorm:"type:varchar(64);not null"`
 	UserId          UID       `json:"user_id" gorm:"not null"`
 	AppId           uint      `json:"-" gorm:"not null"`
-	Type            string    `json:"type" gorm:"type:varchar(64);not null"`
+	Type            uint8     `json:"type" gorm:"not null;default:1"`
+	TypeName        string    `json:"type_name" gorm:"type:varchar(64);not null"`
+	GatewayDeviceId uint      `json:"-" gorm:"not null;default:0"`
 	LatestVisit     string    `json:"latest_visit" gorm:"type:varchar(12);not null;default:''"`
 	OnlineStatus    uint8     `json:"online_status" gorm:"not null;default:0"`
 	LastIp          string    `json:"last_ip" gorm:"type:varchar(20);not null;default:''"`
@@ -31,6 +36,7 @@ type Device struct {
 
 	App               *App               `json:"-"`
 	DeviceOperateLogs []DeviceOperateLog `json:"-"`
+	GatewayDevice     *Device            `json:"gateway_device"`
 }
 
 func (device *Device) Enable() {
@@ -55,4 +61,8 @@ func (device *Device) IsDelete() bool {
 
 func (device *Device) IsOnline() bool {
 	return device.OnlineStatus == DEVICE_ONLINE
+}
+
+func (device *Device) IsGateway() bool {
+	return device.Type == DEVICE_GATEWAY_APP_TYPE
 }

@@ -2,12 +2,11 @@ package logic
 
 import (
 	"context"
-	"encoding/json"
-	cloudevents "github.com/cloudevents/sdk-go/v2"
-	exception "github.com/titrxw/smart-home-server/app/Exception"
-	"gorm.io/gorm"
 	"reflect"
 	"time"
+
+	exception "github.com/titrxw/smart-home-server/app/Exception"
+	"gorm.io/gorm"
 
 	global "github.com/titrxw/go-framework/src/Global"
 	event "github.com/titrxw/smart-home-server/app/Event"
@@ -48,19 +47,29 @@ func (deviceOperateLogic DeviceOperateLogic) TriggerOperate(ctx context.Context,
 		return nil, exception.NewLogicError("该设备当前不在线")
 	}
 
-	deviceOperateLog := &model.DeviceOperateLog{
-		DeviceId:       device.ID,
-		DeviceType:     device.Type,
-		Source:         global.FApp.Name,
-		OperateName:    string(operate),
-		OperateNumber:  deviceOperateLogic.GetOperateOrReportNumber(device.App.AppId),
-		OperateTime:    model.LocalTime(time.Now()),
-		OperatePayload: payload,
-		OperateLevel:   operateLevel,
-		CreatedAt:      model.LocalTime(time.Now()),
+	gatewayDevice := device
+	if Logic.DeviceLogic.IsNeedGateway(device) {
+		gatewayDevice = Logic.DeviceGatewayLogic.GetGatewayDevice(ctx, device)
+		if gatewayDevice == nil {
+			return nil, exception.NewLogicError("该设备未绑定网关")
+		}
 	}
 
-	err := Logic.DeviceLogic.GetDeviceAdapter(device.Type).BeforeTriggerOperate(device, deviceOperateLog)
+	deviceOperateLog := &model.DeviceOperateLog{
+		DeviceId:        device.ID,
+		DeviceGatewayId: gatewayDevice.ID,
+		DeviceType:      device.TypeName,
+		Source:          global.FApp.Name,
+		OperateName:     string(operate),
+		OperateNumber:   deviceOperateLogic.GetOperateOrReportNumber(device.App.AppId),
+		OperateTime:     model.LocalTime(time.Now()),
+		OperatePayload:  payload,
+		OperateLevel:    operateLevel,
+		CreatedAt:       model.LocalTime(time.Now()),
+	}
+
+	gatewayAdapter := Logic.DeviceLogic.GetDeviceAdapter(gatewayDevice.TypeName)
+	err := gatewayAdapter.BeforeTriggerOperate(ctx, gatewayDevice, device, deviceOperateLog)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +78,13 @@ func (deviceOperateLogic DeviceOperateLogic) TriggerOperate(ctx context.Context,
 		return nil, exception.NewLogicError("添加操作记录失败")
 	}
 
-	err = Logic.EmqxLogic.PubClientOperate(ctx, device, deviceOperateLog)
+	message := &model.IotMessage{
+		EventType: deviceOperateLog.OperateName,
+		Id:        deviceOperateLog.OperateNumber,
+		Payload:   deviceOperateLog.OperatePayload,
+		Timestamp: time.Time(deviceOperateLog.CreatedAt).Unix(),
+	}
+	err = Logic.MessageLogic.PubClientOperate(ctx, gatewayDevice, device, message)
 	if err != nil {
 		deviceOperateLog.ResponsePayload = model.OperatePayload{"error": err.Error()}
 		if !repository.Repository.DeviceOperateLogRepository.UpdateDeviceOperateLog(deviceOperateLogic.GetDefaultDb(), deviceOperateLog) {
@@ -77,7 +92,7 @@ func (deviceOperateLogic DeviceOperateLogic) TriggerOperate(ctx context.Context,
 		}
 	}
 
-	err = Logic.DeviceLogic.GetDeviceAdapter(device.Type).AfterTriggerOperate(device, deviceOperateLog)
+	err = gatewayAdapter.AfterTriggerOperate(ctx, gatewayDevice, device, deviceOperateLog)
 	if err != nil {
 		return nil, err
 	}
@@ -88,21 +103,15 @@ func (deviceOperateLogic DeviceOperateLogic) TriggerOperate(ctx context.Context,
 	return deviceOperateLog, nil
 }
 
-func (deviceOperateLogic DeviceOperateLogic) OnOperateResponse(device *model.Device, cloudEvent *cloudevents.Event) (*model.DeviceOperateLog, error) {
-	payLoad := model.OperatePayload{}
-	err := json.Unmarshal(cloudEvent.Data(), &payLoad)
-	if err != nil {
-		return nil, err
-	}
-
-	operateLog, err := deviceOperateLogic.GetOperateLogByNumber(cloudEvent.ID())
+func (deviceOperateLogic DeviceOperateLogic) OnOperateResponse(gatewayDevice *model.Device, device *model.Device, iotMessage *model.IotMessage) error {
+	operateLog, err := deviceOperateLogic.GetOperateLogByNumber(iotMessage.Id)
 	if err == nil {
 		if device.ID != operateLog.DeviceId {
-			return nil, exception.NewLogicError("设备不匹配")
+			return exception.NewLogicError("设备不匹配")
 		}
 		err = deviceOperateLogic.GetDefaultDb().Transaction(func(tx *gorm.DB) error {
-			operateLog.ResponsePayload = payLoad
-			operateLog.ResponseTime = cloudEvent.Time().Format(model.TimeFormat)
+			operateLog.ResponsePayload = iotMessage.Payload
+			operateLog.ResponseTime = time.Unix(iotMessage.Timestamp, 0).Format(model.TimeFormat)
 			if !repository.Repository.DeviceOperateLogRepository.UpdateDeviceOperateLog(tx, operateLog) {
 				return exception.NewLogicError("更新操作记录失败")
 			}
@@ -117,9 +126,14 @@ func (deviceOperateLogic DeviceOperateLogic) OnOperateResponse(device *model.Dev
 
 			return nil
 		})
+
+		if err == nil {
+			err = Logic.DeviceLogic.GetDeviceAdapter(gatewayDevice.TypeName).OnOperateResponse(context.Background(), gatewayDevice, device, operateLog, iotMessage)
+			global.FApp.Event.Publish(reflect.TypeOf(event.DeviceOperateReplyEvent{}).Name(), event.NewDeviceOperateReplyEvent(device, operateLog, iotMessage))
+		}
 	}
 
-	return operateLog, err
+	return err
 }
 
 func (deviceOperateLogic DeviceOperateLogic) UpdateOperateLog(operateLog *model.DeviceOperateLog) error {

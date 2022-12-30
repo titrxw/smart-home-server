@@ -1,7 +1,5 @@
 package model
 
-const DEVICE_APP_TYPE = 1
-
 type App struct {
 	Model
 

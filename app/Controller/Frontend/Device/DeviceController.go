@@ -53,7 +53,7 @@ func (deviceController DeviceController) AddUserDevice(ctx *gin.Context) {
 		return
 	}
 
-	device, err := logic.Logic.DeviceLogic.CreateUserDevice(ctx, deviceController.GetUserId(ctx), deviceAddRequest.DeviceName, deviceAddRequest.DeviceType)
+	device, err := logic.Logic.DeviceLogic.CreateUserDevice(ctx.Request.Context(), deviceController.GetUserId(ctx), deviceAddRequest.DeviceName, deviceAddRequest.DeviceType)
 	if err != nil {
 		deviceController.JsonResponseWithServerError(ctx, err)
 		return
@@ -83,6 +83,9 @@ func (deviceController DeviceController) UserDeviceDetail(ctx *gin.Context) {
 	if err != nil {
 		deviceController.JsonResponseWithServerError(ctx, err)
 		return
+	}
+	if logic.Logic.DeviceLogic.IsNeedGateway(device) {
+		device.GatewayDevice = logic.Logic.DeviceGatewayLogic.GetGatewayDevice(ctx, device)
 	}
 
 	deviceController.JsonResponseWithoutError(ctx, device)
@@ -117,7 +120,7 @@ func (deviceController DeviceController) UpdateUserDevice(ctx *gin.Context) {
 	if deviceUpdateRequest.DeviceStatus != 0 {
 		device.DeviceStatus = deviceUpdateRequest.DeviceStatus
 	}
-	err = logic.Logic.DeviceLogic.UpdateDevice(ctx, device)
+	err = logic.Logic.DeviceLogic.UpdateDevice(ctx.Request.Context(), device)
 	if err != nil {
 		deviceController.JsonResponseWithServerError(ctx, err)
 		return

@@ -21,4 +21,8 @@ func (devicer *Device) registerRoute(router *gin.RouterGroup) {
 			v3.POST("/list", new(device.DeviceController).UserDevices)
 		}
 	}
+	v21 := router.Group("/device-gateway", new(middleware.OauthMiddleware).Process)
+	{
+		v21.POST("/bind", new(device.DeviceGatewayController).AddUserGatewayDevice)
+	}
 }

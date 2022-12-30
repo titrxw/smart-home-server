@@ -1,9 +1,9 @@
 package utils
 
 import (
+	"context"
 	"errors"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	"time"
 )
@@ -22,7 +22,7 @@ func (retryTooManyError RetryTooManyError) Error() string {
 type RetryLimit struct {
 }
 
-func (retryLimit RetryLimit) Try(ctx *gin.Context, redisClient *redis.Client, callback func(*gin.Context, *redis.Client, int64) error, key string, tryNum int64, ttl time.Duration) error {
+func (retryLimit RetryLimit) Try(ctx context.Context, redisClient *redis.Client, callback func(context.Context, *redis.Client, int64) error, key string, tryNum int64, ttl time.Duration) error {
 	curNum, err := retryLimit.incr(ctx, redisClient, key, ttl)
 	if err != nil {
 		return err
@@ -37,11 +37,11 @@ func (retryLimit RetryLimit) Try(ctx *gin.Context, redisClient *redis.Client, ca
 	return callback(ctx, redisClient, curNum)
 }
 
-func (retryLimit RetryLimit) Reset(ctx *gin.Context, redisClient *redis.Client, key string) error {
+func (retryLimit RetryLimit) Reset(ctx context.Context, redisClient *redis.Client, key string) error {
 	return redisClient.Del(ctx, fmt.Sprintf(SERVICE_RETRY_LIMIT, key)).Err()
 }
 
-func (retryLimit RetryLimit) Decr(ctx *gin.Context, redisClient *redis.Client, key string) error {
+func (retryLimit RetryLimit) Decr(ctx context.Context, redisClient *redis.Client, key string) error {
 	return redisClient.Decr(ctx, fmt.Sprintf(SERVICE_RETRY_LIMIT, key)).Err()
 }
 
@@ -49,7 +49,7 @@ func (retryLimit RetryLimit) formatCacheKey(key string) string {
 	return fmt.Sprintf(SERVICE_RETRY_LIMIT, key)
 }
 
-func (retryLimit RetryLimit) incr(ctx *gin.Context, redisClient *redis.Client, key string, ttl time.Duration) (int64, error) {
+func (retryLimit RetryLimit) incr(ctx context.Context, redisClient *redis.Client, key string, ttl time.Duration) (int64, error) {
 	cacheKey := retryLimit.formatCacheKey(key)
 	result, err := redisClient.SetNX(ctx, cacheKey, 0, 0).Result()
 	if err != nil {

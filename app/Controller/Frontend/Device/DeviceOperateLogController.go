@@ -44,7 +44,7 @@ func (deviceOperateController DeviceOperateLogController) TriggerOperate(ctx *gi
 		return
 	}
 
-	operateLog, err := logic.Logic.DeviceOperateLogic.TriggerOperate(ctx, device, deviceOperateRequest.OperateType, deviceOperateRequest.OperatePayload, 2)
+	operateLog, err := logic.Logic.DeviceOperateLogic.TriggerOperate(ctx.Request.Context(), device, deviceOperateRequest.OperateType, deviceOperateRequest.OperatePayload, 2)
 	if err != nil {
 		deviceOperateController.JsonResponseWithServerError(ctx, err)
 		return

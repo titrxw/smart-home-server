@@ -1,21 +1,22 @@
 package light
 
 import (
-	cloudevents "github.com/cloudevents/sdk-go/v2"
-	mqtt "github.com/eclipse/paho.mqtt.golang"
+	"context"
 	"github.com/titrxw/smart-home-server/app/Device/Interface"
 	model "github.com/titrxw/smart-home-server/app/Model"
 	"github.com/titrxw/smart-home-server/config"
 )
 
 type LightDeviceAdapter struct {
-	Interface.DeviceAdapterInterface
+	Interface.DeviceAdapterAbstract
 }
 
 func (lightAdapter LightDeviceAdapter) GetDeviceConfig() config.Device {
 	return config.Device{
-		Type:           "light",
+		Type:           model.DEVICE_APP_TYPE,
+		TypeName:       "light",
 		Name:           "电灯",
+		NeedGateway:    true,
 		SupportOperate: []string{"on", "off"},
 		OperateDesc:    map[string]string{"on": "开灯", "off": "关灯"},
 		SupportReport:  nil,
@@ -23,18 +24,18 @@ func (lightAdapter LightDeviceAdapter) GetDeviceConfig() config.Device {
 	}
 }
 
-func (lightAdapter LightDeviceAdapter) BeforeTriggerOperate(device *model.Device, deviceOperateLog *model.DeviceOperateLog) error {
+func (lightAdapter LightDeviceAdapter) BeforeTriggerOperate(ctx context.Context, gatewayDevice *model.Device, device *model.Device, deviceOperateLog *model.DeviceOperateLog) error {
 	return nil
 }
 
-func (lightAdapter LightDeviceAdapter) AfterTriggerOperate(device *model.Device, deviceOperateLog *model.DeviceOperateLog) error {
+func (lightAdapter LightDeviceAdapter) AfterTriggerOperate(ctx context.Context, gatewayDevice *model.Device, device *model.Device, deviceOperateLog *model.DeviceOperateLog) error {
 	return nil
 }
 
-func (lightAdapter LightDeviceAdapter) OnOperateResponse(client mqtt.Client, device *model.Device, deviceOperateLog *model.DeviceOperateLog, cloudEvent *cloudevents.Event) error {
+func (lightAdapter LightDeviceAdapter) OnOperateResponse(ctx context.Context, gatewayDevice *model.Device, device *model.Device, deviceOperateLog *model.DeviceOperateLog, message *model.IotMessage) error {
 	return nil
 }
 
-func (lightAdapter LightDeviceAdapter) OnReport(client mqtt.Client, device *model.Device, deviceReportLog *model.DeviceReportLog, cloudEvent *cloudevents.Event) error {
+func (lightAdapter LightDeviceAdapter) OnReport(ctx context.Context, gatewayDevice *model.Device, device *model.Device, deviceReportLog *model.DeviceReportLog, message *model.IotMessage) error {
 	return nil
 }

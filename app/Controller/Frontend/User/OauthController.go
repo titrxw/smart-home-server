@@ -3,7 +3,6 @@ package user
 import (
 	exception "github.com/titrxw/smart-home-server/app/Exception"
 	model "github.com/titrxw/smart-home-server/app/Model"
-	"strings"
 	"time"
 
 	base "github.com/titrxw/smart-home-server/app/Controller/Base"
@@ -20,7 +19,6 @@ type RegisterEmailRequest struct {
 
 type RegisterRequest struct {
 	base.RequestAbstract
-	Username        string `form:"user_name" binding:"required,user_name"`
 	Email           string `form:"email" binding:"required,email"`
 	Password        string `form:"password" binding:"required,password"`
 	EmailVerifyCode string `form:"email_code" binding:"required,len=6"`
@@ -49,7 +47,7 @@ func (oauthController OauthController) SendRegisterEmailCode(ctx *gin.Context) {
 		return
 	}
 
-	err := logic.Logic.EmailLogic.Send(ctx, registerEmailRequest.Email, "register")
+	err := logic.Logic.EmailLogic.SendVerifyCode(ctx.Request.Context(), registerEmailRequest.Email, "register")
 	if err != nil {
 		oauthController.JsonResponseWithServerError(ctx, err)
 		return
@@ -63,17 +61,17 @@ func (oauthController OauthController) Register(ctx *gin.Context) {
 	if !oauthController.ValidateFormPost(ctx, &registerRequest) {
 		return
 	}
-	if words := logic.Logic.SysSensitiveWordsLogic.GetSensitiveWord(registerRequest.Username); len(words) > 0 {
-		oauthController.JsonResponseWithServerError(ctx, exception.NewLogicError("用户名包含敏感字符 "+strings.Join(words, ",")))
-		return
-	}
-	err := logic.Logic.EmailLogic.Verify(ctx, registerRequest.Email, registerRequest.EmailVerifyCode, "register")
+	//if words := logic.Logic.SysSensitiveWordsLogic.GetSensitiveWord(registerRequest.Email); len(words) > 0 {
+	//	oauthController.JsonResponseWithServerError(ctx, exception.NewLogicError("用户名包含敏感字符 "+strings.Join(words, ",")))
+	//	return
+	//}
+	err := logic.Logic.EmailLogic.VerifyCode(ctx.Request.Context(), registerRequest.Email, registerRequest.EmailVerifyCode, "register")
 	if err != nil {
 		oauthController.JsonResponseWithServerError(ctx, err)
 		return
 	}
 
-	user, err := logic.Logic.UserLogic.CreateUser(registerRequest.Username, registerRequest.Email, registerRequest.Password)
+	user, err := logic.Logic.UserLogic.CreateUser(registerRequest.Email, registerRequest.Email, registerRequest.Password)
 	if err != nil {
 		oauthController.JsonResponseWithServerError(ctx, err)
 		return
@@ -101,6 +99,16 @@ func (oauthController OauthController) Login(ctx *gin.Context) {
 	oauthController.triggerLogin(ctx, user)
 }
 
+func (oauthController OauthController) Logout(ctx *gin.Context) {
+	err := oauthController.RemoveUserFromSession(ctx)
+	if err != nil {
+		oauthController.JsonResponseWithServerError(ctx, err)
+		return
+	}
+
+	oauthController.JsonSuccessResponse(ctx)
+}
+
 func (oauthController OauthController) triggerLogin(ctx *gin.Context, user *model.User) {
 	user.LastIp = ctx.ClientIP()
 	user.LatestVisit = time.Now().Format(model.TimeFormat)
@@ -109,7 +117,7 @@ func (oauthController OauthController) triggerLogin(ctx *gin.Context, user *mode
 		oauthController.JsonResponseWithServerError(ctx, err)
 		return
 	}
-	err = logic.Logic.UserLogic.ResetUserCache(ctx, user)
+	err = logic.Logic.UserLogic.ResetUserCache(ctx.Request.Context(), user)
 	if err != nil {
 		oauthController.JsonResponseWithServerError(ctx, err)
 		return

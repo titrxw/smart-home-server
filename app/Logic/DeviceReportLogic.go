@@ -1,47 +1,50 @@
 package logic
 
 import (
-	"encoding/json"
-	cloudevents "github.com/cloudevents/sdk-go/v2"
+	"context"
+	"reflect"
+	"time"
+
 	global "github.com/titrxw/go-framework/src/Global"
+	event "github.com/titrxw/smart-home-server/app/Event"
 	exception "github.com/titrxw/smart-home-server/app/Exception"
 	helper "github.com/titrxw/smart-home-server/app/Helper"
 	model "github.com/titrxw/smart-home-server/app/Model"
 	repository "github.com/titrxw/smart-home-server/app/Repository"
-	"time"
 )
 
 type DeviceReportLogic struct {
 	LogicAbstract
 }
 
-func (deviceReportLogic DeviceReportLogic) OnReport(device *model.Device, cloudEvent *cloudevents.Event) (*model.DeviceReportLog, error) {
-	if !Logic.DeviceLogic.IsSupportReport(device, model.DeviceReportType(cloudEvent.Type())) {
-		return nil, exception.NewLogicError("report 不支持")
+func (deviceReportLogic DeviceReportLogic) OnReport(gatewayDevice *model.Device, device *model.Device, iotMessage *model.IotMessage) error {
+	if !Logic.DeviceLogic.IsSupportReport(device, model.DeviceReportType(iotMessage.EventType)) {
+		return exception.NewLogicError("report 不支持")
 	}
-
-	payLoad := model.ReportPayload{}
-	err := json.Unmarshal(cloudEvent.Data(), &payLoad)
-	if err != nil {
-		return nil, err
+	if iotMessage.Id == device.App.AppId {
+		iotMessage.Id = Logic.DeviceReportLogic.GetOperateOrReportNumber(device.App.AppId)
 	}
 
 	deviceReportLog := &model.DeviceReportLog{
-		DeviceId:      device.ID,
-		DeviceType:    device.Type,
-		Source:        global.FApp.Name,
-		ReportName:    cloudEvent.Type(),
-		ReportNumber:  helper.Sha1(device.App.AppId + helper.UUid()),
-		ReportTime:    model.LocalTime(time.Now()),
-		ReportPayload: payLoad,
-		ReportLevel:   2,
-		CreatedAt:     model.LocalTime(time.Now()),
+		DeviceId:        device.ID,
+		DeviceGatewayId: gatewayDevice.ID,
+		DeviceType:      device.TypeName,
+		Source:          global.FApp.Name,
+		ReportName:      iotMessage.EventType,
+		ReportNumber:    helper.Sha1(device.App.AppId + helper.UUid()),
+		ReportTime:      model.LocalTime(time.Now()),
+		ReportPayload:   model.ReportPayload(iotMessage.Payload),
+		ReportLevel:     2,
+		CreatedAt:       model.LocalTime(time.Unix(iotMessage.Timestamp, 0)),
 	}
 	if !repository.Repository.DeviceReportLogRepository.AddDeviceReportLog(deviceReportLogic.GetDefaultDb(), deviceReportLog) {
-		return nil, exception.NewLogicError("添加上报记录失败")
+		return exception.NewLogicError("添加上报记录失败")
 	}
 
-	return deviceReportLog, nil
+	err := Logic.DeviceLogic.GetDeviceAdapter(gatewayDevice.TypeName).OnReport(context.Background(), gatewayDevice, device, deviceReportLog, iotMessage)
+	global.FApp.Event.Publish(reflect.TypeOf(event.DeviceReportEvent{}).Name(), event.NewDeviceReportEvent(device, deviceReportLog, iotMessage))
+
+	return err
 }
 
 func (deviceReportLogic DeviceReportLogic) GetDeviceReportLogByNumber(device *model.Device, reportNumber string) (*model.DeviceReportLog, error) {

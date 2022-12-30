@@ -11,7 +11,7 @@ type InfoController struct {
 }
 
 func (infoController InfoController) Info(ctx *gin.Context) {
-	user, err := logic.Logic.UserLogic.GetUserById(ctx, infoController.GetUserId(ctx))
+	user, err := logic.Logic.UserLogic.GetUserById(ctx.Request.Context(), infoController.GetUserId(ctx))
 	if err != nil {
 		infoController.JsonResponseWithServerError(ctx, err)
 		return

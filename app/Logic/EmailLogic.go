@@ -1,8 +1,8 @@
 package logic
 
 import (
+	"context"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	"github.com/jordan-wright/email"
 	exception "github.com/titrxw/smart-home-server/app/Exception"
@@ -24,15 +24,15 @@ func (emailLogic EmailLogic) formatCacheKey(email string, verifyType string) str
 	return fmt.Sprintf(SERVICE_EMAIL_CODE, email, verifyType)
 }
 
-func (emailLogic EmailLogic) SendEmail(userEmail string, content string) error {
+func (emailLogic EmailLogic) SendEmail(userEmail string, htmlContent string) error {
 	e := email.NewEmail()
 	e.From = fmt.Sprintf("发件人 <%s>", config.GConfig.Email.FromUserName)
 	e.To = []string{userEmail}
-	e.HTML = []byte(content)
+	e.HTML = []byte(htmlContent)
 	return e.Send(config.GConfig.Email.Host+":"+config.GConfig.Email.Port, smtp.PlainAuth(config.GConfig.Email.Identify, config.GConfig.Email.UserName, config.GConfig.Email.Password, config.GConfig.Email.Host))
 }
 
-func (emailLogic EmailLogic) Send(ctx *gin.Context, email string, verifyType string) error {
+func (emailLogic EmailLogic) SendVerifyCode(ctx context.Context, email string, verifyType string) error {
 	code := helper.RandomNumber(6)
 
 	content := fmt.Sprintf(`
@@ -57,16 +57,16 @@ func (emailLogic EmailLogic) Send(ctx *gin.Context, email string, verifyType str
 	return emailLogic.GetDefaultRedis().Set(ctx, emailLogic.formatCacheKey(email, verifyType), code, time.Second*300).Err()
 }
 
-func (emailLogic EmailLogic) Verify(ctx *gin.Context, email string, emailVerifyCode string, verifyType string) error {
+func (emailLogic EmailLogic) VerifyCode(ctx context.Context, email string, emailVerifyCode string, verifyType string) error {
 	cacheKey := emailLogic.formatCacheKey(email, verifyType)
 
-	return utils.RetryLimit{}.Try(ctx, emailLogic.GetDefaultRedis(), func(context *gin.Context, client *redis.Client, curNum int64) error {
-		result := client.Get(ctx, cacheKey)
+	return utils.RetryLimit{}.Try(ctx, emailLogic.GetDefaultRedis(), func(context context.Context, client *redis.Client, curNum int64) error {
+		result := client.Get(context, cacheKey)
 		if result.Err() != nil && result.Err() != redis.Nil {
 			return result.Err()
 		}
 		if emailVerifyCode == result.Val() {
-			return client.Del(ctx, cacheKey).Err()
+			return client.Del(context, cacheKey).Err()
 		}
 
 		return exception.NewLogicError("email验证码错误")

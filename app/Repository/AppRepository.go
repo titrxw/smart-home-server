@@ -12,9 +12,9 @@ type AppRepository struct {
 	RepositoryAbstract
 }
 
-func (appRepository AppRepository) CreateDeviceApp(db *gorm.DB) *model.App {
+func (appRepository AppRepository) CreateDeviceApp(db *gorm.DB, appType uint8) *model.App {
 	appId := appRepository.getUniqueAppId(db, "sd")
-	return appRepository.make(db, appId, strings.Replace(helper.UUid(), "-", "", -1), model.DEVICE_APP_TYPE)
+	return appRepository.make(db, appId, strings.Replace(helper.UUid(), "-", "", -1), appType)
 }
 
 func (appRepository AppRepository) GetById(db *gorm.DB, id uint) *model.App {

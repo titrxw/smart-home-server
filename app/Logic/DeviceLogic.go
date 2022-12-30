@@ -2,7 +2,12 @@ package logic
 
 import (
 	"context"
+	"reflect"
+	"time"
+
+	global "github.com/titrxw/go-framework/src/Global"
 	"github.com/titrxw/smart-home-server/app/Device/Interface"
+	event "github.com/titrxw/smart-home-server/app/Event"
 	exception "github.com/titrxw/smart-home-server/app/Exception"
 
 	"github.com/titrxw/smart-home-server/config"
@@ -28,8 +33,8 @@ func (deviceLogic *DeviceLogic) RegisterDeviceAdapter(adapterInterface Interface
 	}
 
 	deviceConfig := adapterInterface.GetDeviceConfig()
-	deviceLogic.SupportDeviceAdapter[deviceConfig.Type] = adapterInterface
-	deviceLogic.SupportDeviceMap[deviceConfig.Type] = deviceConfig
+	deviceLogic.SupportDeviceAdapter[deviceConfig.TypeName] = adapterInterface
+	deviceLogic.SupportDeviceMap[deviceConfig.TypeName] = deviceConfig
 }
 
 func (deviceLogic DeviceLogic) GetDeviceSupportMap() map[string]config.Device {
@@ -37,12 +42,7 @@ func (deviceLogic DeviceLogic) GetDeviceSupportMap() map[string]config.Device {
 }
 
 func (deviceLogic DeviceLogic) GetDeviceSupportOperateMap(device *model.Device) []string {
-	_, exists := deviceLogic.GetDeviceSupportMap()[device.Type]
-	if !exists {
-		return nil
-	}
-
-	return deviceLogic.GetDeviceSupportMap()[device.Type].SupportOperate
+	return deviceLogic.GetDeviceSupportMap()[device.TypeName].SupportOperate
 }
 
 func (deviceLogic DeviceLogic) IsSupportOperate(device *model.Device, operate model.DeviceOperateType) bool {
@@ -61,12 +61,7 @@ func (deviceLogic DeviceLogic) IsSupportOperate(device *model.Device, operate mo
 }
 
 func (deviceLogic DeviceLogic) GetDeviceSupportReportMap(device *model.Device) []string {
-	_, exists := deviceLogic.GetDeviceSupportMap()[device.Type]
-	if !exists {
-		return nil
-	}
-
-	return deviceLogic.GetDeviceSupportMap()[device.Type].SupportReport
+	return deviceLogic.GetDeviceSupportMap()[device.TypeName].SupportReport
 }
 
 func (deviceLogic DeviceLogic) IsSupportReport(device *model.Device, operate model.DeviceReportType) bool {
@@ -82,6 +77,10 @@ func (deviceLogic DeviceLogic) IsSupportReport(device *model.Device, operate mod
 	}
 
 	return false
+}
+
+func (deviceLogic DeviceLogic) IsNeedGateway(device *model.Device) bool {
+	return deviceLogic.GetDeviceSupportMap()[device.TypeName].NeedGateway
 }
 
 func (deviceLogic DeviceLogic) GetDeviceAdapter(deviceType string) Interface.DeviceAdapterInterface {
@@ -103,12 +102,13 @@ func (deviceLogic DeviceLogic) GetDeviceById(deviceId uint) *model.Device {
 
 func (deviceLogic DeviceLogic) CreateUserDevice(ctx context.Context, userId model.UID, deviceName string, deviceType string) (*model.Device, error) {
 	device := &model.Device{
-		Name: deviceName,
-		Type: deviceType,
+		Name:     deviceName,
+		TypeName: deviceType,
+		Type:     deviceLogic.GetDeviceSupportMap()[deviceType].Type,
 	}
 
 	err := deviceLogic.GetDefaultDb().Transaction(func(tx *gorm.DB) error {
-		app := repository.Repository.AppRepository.CreateDeviceApp(tx)
+		app := repository.Repository.AppRepository.CreateDeviceApp(tx, device.Type)
 		if app == nil {
 			return exception.NewLogicError("创建app失败")
 		}
@@ -118,13 +118,23 @@ func (deviceLogic DeviceLogic) CreateUserDevice(ctx context.Context, userId mode
 			return exception.NewLogicError("创建设备失败")
 		}
 
-		return Logic.EmqxLogic.AddEmqxClient(ctx, device)
-	})
-	if err != nil {
-		return nil, err
-	}
+		if !deviceLogic.GetDeviceSupportMap()[deviceType].NeedGateway {
+			adapter := deviceLogic.GetDeviceAdapter(deviceType)
+			return Logic.EmqxLogic.AddEmqxClient(ctx, device, map[string][]string{
+				"pub": []string{
+					adapter.GetReportTopic(app.AppId),
+					adapter.GetAvailabilityTopic(app.AppId),
+				},
+				"sub": []string{
+					adapter.GetCtrlTopic(app.AppId, "+"),
+				},
+			})
+		}
 
-	return device, nil
+		return nil
+	})
+
+	return device, err
 }
 
 func (deviceLogic DeviceLogic) GetUserDevices(userId model.UID, page uint, pageSize uint) *repository.PageModel {
@@ -141,14 +151,23 @@ func (deviceLogic DeviceLogic) GetUserDeviceById(userId model.UID, id uint) (*mo
 }
 
 func (deviceLogic DeviceLogic) UpdateDevice(ctx context.Context, device *model.Device) error {
-	return deviceLogic.GetDefaultDb().Transaction(func(tx *gorm.DB) error {
-		if !repository.Repository.DeviceRepository.UpdateDevice(tx, device) {
-			return exception.NewLogicError("更新设备失败")
-		}
+	if !repository.Repository.DeviceRepository.UpdateDevice(deviceLogic.GetDefaultDb(), device) {
+		return exception.NewLogicError("更新设备失败")
+	}
 
-		if device.IsDelete() {
-			return Logic.EmqxLogic.DeleteEmqxClient(ctx, device)
-		}
-		return nil
-	})
+	return nil
+}
+
+func (deviceLogic DeviceLogic) OnOnlineStatucChange(device *model.Device, lastIp string, isOnline bool) error {
+	if isOnline {
+		device.OnlineStatus = model.DEVICE_ONLINE
+		device.LastIp = lastIp
+		device.LatestVisit = time.Now().Format(model.TimeFormat)
+	} else {
+		device.OnlineStatus = model.DEVICE_OFFLINE
+	}
+	err := Logic.DeviceLogic.UpdateDevice(context.Background(), device)
+	global.FApp.Event.Publish(reflect.TypeOf(event.DeviceStatusChangeEvent{}).Name(), event.NewDeviceStatusChangeEvent(device))
+
+	return err
 }
