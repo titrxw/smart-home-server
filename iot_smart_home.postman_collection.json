@@ -48,7 +48,7 @@
 			"response": []
 		},
 		{
-			"name": "{{url}}/api/util/captcha",
+			"name": "{{url}}/api/v1/util/captcha",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -86,7 +86,7 @@
 			"response": []
 		},
 		{
-			"name": "{{url}}/api/frontend/user/oauth/register",
+			"name": "{{url}}/api/v1/frontend/user/oauth/register",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -121,7 +121,7 @@
 					]
 				},
 				"url": {
-					"raw": "{{url}}/api/frontend/user/oauth/register",
+					"raw": "{{url}}/api/v1/frontend/user/oauth/register",
 					"host": [
 						"{{url}}"
 					],
@@ -137,7 +137,7 @@
 			"response": []
 		},
 		{
-			"name": "{{url}}/api/frontend/user/device/list",
+			"name": "{{url}}/api/v1/frontend/user/device/list",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -174,7 +174,7 @@
 			"response": []
 		},
 		{
-			"name": "{{url}}/api/frontend/user/device/list",
+			"name": "{{url}}/api/v1/frontend/user/device/list",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -211,7 +211,7 @@
 			"response": []
 		},
 		{
-			"name": "{{url}}/api/frontend/user/device/detail/11",
+			"name": "{{url}}/api/v1/frontend/user/device/detail/11",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -234,7 +234,7 @@
 			"response": []
 		},
 		{
-			"name": "{{url}}/api/frontend/user/device-operate/trigger",
+			"name": "{{url}}/api/v1/frontend/user/device-operate/trigger",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -281,7 +281,7 @@
 			"response": []
 		},
 		{
-			"name": "{{url}}/api/frontend/user/device-operate/detail?device_id=16&operate_number",
+			"name": "{{url}}/api/v1/frontend/user/device-operate/detail?device_id=16&operate_number",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -328,7 +328,7 @@
 			"response": []
 		},
 		{
-			"name": "{{url}}/api/frontend/user/device-operate/list",
+			"name": "{{url}}/api/v1/frontend/user/device-operate/list",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -370,7 +370,7 @@
 			"response": []
 		},
 		{
-			"name": "{{url}}/api/frontend/user/device/setting",
+			"name": "{{url}}/api/v1/frontend/user/device/setting",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -392,7 +392,7 @@
 			"response": []
 		},
 		{
-			"name": "{{url}}/api/frontend/user/oauth/info",
+			"name": "{{url}}/api/v1/frontend/user/oauth/info",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -414,7 +414,7 @@
 			"response": []
 		},
 		{
-			"name": "{{url}}/api/util/attach/upload/image",
+			"name": "{{url}}/api/v1/util/attach/upload/image",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -466,7 +466,7 @@
 			"response": []
 		},
 		{
-			"name": "{{url}}/api/device/face_identify/list",
+			"name": "{{url}}/api/v1/device/face_identify/list",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -508,7 +508,7 @@
 			"response": []
 		},
 		{
-			"name": "{{url}}/api/device/face_identify/detail/21/37",
+			"name": "{{url}}/api/v1/device/face_identify/detail/21/37",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -532,7 +532,7 @@
 			"response": []
 		},
 		{
-			"name": "{{url}}/api/frontend/user/oauth/register-email",
+			"name": "{{url}}/api/v1/frontend/user/oauth/register-email",
 			"request": {
 				"method": "POST",
 				"header": [],
