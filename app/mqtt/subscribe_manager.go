@@ -2,32 +2,21 @@ package mqtt
 
 import (
 	"context"
-	"github.com/titrxw/smart-home-server/app/common/emqx"
-	"github.com/titrxw/smart-home-server/app/common/helper"
 	subscribeInterface "github.com/titrxw/smart-home-server/app/mqtt/interface"
+	"github.com/titrxw/smart-home-server/app/pkg/emqx"
+	"github.com/titrxw/smart-home-server/app/pkg/helper"
 	"time"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
 type SubscribeManager struct {
-	subscribeMap map[string]mqtt.MessageHandler
-}
-
-var subscribeManager *SubscribeManager
-
-func GetSubscribeManager() *SubscribeManager {
-	if subscribeManager == nil {
-		subscribeManager = &SubscribeManager{
-			subscribeMap: make(map[string]mqtt.MessageHandler),
-		}
-	}
-
-	return subscribeManager
+	subscribeMap   map[string]mqtt.MessageHandler
+	emqxHttpClient *emqx.Client
 }
 
 func (sm *SubscribeManager) RegisterSubscribe(subscribeInterface subscribeInterface.Interface) {
-	subscribeManager.subscribeMap[subscribeInterface.GetTopic()] = subscribeInterface.OnSubscribe
+	sm.subscribeMap[subscribeInterface.GetTopic()] = subscribeInterface.OnSubscribe
 }
 
 func (sm *SubscribeManager) Start(EMQServerAddress string, port string, userName string, password string) {
@@ -37,15 +26,14 @@ func (sm *SubscribeManager) Start(EMQServerAddress string, port string, userName
 
 func (sm *SubscribeManager) initMqttDevice(userName string, password string) {
 	ctx := context.Background()
-	emqService := emqx.GetEmqxClientService()
-	emqService.DeleteClient(ctx, userName)
-	err := emqService.AddClient(ctx, userName, password, "")
+	sm.emqxHttpClient.DeleteClient(ctx, userName)
+	err := sm.emqxHttpClient.AddClient(ctx, userName, password, "")
 	if err != nil {
 		panic(err)
 	}
 
 	for topic, _ := range sm.subscribeMap {
-		err = emqService.AddClientSubAcl(context.Background(), userName, topic)
+		err = sm.emqxHttpClient.AddClientSubAcl(context.Background(), userName, topic)
 		if err != nil {
 			panic(err)
 		}

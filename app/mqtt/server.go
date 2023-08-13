@@ -7,13 +7,19 @@ import (
 
 type Server struct {
 	server.Server
-	config *viper.Viper
+	config           *viper.Viper
+	subscribeManager *SubscribeManager
 }
 
-func NewMqttSubServer(config *viper.Viper) *Server {
+func NewMqttSubServer(config *viper.Viper, subscribeManager *SubscribeManager) *Server {
 	return &Server{
-		config: config,
+		config:           config,
+		subscribeManager: subscribeManager,
 	}
+}
+
+func (s Server) GetSubscribeManager() *SubscribeManager {
+	return s.subscribeManager
 }
 
 func (s Server) GetServerName() string {
@@ -28,7 +34,7 @@ func (s Server) GetOptions() map[string]string {
 }
 
 func (s Server) Start() {
-	GetSubscribeManager().Start(
+	s.subscribeManager.Start(
 		s.config.GetString("server.mqtt.host"),
 		s.config.GetString("server.mqtt.port"),
 		s.config.GetString("server.mqtt.user_name"),

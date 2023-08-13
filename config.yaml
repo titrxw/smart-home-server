@@ -1,11 +1,14 @@
 app:
   name: smart_home
   env: debug
-  server: http
+  server: http|prof
 server:
   http:
     host: localhost
     port: 8081
+  prof:
+    host: localhost
+    port: 8082
   mqtt:
     host: 127.0.0.1
     port: 1883
@@ -15,12 +18,13 @@ common:
   secure_key: sdf56gh78jmnbvf43edsw3401lbfdert
 log:
   default:
+    driver: stream
     path: smart.log
     level: debug
 database:
   default:
     driver: mysql
-    user: root
+    user_name: root
     password: 123456
     host: 127.0.0.1
     port: 3306
@@ -55,3 +59,10 @@ cookie:
   name: smart_home
   http_only: true
   path: /
+  expires: 86400
+gateway:
+  operate_trigger_url: http://127.0.0.1:8081/api/v1/device/trigger-operate
+face_identify:
+  server: http://127.0.0.1:8081
+  appid: Tg6FijzU6km1yST1eyy
+  appsecret: oALD2bWC6HO+br/aJskY037Dc6j0biv/S7K

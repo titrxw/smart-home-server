@@ -3,7 +3,7 @@ package device
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/titrxw/smart-home-server/app/device_manager/controller/frontend/frontend"
-	"github.com/titrxw/smart-home-server/app/device_manager/logic"
+	"github.com/titrxw/smart-home-server/app/internal/logic"
 )
 
 type Gateway struct {
@@ -15,7 +15,7 @@ type GatewayAddRequest struct {
 	DeviceGatewayId uint `form:"device_gateway_id" binding:"required,id"`
 }
 
-func (c Gateway) AddUserGatewayDevice(ctx *gin.Context) {
+func (c Gateway) UserDeviceBindGateway(ctx *gin.Context) {
 	deviceGatewayAddRequest := GatewayAddRequest{}
 	if !c.Validate(ctx, &deviceGatewayAddRequest) {
 		return

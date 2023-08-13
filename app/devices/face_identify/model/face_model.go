@@ -4,7 +4,7 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"fmt"
-	"github.com/titrxw/smart-home-server/app/device_manager/model"
+	"github.com/titrxw/smart-home-server/app/pkg/model"
 )
 
 type FaceUrls []string
@@ -35,10 +35,11 @@ const FaceModelStatusDisable = 0
 type FaceModel struct {
 	model.Model
 
-	DeviceId uint     `json:"-" gorm:"not null"`
-	UserName string   `json:"user_name" gorm:"type:varchar(64);not null"`
-	Status   uint8    `json:"status" gorm:"type:tinyint(4);not null"`
-	Urls     FaceUrls `json:"face_urls" gorm:"type:text;not null;default:''"`
+	UserId      uint     `json:"user_id" gorm:"not null"`
+	DeviceAppId string   `json:"device_appid" gorm:"column:device_appid;not null"`
+	UserName    string   `json:"user_name" gorm:"type:varchar(64);not null"`
+	Status      uint8    `json:"status" gorm:"type:tinyint(4);not null"`
+	Urls        FaceUrls `json:"face_urls" gorm:"type:text;not null;default:''"`
 
 	CreatedAt model.LocalTime `json:"created_at"`
 }

@@ -1,11 +1,13 @@
 package mqtt_zigbee_gateway
 
 import (
+	"context"
 	"encoding/json"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
-	"github.com/titrxw/smart-home-server/app/common/helper"
-	"github.com/titrxw/smart-home-server/app/device_manager/logic"
-	"github.com/titrxw/smart-home-server/app/device_manager/mqtt/subscribe"
+	"github.com/titrxw/smart-home-server/app/internal/logic"
+	"github.com/titrxw/smart-home-server/app/mqtt/subscribe"
+	devicepkg "github.com/titrxw/smart-home-server/app/pkg/device"
+	"github.com/titrxw/smart-home-server/app/pkg/helper"
 )
 
 type DeviceStatus struct {
@@ -35,10 +37,13 @@ func (s DeviceAvailabilitySubscribe) OnSubscribe(client mqtt.Client, message mqt
 		deviceStatus := DeviceStatus{}
 		err := json.Unmarshal(message.Payload(), &deviceStatus)
 		if err == nil {
-			device := logic.Logic.Device.GetDeviceByDeviceId(deviceId)
-			if device != nil {
-				err = logic.Logic.Device.OnOnlineStatucChange(device, "", deviceStatus.State == "online")
+			iotMessage := &devicepkg.OperateMessage{
+				EventType: "device_status_change",
+				Payload: map[string]interface{}{
+					"status": deviceStatus.State,
+				},
 			}
+			err = logic.Logic.Message.PubClientReportMsg(context.Background(), deviceId, deviceId, iotMessage)
 		}
 
 		if err != nil {

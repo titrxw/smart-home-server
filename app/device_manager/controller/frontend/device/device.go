@@ -2,9 +2,9 @@ package device
 
 import (
 	"github.com/titrxw/smart-home-server/app/device_manager/controller/frontend/frontend"
-	"github.com/titrxw/smart-home-server/app/device_manager/exception"
-	"github.com/titrxw/smart-home-server/app/device_manager/logic"
-	"github.com/titrxw/smart-home-server/app/devices/manager"
+	"github.com/titrxw/smart-home-server/app/internal/device/manager"
+	"github.com/titrxw/smart-home-server/app/internal/logic"
+	"github.com/titrxw/smart-home-server/app/pkg/exception"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -80,7 +80,7 @@ func (c Device) UserDeviceDetail(ctx *gin.Context) {
 		c.JsonResponseWithServerError(ctx, err)
 		return
 	}
-	if manager.GetDeviceByDeviceType(device.TypeName).NeedGateway {
+	if manager.GetDeviceConfigByDeviceType(device.TypeName).NeedGateway {
 		device.GatewayDevice = logic.Logic.DeviceGateway.GetGatewayDevice(ctx, device)
 	}
 

@@ -3,7 +3,7 @@ package user
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/titrxw/smart-home-server/app/device_manager/controller/frontend/frontend"
-	"github.com/titrxw/smart-home-server/app/device_manager/logic"
+	"github.com/titrxw/smart-home-server/app/internal/logic"
 )
 
 type Info struct {

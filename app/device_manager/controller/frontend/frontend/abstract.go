@@ -2,7 +2,7 @@ package frontend
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/titrxw/smart-home-server/app/device_manager/model"
+	"github.com/titrxw/smart-home-server/app/internal/model"
 	"github.com/we7coreteam/w7-rangine-go/src/http/controller"
 )
 

@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"github.com/titrxw/smart-home-server/app/device_manager/repository"
 	"github.com/titrxw/smart-home-server/app/devices/face_identify/model"
+	"github.com/titrxw/smart-home-server/app/pkg/repository"
 	"gorm.io/gorm"
 )
 
@@ -16,15 +16,21 @@ func (r FaceModel) AddFaceModel(db *gorm.DB, faceModel *model.FaceModel) bool {
 	return result.Error == nil
 }
 
+func (r FaceModel) SaveFaceModel(db *gorm.DB, faceModel *model.FaceModel) bool {
+	result := db.Save(faceModel)
+
+	return result.Error == nil
+}
+
 func (r FaceModel) UpdateFaceModel(db *gorm.DB, faceModel *model.FaceModel) bool {
 	result := db.Save(faceModel)
 
 	return result.Error == nil
 }
 
-func (r FaceModel) GetByLabel(db *gorm.DB, label uint) *model.FaceModel {
+func (r FaceModel) GetByUserAndLabel(db *gorm.DB, userId uint, label uint) *model.FaceModel {
 	faceModel := new(model.FaceModel)
-	result := db.Where("id = ?", label).First(faceModel)
+	result := db.Where("id = ?", label).Where("user_id = ?", userId).First(faceModel)
 	if result.RowsAffected == 1 {
 		return faceModel
 	}
@@ -32,7 +38,17 @@ func (r FaceModel) GetByLabel(db *gorm.DB, label uint) *model.FaceModel {
 	return nil
 }
 
-func (r FaceModel) GetDeviceFaceModels(db *gorm.DB, deviceId uint, page uint, pageSize uint) *repository.PageModel {
+func (r FaceModel) GetByDeviceAppIdAndLabel(db *gorm.DB, deviceAppId string, label uint) *model.FaceModel {
+	faceModel := new(model.FaceModel)
+	result := db.Where("id = ?", label).Where("device_appid = ?", deviceAppId).First(faceModel)
+	if result.RowsAffected == 1 {
+		return faceModel
+	}
+
+	return nil
+}
+
+func (r FaceModel) GetDeviceFaceModels(db *gorm.DB, userId uint, deviceAppId string, page uint, pageSize uint) *repository.PageModel {
 	faceModels := make([]model.FaceModel, 0)
 	pageData := &repository.PageModel{
 		CurPage:  page,
@@ -41,7 +57,7 @@ func (r FaceModel) GetDeviceFaceModels(db *gorm.DB, deviceId uint, page uint, pa
 		Data:     &faceModels,
 	}
 
-	totalQuery := db.Model(&model.FaceModel{}).Where("device_id = ?", deviceId).Where("status != ?", model.FaceModelStatusDisable)
+	totalQuery := db.Model(&model.FaceModel{}).Where("user_id = ?", userId).Where("device_appid = ?", deviceAppId).Where("status != ?", model.FaceModelStatusDisable)
 	var total int64
 	totalQuery.Count(&total)
 	if total > 0 {

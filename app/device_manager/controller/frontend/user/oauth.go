@@ -2,9 +2,12 @@ package user
 
 import (
 	"github.com/titrxw/smart-home-server/app/device_manager/controller/frontend/frontend"
-	"github.com/titrxw/smart-home-server/app/device_manager/exception"
-	"github.com/titrxw/smart-home-server/app/device_manager/logic"
-	"github.com/titrxw/smart-home-server/app/device_manager/model"
+	"github.com/titrxw/smart-home-server/app/internal/logic"
+	"github.com/titrxw/smart-home-server/app/internal/middleware"
+	"github.com/titrxw/smart-home-server/app/internal/model"
+	"github.com/titrxw/smart-home-server/app/pkg/exception"
+	pkgmodel "github.com/titrxw/smart-home-server/app/pkg/model"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -27,7 +30,7 @@ type LoginRequest struct {
 
 type Oauth struct {
 	frontend.Abstract
-	UserOauth
+	middleware.UserOauth
 }
 
 func (c Oauth) SendRegisterEmailCode(ctx *gin.Context) {
@@ -56,10 +59,10 @@ func (c Oauth) Register(ctx *gin.Context) {
 	if !c.Validate(ctx, &registerRequest) {
 		return
 	}
-	//if words := logic.Logic.SysSensitiveWordsLogic.GetSensitiveWord(registerRequest.Email); len(words) > 0 {
-	//	oauthController.JsonResponseWithServerError(ctx, exception.NewLogicError("用户名包含敏感字符 "+strings.Join(words, ",")))
-	//	return
-	//}
+	if words := logic.Logic.SysSensitiveWords.GetSensitiveWord(registerRequest.Email); len(words) > 0 {
+		c.JsonResponseWithServerError(ctx, exception.NewResponseError("用户名包含敏感字符 "+strings.Join(words, ",")))
+		return
+	}
 	err := logic.Logic.Email.VerifyCode(ctx.Request.Context(), registerRequest.Email, registerRequest.EmailVerifyCode, "register")
 	if err != nil {
 		c.JsonResponseWithServerError(ctx, err)
@@ -106,7 +109,7 @@ func (c Oauth) Logout(ctx *gin.Context) {
 
 func (c Oauth) triggerLogin(ctx *gin.Context, user *model.User) {
 	user.LastIp = ctx.ClientIP()
-	user.LatestVisit = time.Now().Format(model.TimeFormat)
+	user.LatestVisit = time.Now().Format(pkgmodel.TimeFormat)
 	err := logic.Logic.User.UpdateUser(user)
 	if err != nil {
 		c.JsonResponseWithServerError(ctx, err)

@@ -11,7 +11,7 @@
  Target Server Version : 80025
  File Encoding         : 65001
 
- Date: 30/12/2022 22:18:27
+ Date: 13/08/2023 15:11:58
 */
 
 SET NAMES utf8mb4;
@@ -29,7 +29,7 @@ CREATE TABLE `iot_app` (
   PRIMARY KEY (`id`,`app_id`),
   UNIQUE KEY `idx_iot_app_app_id` (`app_id`,`app_secret`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Table structure for iot_app_proxy
@@ -48,22 +48,23 @@ CREATE TABLE `iot_app_proxy` (
 DROP TABLE IF EXISTS `iot_device`;
 CREATE TABLE `iot_device` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `user_id` bigint unsigned NOT NULL,
-  `app_id` bigint unsigned NOT NULL,
-  `type` tinyint unsigned DEFAULT '1',
-  `type_name` varchar(24) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
+  `user_id` bigint unsigned NOT NULL DEFAULT '0',
+  `app_id` bigint unsigned NOT NULL DEFAULT '0',
+  `gateway_device_id` int NOT NULL DEFAULT '0',
+  `device_appid` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '',
+  `type` tinyint unsigned NOT NULL DEFAULT '1',
+  `type_name` varchar(24) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
   `device_status` tinyint unsigned NOT NULL DEFAULT '1',
-  `device_cur_status` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '',
+  `device_cur_status` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
   `online_status` tinyint NOT NULL DEFAULT '0',
-  `last_ip` varchar(24) DEFAULT '',
-  `latest_visit` varchar(24) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '',
+  `last_ip` varchar(24) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
+  `latest_visit` varchar(24) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `gateway_device_id` int DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `fk_iot_device_app` (`app_id`),
   CONSTRAINT `fk_iot_device_app` FOREIGN KEY (`app_id`) REFERENCES `iot_app` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Table structure for iot_device_operate_log
@@ -115,7 +116,8 @@ CREATE TABLE `iot_device_report_log` (
 DROP TABLE IF EXISTS `iot_face_model`;
 CREATE TABLE `iot_face_model` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `device_id` int NOT NULL,
+  `user_id` int DEFAULT '0',
+  `device_appid` varchar(64) NOT NULL,
   `user_name` varchar(64) NOT NULL,
   `status` tinyint NOT NULL DEFAULT '0',
   `urls` text NOT NULL,
@@ -159,11 +161,12 @@ CREATE TABLE `iot_user` (
 -- ----------------------------
 DROP TABLE IF EXISTS `sessions`;
 CREATE TABLE `sessions` (
-  `token` char(43) NOT NULL,
-  `data` blob NOT NULL,
-  `expiry` timestamp(6) NOT NULL,
-  PRIMARY KEY (`token`),
-  KEY `sessions_expiry_idx` (`expiry`)
+  `id` varchar(191) NOT NULL,
+  `data` longtext,
+  `created_at` datetime(3) DEFAULT NULL,
+  `updated_at` datetime(3) DEFAULT NULL,
+  `expires_at` datetime(3) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 SET FOREIGN_KEY_CHECKS = 1;
